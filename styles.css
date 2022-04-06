@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     max-height: 20rem;
-    overflow: scroll;
+    overflow-y: scroll;
     margin-bottom: 0.5rem;
 }
 #openai_input {
@@ -10,6 +10,11 @@
     border-radius: 0.5rem;
     border: 1px solid gray;
     width: 100%;
+    transition: background 0.4s ease;
+}
+#openai_input.disabled {
+    background: #dbdbdb;
+    pointer-events: none;
 }
 .openai_message {
     padding: 0.75rem 1rem;

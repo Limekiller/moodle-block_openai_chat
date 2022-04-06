@@ -1,5 +1,6 @@
 <?php
 require_once ('../../../config.php');
+require_login();
 
 $body = json_decode(file_get_contents('php://input'), true);
 
@@ -8,7 +9,6 @@ if (!$body['message']) {
     die();
 }
 
-$curl = curl_init();
 $api_key = get_config('block_openai_chat', 'apikey');
 $prompt = get_config('block_openai_chat', 'prompt');
 
@@ -22,11 +22,12 @@ $curl_body = [
     "temperature" => 0,
     "max_tokens" => 500,
     "top_p" => 1,
-    "frequency_penalty" => 0.5,
+    "frequency_penalty" => 1,
     "presence_penalty" => 0,
     "stop" => "User:"
 ];
 
+$curl = curl_init();
 curl_setopt_array($curl, array(
   CURLOPT_URL => 'https://api.openai.com/v1/engines/text-davinci-002/completions',
   CURLOPT_RETURNTRANSFER => true,

@@ -55,7 +55,10 @@ class block_openai_chat extends block_base {
 
             <div id="openai_chat_log"></div>
         ';
-        $this->content->footer = '<input id="openai_input" placeholder="Ask a question..." type="text" name="message" />';
+        
+        $this->content->footer = get_config('block_openai_chat', 'apikey') ? '
+            <input id="openai_input" placeholder="Ask a question..." type="text" name="message" />'
+        : 'Please add your OpenAI API key to the global block settings.';
      
         return $this->content;
     }

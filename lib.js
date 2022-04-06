@@ -20,6 +20,8 @@ const addToChatLog = (type, message) => {
 
 const createCompletion = (message) => {
     const history = buildTranscript()
+    document.querySelector('#openai_input').classList.add('disabled')
+    document.querySelector('#openai_input').blur()
     addToChatLog('bot loading', '...');
 
     fetch('/blocks/openai_chat/api/completion.php', {
@@ -33,7 +35,13 @@ const createCompletion = (message) => {
     .then(data => {
         let messageContainer = document.querySelector('#openai_chat_log')
         messageContainer.removeChild(messageContainer.lastElementChild)
-        addToChatLog('bot', data.choices[0].text)
+        document.querySelector('#openai_input').classList.remove('disabled')
+
+        try {
+            addToChatLog('bot', data.choices[0].text)
+        } catch (error) {
+            addToChatLog('bot', data.error.message)
+        }
     })
 }
 
