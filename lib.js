@@ -44,9 +44,9 @@ const buildTranscript = () => {
             return
         }
 
-        let user = 'User'
+        let user = userName
         if (message.classList.contains('bot')) {
-            user = 'Agent'
+            user = agentName
         }
         transcript += `${user}: ${message.innerText}\n`
     })

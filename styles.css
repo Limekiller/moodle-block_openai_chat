@@ -15,13 +15,27 @@
     padding: 0.75rem 1rem;
     background: #f4f4f4;
     border-radius: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.75rem;
     width: fit-content;
     max-width: 90%;
+    animation: popup 0.4s cubic-bezier(0.87, 0, 0.13, 1);
+    position: relative;
+}
+.openai_message:before {
+    position: absolute;
+    top: -1.5rem;
+    left: 0;
+    color: gray;
+    opacity: 0;
+    animation: fade-in 0.4s ease 0.4s forwards;
 }
 .openai_message.user {
     align-self: flex-end;
     text-align: right;
+}
+.openai_message.user:before {
+    right: 0;
+    left: unset;
 }
 .openai_message.bot {
     background: var(--blue);
@@ -30,9 +44,25 @@
 .openai_message.loading {
     animation: thinking 1s ease infinite;
 }
+.openai_message.loading:before {
+    animation: none;
+    opacity: 0;
+}
+
+@keyframes popup {
+    0% {opacity: 0; transform: translateY(5px);}
+    70% {opacity: 1; transform: translateY(-2.5px);}
+    85% {transform: translateY(2.5px);}
+    100% {transform: translateY(0px);}
+}
 
 @keyframes thinking {
     0% {opacity: 1;}
     50% {opacity: 0.25;}
     100% {opacity: 1;}
+}
+
+@keyframes fade-in {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
