@@ -1,0 +1,38 @@
+#openai_chat_log {
+    display: flex;
+    flex-direction: column;
+    max-height: 20rem;
+    overflow: scroll;
+    margin-bottom: 0.5rem;
+}
+#openai_input {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid gray;
+    width: 100%;
+}
+.openai_message {
+    padding: 0.75rem 1rem;
+    background: #f4f4f4;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: fit-content;
+    max-width: 90%;
+}
+.openai_message.user {
+    align-self: flex-end;
+    text-align: right;
+}
+.openai_message.bot {
+    background: var(--blue);
+    color: var(--white);
+}
+.openai_message.loading {
+    animation: thinking 1s ease infinite;
+}
+
+@keyframes thinking {
+    0% {opacity: 1;}
+    50% {opacity: 0.25;}
+    100% {opacity: 1;}
+}
