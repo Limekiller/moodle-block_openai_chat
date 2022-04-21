@@ -27,23 +27,34 @@ require_login();
 
 $body = json_decode(file_get_contents('php://input'), true);
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    die();
+}
+
 if (!$body['message']) {
     http_response_code(400);
+    echo "'message' not included in request";
     die();
 }
 
 $apikey = get_config('block_openai_chat', 'apikey');
 $prompt = get_config('block_openai_chat', 'prompt');
 $agentname = get_config('block_openai_chat', 'agentname');
+$username = get_config('block_openai_chat', 'username');
 
 if (!$prompt) {
-    $prompt = "Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning:\n";
+    $prompt = get_string('defaultprompt', 'block_openai_chat');
 }
 if (!$agentname) {
-    $agentname = 'Agent';
+    $agentname = get_string('defaultagentname', 'block_openai_chat');
+}
+if (!$username) {
+    $username = get_string('defaultusername', 'block_openai_chat');
 }
 
-$body['history'] .= 'User: ';
+$prompt .= "\n";
+$body['history'] .= $username . ": ";
 
 $curlbody = [
     "prompt" => $prompt . $body['history'] . $body['message'] . "\n" . $agentname . ': ',
@@ -52,7 +63,7 @@ $curlbody = [
     "top_p" => 1,
     "frequency_penalty" => 1,
     "presence_penalty" => 0,
-    "stop" => "User:"
+    "stop" => $username . ":"
 ];
 
 $curl = curl_init();

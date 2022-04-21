@@ -38,3 +38,7 @@ $string['agentnamedesc'] = 'The name that the AI will use for itself internally'
 $string['username'] = 'User name';
 $string['usernamedesc'] = 'The name that the AI will use for the user internally';
 $string['showlabels'] = 'Show labels';
+
+$string['defaultprompt'] = "Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning:";
+$string['defaultagentname'] = 'Agent';
+$string['defaultusername'] = 'User';

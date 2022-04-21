@@ -9,6 +9,11 @@ const init = () => {
 }
 
 const addToChatLog = (type, message) => {
+    /**
+     * Add a message to the chat UI
+     * @param {string} type Which side of the UI the message should be on. Can be "user" or "bot"
+     * @param {string} message The text of the message to add
+     */
     let messageContainer = document.querySelector('#openai_chat_log')
     messageContainer.insertAdjacentHTML('beforeend', `
         <div class='openai_message ${type}'>
@@ -19,6 +24,10 @@ const addToChatLog = (type, message) => {
 }
 
 const createCompletion = (message) => {
+    /**
+     * Makes an API request to get a completion from GPT-3, and adds it to the chat log
+     * @param {string} message The text to get a completion for
+     */
     const history = buildTranscript()
     document.querySelector('#openai_input').classList.add('disabled')
     document.querySelector('#openai_input').blur()
@@ -46,6 +55,10 @@ const createCompletion = (message) => {
 }
 
 const buildTranscript = () => {
+    /**
+     * Using the existing messages in the chat history, create a string that can be used to aid completion
+     * @return {string} A transcript of the conversation up to this point
+     */
     let transcript = ''
     document.querySelectorAll('.openai_message').forEach((message, index) => {
         if (index === document.querySelectorAll('.openai_message').length - 1) {
