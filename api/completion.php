@@ -18,7 +18,7 @@
  * API endpoint for retrieving GPT-3 completion
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder
+ * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,13 +26,15 @@ require_once('../../../config.php');
 require_login();
 
 $body = json_decode(file_get_contents('php://input'), true);
+$message = clean_param($body['message'], PARAM_NOTAGS);
+$history = clean_param($body['history'], PARAM_NOTAGS);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     die();
 }
 
-if (!$body['message']) {
+if (!$message) {
     http_response_code(400);
     echo "'message' not included in request";
     die();
@@ -54,10 +56,10 @@ if (!$username) {
 }
 
 $prompt .= "\n";
-$body['history'] .= $username . ": ";
+$history .= $username . ": ";
 
 $curlbody = [
-    "prompt" => $prompt . $body['history'] . $body['message'] . "\n" . $agentname . ': ',
+    "prompt" => $prompt . $history . $message . "\n" . $agentname . ': ',
     "temperature" => 0,
     "max_tokens" => 500,
     "top_p" => 1,
