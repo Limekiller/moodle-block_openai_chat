@@ -18,7 +18,7 @@
  * Block class
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder
+ * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -58,8 +58,8 @@ class block_openai_chat extends block_base {
             ';
         }
 
-        $agentname = get_config('block_openai_chat', 'agentname') ? get_config('block_openai_chat', 'agentname') : 'Agent';
-        $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : 'User';
+        $agentname = get_config('block_openai_chat', 'agentname') ? get_config('block_openai_chat', 'agentname') : get_string('defaultagentname', 'block_openai_chat');
+        $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : get_string('defaultusername', 'block_openai_chat');
 
         $this->content = new stdClass;
         $this->content->text = '

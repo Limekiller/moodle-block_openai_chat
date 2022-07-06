@@ -18,7 +18,7 @@
  * Per-block settings
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder
+ * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

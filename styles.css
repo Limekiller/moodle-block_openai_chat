@@ -1,22 +1,22 @@
-#openai_chat_log {
+.block_openai_chat #openai_chat_log {
     display: flex;
     flex-direction: column;
     max-height: 20rem;
     overflow-y: scroll;
     margin-bottom: 0.5rem;
 }
-#openai_input {
+.block_openai_chat #openai_input {
     padding: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid gray;
     width: 100%;
     transition: background 0.4s ease;
 }
-#openai_input.disabled {
+.block_openai_chat #openai_input.disabled {
     background: #dbdbdb;
     pointer-events: none;
 }
-.openai_message {
+.block_openai_chat .openai_message {
     padding: 0.75rem 1rem;
     background: #f4f4f4;
     border-radius: 0.5rem;
@@ -26,7 +26,7 @@
     animation: popup 0.4s cubic-bezier(0.87, 0, 0.13, 1);
     position: relative;
 }
-.openai_message:before {
+.block_openai_chat .openai_message:before {
     position: absolute;
     top: -1.5rem;
     left: 0;
@@ -34,22 +34,22 @@
     opacity: 0;
     animation: fade-in 0.4s ease 0.4s forwards;
 }
-.openai_message.user {
+.block_openai_chat .openai_message.user {
     align-self: flex-end;
     text-align: right;
 }
-.openai_message.user:before {
+.block_openai_chat .openai_message.user:before {
     right: 0;
     left: unset;
 }
-.openai_message.bot {
+.block_openai_chat .openai_message.bot {
     background: var(--blue);
     color: var(--white);
 }
-.openai_message.loading {
+.block_openai_chat .openai_message.loading {
     animation: thinking 1s ease infinite;
 }
-.openai_message.loading:before {
+.block_openai_chat .openai_message.loading:before {
     animation: none;
     opacity: 0;
 }
