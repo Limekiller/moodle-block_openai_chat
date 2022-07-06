@@ -23,6 +23,8 @@
  */
 
 require_once('../../../config.php');
+require_once($CFG->libdir . '/filelib.php');
+
 require_login();
 
 $body = json_decode(file_get_contents('php://input'), true);
@@ -68,24 +70,13 @@ $curlbody = [
     "stop" => $username . ":"
 ];
 
-$curl = curl_init();
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.openai.com/v1/engines/text-davinci-002/completions',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => json_encode($curlbody),
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: Bearer ' . $apikey,
-    'Content-Type: application/json'
-  ),
+$curl = new \curl();
+$curl->setopt(array(
+    'CURLOPT_HTTPHEADER' => array(
+        'Authorization: Bearer ' . $apikey,
+        'Content-Type: application/json'
+    ),
 ));
 
-$response = curl_exec($curl);
-
-curl_close($curl);
+$response = $curl->post('https://api.openai.com/v1/engines/text-davinci-002/completions', json_encode($curlbody));
 echo $response;
