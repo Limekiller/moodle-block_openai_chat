@@ -6,7 +6,7 @@
 
 This block allows your Moodle users to get 24/7 chat support via OpenAI's GPT-3 text-completion AI. The block offers multiple options for customizing the persona of the AI and the prompt it is given, in order to influence the text it outputs.
 
-To get started, create an OpenAI account [here](https://openai.com/api/). **All you'll need for this plugin is to create an API key and add that key to the plugin's settings.**
+To get started, create an OpenAI account [here](https://openai.com/api/). **This plugin requries a commercial subscription via a paid OpenAI account. For more information on purchasing a subscription, please see the aforementioned link. Once a paid account is created, all you need to do is add the API key to the plugin settings.**
 
 This plugin uses the Completion API, where a prompt is given and the AI is asked to guess what might come next in the sequence. To read more about this API, and for tips on optimizing your prompt to get the output that you want, please look [here](https://beta.openai.com/docs/guides/completion/introduction).
 

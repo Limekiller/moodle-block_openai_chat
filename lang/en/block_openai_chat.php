@@ -26,6 +26,7 @@ $string['pluginname'] = 'OpenAI Chat Block';
 $string['openai_chat'] = 'OpenAI Chat';
 $string['openaichat:addinstance'] = 'Add a new OpenAI Chat block';
 $string['openaichat:myaddinstance'] = 'Add a new OpenAI Chat block to the My Moodle page';
+$string['privacy:metadata'] = 'The OpenAI Chat block stores no personal user data; nor does it, by default, send personal data to OpenAI. However, chat messages submitted by users are sent in their entirety to OpenAI, and are then subject to OpenAI\'s privacy policy (https://openai.com/api/policies/privacy/), which may store messages in order to improve the API.';
 
 $string['blocktitle'] = 'Block title';
 
