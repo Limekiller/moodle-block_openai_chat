@@ -23,7 +23,7 @@
     margin-bottom: 1.75rem;
     width: fit-content;
     max-width: 90%;
-    animation: popup 0.4s cubic-bezier(0.87, 0, 0.13, 1);
+    animation: block_openai_chat_popup 0.4s cubic-bezier(0.87, 0, 0.13, 1);
     position: relative;
 }
 .block_openai_chat .openai_message:before {
@@ -32,7 +32,7 @@
     left: 0;
     color: gray;
     opacity: 0;
-    animation: fade-in 0.4s ease 0.4s forwards;
+    animation: block_openai_chat_fade-in 0.4s ease 0.4s forwards;
 }
 .block_openai_chat .openai_message.user {
     align-self: flex-end;
@@ -47,27 +47,27 @@
     color: var(--white);
 }
 .block_openai_chat .openai_message.loading {
-    animation: thinking 1s ease infinite;
+    animation: block_openai_chat_thinking 1s ease infinite;
 }
 .block_openai_chat .openai_message.loading:before {
     animation: none;
     opacity: 0;
 }
 
-@keyframes popup {
+@keyframes block_openai_chat_popup {
     0% {opacity: 0; transform: translateY(5px);}
     70% {opacity: 1; transform: translateY(-2.5px);}
     85% {transform: translateY(2.5px);}
     100% {transform: translateY(0px);}
 }
 
-@keyframes thinking {
+@keyframes block_openai_chat_thinking {
     0% {opacity: 1;}
     50% {opacity: 0.25;}
     100% {opacity: 1;}
 }
 
-@keyframes fade-in {
+@keyframes block_openai_chat_fade-in {
     from {opacity: 0;}
     to {opacity: 1;}
 }
