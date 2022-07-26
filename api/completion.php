@@ -25,16 +25,30 @@
 require_once('../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
 
-require_login();
+function build_source_of_truth() {
+    $sourceoftruth = get_config('block_openai_chat', 'sourceoftruth');
+
+    if ($sourceoftruth) {
+        $sourceoftruth = 
+            "Below is a list of questions and their answers:\n\n" . 
+            $sourceoftruth . 
+            "\n\n=======================================\n\n";
+    }
+    return $sourceoftruth;
+}
+
+if (get_config('block_openai_chat', 'restrictusage') !== "0") {
+    require_login();
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: $CFG->wwwroot");
+    die();
+}
 
 $body = json_decode(file_get_contents('php://input'), true);
 $message = clean_param($body['message'], PARAM_NOTAGS);
 $history = clean_param($body['history'], PARAM_NOTAGS);
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    die();
-}
 
 if (!$message) {
     http_response_code(400);
@@ -46,6 +60,7 @@ $apikey = get_config('block_openai_chat', 'apikey');
 $prompt = get_config('block_openai_chat', 'prompt');
 $agentname = get_config('block_openai_chat', 'agentname');
 $username = get_config('block_openai_chat', 'username');
+$sourceoftruth = build_source_of_truth();
 
 if (!$prompt) {
     $prompt = get_string('defaultprompt', 'block_openai_chat');
@@ -61,12 +76,12 @@ $prompt .= "\n";
 $history .= $username . ": ";
 
 $curlbody = [
-    "prompt" => $prompt . $history . $message . "\n" . $agentname . ': ',
-    "temperature" => 0,
+    "prompt" => $sourceoftruth . $prompt . $history . $message . "\n" . $agentname . ':',
+    "temperature" => 0.5,
     "max_tokens" => 500,
     "top_p" => 1,
     "frequency_penalty" => 1,
-    "presence_penalty" => 0,
+    "presence_penalty" => 1,
     "stop" => $username . ":"
 ];
 
