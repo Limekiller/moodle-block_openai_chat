@@ -24,6 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$settings->add(new admin_setting_configcheckbox(
+    'block_openai_chat/restrictusage',
+    get_string('restrictusage', 'block_openai_chat'),
+    get_string('restrictusagedesc', 'block_openai_chat'),
+    1
+));
+
 $settings->add(new admin_setting_configtext(
     'block_openai_chat/apikey',
     get_string('apikey', 'block_openai_chat'),
@@ -53,5 +60,13 @@ $settings->add(new admin_setting_configtext(
     get_string('username', 'block_openai_chat'),
     get_string('usernamedesc', 'block_openai_chat'),
     'User',
+    PARAM_TEXT
+));
+
+$settings->add(new admin_setting_configtextarea(
+    'block_openai_chat/sourceoftruth',
+    get_string('sourceoftruth', 'block_openai_chat'),
+    get_string('sourceoftruthdesc', 'block_openai_chat'),
+    '',
     PARAM_TEXT
 ));

@@ -30,14 +30,18 @@ $string['privacy:metadata'] = 'The OpenAI Chat block stores no personal user dat
 
 $string['blocktitle'] = 'Block title';
 
+$string['restrictusage'] = 'Restrict chat usage to logged-in users';
+$string['restrictusagedesc'] = 'If this box is checked, only logged-in users will be able to use the chat box.';
 $string['apikey'] = 'OpenAI API Key';
 $string['apikeydesc'] = 'The API Key for your OpenAI account';
 $string['prompt'] = 'Completion prompt';
-$string['promptdesc'] = 'The prompt the AI will be given before the conversation transcript.';
+$string['promptdesc'] = 'The prompt the AI will be given before the conversation transcript';
 $string['agentname'] = 'Agent name';
 $string['agentnamedesc'] = 'The name that the AI will use for itself internally';
 $string['username'] = 'User name';
 $string['usernamedesc'] = 'The name that the AI will use for the user internally';
+$string['sourceoftruth'] = 'Source of truth';
+$string['sourceoftruthdesc'] = 'Although the AI is very capable out-of-the-box, if it doesn\'t know the answer to a question, it is more likely to give incorrect information confidently than to refuse to answer. In this textbox, you can add common questions and their answers for the AI to pull from. Please put questions and answers in the following format: <pre>Q: Question 1<br />A: Answer 1<br /><br />Q: Question 2<br />A: Answer 2</pre>';
 $string['showlabels'] = 'Show labels';
 
 $string['defaultprompt'] = "Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning:";
@@ -45,3 +49,4 @@ $string['defaultagentname'] = 'Agent';
 $string['defaultusername'] = 'User';
 $string['askaquestion'] = 'Ask a question...';
 $string['apikeymissing'] = 'Please add your OpenAI API key to the global block settings.';
+$string['erroroccurred'] = 'An error occurred! Please try again later.';

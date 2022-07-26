@@ -12,6 +12,9 @@
     width: 100%;
     transition: background 0.4s ease;
 }
+.block_openai_chat #openai_input.error {
+    border: 1px solid red;
+}
 .block_openai_chat #openai_input.disabled {
     background: #dbdbdb;
     pointer-events: none;
