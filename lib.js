@@ -1,3 +1,6 @@
+var questionString = 'Ask a question...'
+var errorString = 'An error occurred! Please try again later.'
+
 const init = () => {
     document.querySelector('#openai_input').addEventListener('keyup', e => {
         if (e.which === 13) {
@@ -6,6 +9,23 @@ const init = () => {
             e.target.value = ''
         }
     })
+
+    require(['core/str'], function(str) {
+        var strings = [
+            {
+                key: 'askaquestion',
+                component: 'block_openai_chat'
+            },
+            {
+                key: 'erroroccurred',
+                component: 'block_openai_chat'
+            },
+        ];
+        str.get_strings(strings).then((results) => {
+            questionString = results[0];
+            errorString = results[1];
+        });
+    });
 }
 
 const addToChatLog = (type, message) => {
@@ -30,6 +50,8 @@ const createCompletion = (message) => {
      */
     const history = buildTranscript()
     document.querySelector('#openai_input').classList.add('disabled')
+    document.querySelector('#openai_input').classList.remove('error')
+    document.querySelector('#openai_input').placeholder = questionString
     document.querySelector('#openai_input').blur()
     addToChatLog('bot loading', '...');
 
@@ -40,18 +62,29 @@ const createCompletion = (message) => {
             history: history
         })
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(response => {
         let messageContainer = document.querySelector('#openai_chat_log')
         messageContainer.removeChild(messageContainer.lastElementChild)
         document.querySelector('#openai_input').classList.remove('disabled')
 
+        if (!response.ok) {
+            throw Error(response.statusText)
+        } else {
+            return response.json()
+        }
+    })
+    .then(data => {
         try {
             addToChatLog('bot', data.choices[0].text)
         } catch (error) {
             addToChatLog('bot', data.error.message)
         }
     })
+    .catch(error => {
+        document.querySelector('#openai_input').classList.add('error')
+        document.querySelector('#openai_input').placeholder = errorString
+    })
+
 }
 
 const buildTranscript = () => {
