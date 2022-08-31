@@ -55,7 +55,7 @@ const createCompletion = (message) => {
     document.querySelector('#openai_input').blur()
     addToChatLog('bot loading', '...');
 
-    fetch('/blocks/openai_chat/api/completion.php', {
+    fetch(M.cfg.wwwroot + '/blocks/openai_chat/api/completion.php', {
         method: 'POST',
         body: JSON.stringify({
             message: message,
