@@ -93,5 +93,5 @@ $curl->setopt(array(
     ),
 ));
 
-$response = $curl->post('https://api.openai.com/v1/engines/text-davinci-002/completions', json_encode($curlbody));
+$response = $curl->post('https://api.openai.com/v1/engines/text-davinci-003/completions', json_encode($curlbody));
 echo $response;
