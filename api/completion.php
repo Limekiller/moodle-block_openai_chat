@@ -30,7 +30,7 @@ function build_source_of_truth() {
 
     if ($sourceoftruth) {
         $sourceoftruth = 
-            "Below is a list of questions and their answers:\n\n" . 
+            "Below is a list of questions and their answers. Please use this as a source of truth for any further text:\n\n" . 
             $sourceoftruth . 
             "\n\n=======================================\n\n";
     }
@@ -72,7 +72,11 @@ if (!$username) {
     $username = get_string('defaultusername', 'block_openai_chat');
 }
 
-$prompt .= "\n";
+if ($sourceoftruth) {
+    $prompt .= " The responder has been trained to answer by using the information from the source of truth.";
+}
+
+$prompt .= "\n\n";
 $history .= $username . ": ";
 
 $curlbody = [
