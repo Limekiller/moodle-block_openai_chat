@@ -71,3 +71,5 @@ There are a few settings that can be changed on a per-block basis. You can acces
 
 - **Block title:** The title for this block
 - **Show labels:** Whether or not the names chosen for "Agent name" and "User name" should appear in the chat UI
+
+Maintained by [Bryce Yoder](https://bryceyoder.com)
