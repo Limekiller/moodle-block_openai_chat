@@ -30,11 +30,19 @@ function build_source_of_truth() {
 
     if ($sourceoftruth) {
         $sourceoftruth = 
-            "Below is a list of questions and their answers. Please use this as a source of truth for any further text:\n\n" . 
-            $sourceoftruth . 
-            "\n\n=======================================\n\n";
-    }
+            get_string('sourceoftruthpreamble', 'block_openai_chat')
+            . $sourceoftruth 
+            . "\n\n";
+        }
     return $sourceoftruth;
+}
+
+function get_setting($settingname, $default_value) {
+    $setting = get_config('block_openai_chat', $settingname);
+    if (!$setting && (float) $setting != 0) {
+        $setting = $default_value;
+    }
+    return $setting;
 }
 
 if (get_config('block_openai_chat', 'restrictusage') !== "0") {
@@ -57,35 +65,32 @@ if (!$message) {
 }
 
 $apikey = get_config('block_openai_chat', 'apikey');
-$prompt = get_config('block_openai_chat', 'prompt');
-$agentname = get_config('block_openai_chat', 'agentname');
-$username = get_config('block_openai_chat', 'username');
+$prompt = get_setting('prompt', get_string('defaultprompt', 'block_openai_chat'));
+$agentname = get_setting('agentname', get_string('defaultagentname', 'block_openai_chat'));
+$username = get_setting('username', get_string('defaultusername', 'block_openai_chat'));
+
 $sourceoftruth = build_source_of_truth();
-
-if (!$prompt) {
-    $prompt = get_string('defaultprompt', 'block_openai_chat');
-}
-if (!$agentname) {
-    $agentname = get_string('defaultagentname', 'block_openai_chat');
-}
-if (!$username) {
-    $username = get_string('defaultusername', 'block_openai_chat');
-}
-
 if ($sourceoftruth) {
-    $prompt .= " The responder has been trained to answer by using the information from the source of truth.";
+    $prompt .= get_string('sourceoftruthreinforcement', 'block_openai_chat');
 }
 
 $prompt .= "\n\n";
 $history .= $username . ": ";
 
+$model = get_setting('model', 'text-davinci-003');
+$temperature = get_setting('temperature', 0.5);
+$maxlength = get_setting('maxlength', 500);
+$topp = get_setting('topp', 1);
+$frequency = get_setting('frequency', 1);
+$presence = get_setting('presence', 1);
+
 $curlbody = [
     "prompt" => $sourceoftruth . $prompt . $history . $message . "\n" . $agentname . ':',
-    "temperature" => 0.5,
-    "max_tokens" => 500,
-    "top_p" => 1,
-    "frequency_penalty" => 1,
-    "presence_penalty" => 1,
+    "temperature" => (float) $temperature,
+    "max_tokens" => (int) $maxlength,
+    "top_p" => (float) $topp,
+    "frequency_penalty" => (float) $frequency,
+    "presence_penalty" => (float) $presence,
     "stop" => $username . ":"
 ];
 
@@ -97,5 +102,5 @@ $curl->setopt(array(
     ),
 ));
 
-$response = $curl->post('https://api.openai.com/v1/engines/text-davinci-003/completions', json_encode($curlbody));
+$response = $curl->post("https://api.openai.com/v1/engines/$model/completions", json_encode($curlbody));
 echo $response;

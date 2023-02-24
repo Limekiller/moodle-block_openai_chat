@@ -24,8 +24,8 @@
 
 $string['pluginname'] = 'OpenAI Chat Block';
 $string['openai_chat'] = 'OpenAI Chat';
-$string['openaichat:addinstance'] = 'Add a new OpenAI Chat block';
-$string['openaichat:myaddinstance'] = 'Add a new OpenAI Chat block to the My Moodle page';
+$string['openai_chat:addinstance'] = 'Add a new OpenAI Chat block';
+$string['openai_chat:myaddinstance'] = 'Add a new OpenAI Chat block to the My Moodle page';
 $string['privacy:metadata'] = 'The OpenAI Chat block stores no personal user data; nor does it, by default, send personal data to OpenAI. However, chat messages submitted by users are sent in their entirety to OpenAI, and are then subject to OpenAI\'s privacy policy (https://openai.com/api/policies/privacy/), which may store messages in order to improve the API.';
 
 $string['blocktitle'] = 'Block title';
@@ -43,6 +43,20 @@ $string['usernamedesc'] = 'The name that the AI will use for the user internally
 $string['sourceoftruth'] = 'Source of truth';
 $string['sourceoftruthdesc'] = 'Although the AI is very capable out-of-the-box, if it doesn\'t know the answer to a question, it is more likely to give incorrect information confidently than to refuse to answer. In this textbox, you can add common questions and their answers for the AI to pull from. Please put questions and answers in the following format: <pre>Q: Question 1<br />A: Answer 1<br /><br />Q: Question 2<br />A: Answer 2</pre>';
 $string['showlabels'] = 'Show labels';
+$string['advanced'] = 'Advanced';
+$string['advanceddesc'] = 'Advanced arguments sent to OpenAI. Don\'t touch unless you know what you\'re doing!';
+$string['model'] = 'Model';
+$string['modeldesc'] = 'The model which will  generate the completion. Some models are suitable for natural language tasks, others specialize in code.';
+$string['temperature'] = 'Temperature';
+$string['temperaturedesc'] = 'Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.';
+$string['maxlength'] = 'Maximum length';
+$string['maxlengthdesc'] = 'The maximum number of token to generate. Requests can use up to 2,048 or 4,000 tokens shared between prompt and completion. The exact limit varies by model. (One token is roughly 4 characters for normal English text)';
+$string['topp'] = 'Top P';
+$string['toppdesc'] = 'Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered.';
+$string['frequency'] = 'Frequency penalty';
+$string['frequencydesc'] = 'How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model\'s likelihood to repeat the same line verbatim.';
+$string['presence'] = 'Presence penalty';
+$string['presencedesc'] = 'How much to penalize new tokens based on whether they appear in the text so far. Increases the model\'s likelihood to talk about new topics.';
 
 $string['defaultprompt'] = "Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning:";
 $string['defaultagentname'] = 'Agent';
@@ -50,3 +64,5 @@ $string['defaultusername'] = 'User';
 $string['askaquestion'] = 'Ask a question...';
 $string['apikeymissing'] = 'Please add your OpenAI API key to the global block settings.';
 $string['erroroccurred'] = 'An error occurred! Please try again later.';
+$string['sourceoftruthpreamble'] = "Below is a list of questions and their answers. Please use this information as reference for any relevant inquiries:\n\n";
+$string['sourceoftruthreinforcement'] = ' The responder has been trained to answer by first using the information from the above reference. However, if the reference does not cover the question or topic, the responder will use outside knowledge to answer:';

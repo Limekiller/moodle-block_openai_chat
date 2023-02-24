@@ -70,3 +70,70 @@ $settings->add(new admin_setting_configtextarea(
     '',
     PARAM_TEXT
 ));
+
+// Advanced Settings //
+
+$settings->add(new admin_setting_heading(
+    'block_openai_chat/advanced', 
+    get_string('advanced', 'block_openai_chat'),
+    get_string('advanceddesc', 'block_openai_chat'),
+));
+
+$settings->add(new admin_setting_configselect(
+    'block_openai_chat/model',
+    get_string('model', 'block_openai_chat'),
+    get_string('modeldesc', 'block_openai_chat'),
+    'text-davinci-003',
+    [
+        'text-davinci-003' => 'text-davinci-003',
+        'text-davinci-002' => 'text-davinci-002',
+        'text-davinci-001' => 'text-davinci-001',
+        'text-curie-001' => 'text-curie-001',
+        'text-babbage-001' => 'text-babbage-001',
+        'text-ada-001' => 'text-ada-001',
+        'davinci' => 'davinci',
+        'curie' => 'curie',
+        'babbage' => 'babbage',
+        'ada' => 'ada'
+    ]
+));
+
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/temperature',
+    get_string('temperature', 'block_openai_chat'),
+    get_string('temperaturedesc', 'block_openai_chat'),
+    0.5,
+    PARAM_FLOAT
+));
+
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/maxlength',
+    get_string('maxlength', 'block_openai_chat'),
+    get_string('maxlengthdesc', 'block_openai_chat'),
+    500,
+    PARAM_INT
+));
+
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/topp',
+    get_string('topp', 'block_openai_chat'),
+    get_string('toppdesc', 'block_openai_chat'),
+    1,
+    PARAM_FLOAT
+));
+
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/frequency',
+    get_string('frequency', 'block_openai_chat'),
+    get_string('frequencydesc', 'block_openai_chat'),
+    1,
+    PARAM_FLOAT
+));
+
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/presence',
+    get_string('presence', 'block_openai_chat'),
+    get_string('presencedesc', 'block_openai_chat'),
+    1,
+    PARAM_FLOAT
+));
