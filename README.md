@@ -36,7 +36,7 @@ The user is able to customize the prompt added to the top of the transcript, as 
 
 If a source of truth is provided, it will also be prepended to the transcript, similar to the below:
 ```
-Below is a list of questions and their answers:
+Below is a list of questions and their answers. Please use this information as reference for any relevant inquiries:
 
 Q: What color is the car?
 A: The car is blue
@@ -44,9 +44,8 @@ A: The car is blue
 Q: How do I upload an assignment?
 A: In your course, click on the assignment. Click the Add submission button, and then upload your file.
 
-=======================================
+Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning. The responder has been trained to answer by first using the information from the above reference. However, if the reference does not cover the question or topic, the responder will use outside knowledge to answer:
 
-Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning:
 User: What color is the apple?
 Agent: The apple is red.
 User: What color is the forest?
