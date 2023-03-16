@@ -42,8 +42,10 @@ class block_openai_chat extends block_base {
             return $this->content;
         }
 
+        $sourceoftruth = !empty($this->config) && $this->config->sourceoftruth ? $this->config->sourceoftruth : '';
+
         $this->page->requires->js('/blocks/openai_chat/lib.js');
-        $this->page->requires->js_init_call('init');
+        $this->page->requires->js_init_call('init', [$sourceoftruth]);
 
         // Determine if name labels should be shown.
         $showlabelscss = '';
@@ -58,13 +60,13 @@ class block_openai_chat extends block_base {
             ';
         }
 
-        $agentname = get_config('block_openai_chat', 'agentname') ? get_config('block_openai_chat', 'agentname') : get_string('defaultagentname', 'block_openai_chat');
+        $assistantname = get_config('block_openai_chat', 'assistantname') ? get_config('block_openai_chat', 'assistantname') : get_string('defaultassistantname', 'block_openai_chat');
         $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : get_string('defaultusername', 'block_openai_chat');
 
         $this->content = new stdClass;
         $this->content->text = '
             <script>
-                var agentName = "' . $agentname . '";
+                var assistantName = "' . $assistantname . '";
                 var userName = "' . $username . '";
             </script>
 
@@ -74,7 +76,7 @@ class block_openai_chat extends block_base {
                     content: "' . $username . '";
                 }
                 .openai_message.bot:before {
-                    content: "' . $agentname . '";
+                    content: "' . $assistantname . '";
                 }
             </style>
 

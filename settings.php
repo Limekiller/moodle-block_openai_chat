@@ -43,15 +43,15 @@ $settings->add(new admin_setting_configtextarea(
     'block_openai_chat/prompt',
     get_string('prompt', 'block_openai_chat'),
     get_string('promptdesc', 'block_openai_chat'),
-    "Below is a conversation between a user and a support agent for a Moodle site, where users go for online learning.",
+    "Below is a conversation between a user and a support assistant for a Moodle site, where users go for online learning.",
     PARAM_TEXT
 ));
 
 $settings->add(new admin_setting_configtext(
-    'block_openai_chat/agentname',
-    get_string('agentname', 'block_openai_chat'),
-    get_string('agentnamedesc', 'block_openai_chat'),
-    'Agent',
+    'block_openai_chat/assistantname',
+    get_string('assistantname', 'block_openai_chat'),
+    get_string('assistantnamedesc', 'block_openai_chat'),
+    'Assistant',
     PARAM_TEXT
 ));
 
@@ -85,6 +85,8 @@ $settings->add(new admin_setting_configselect(
     get_string('modeldesc', 'block_openai_chat'),
     'text-davinci-003',
     [
+        'gpt-3.5-turbo' => 'gpt-3.5-turbo',
+        'gpt-3.5-turbo-0301' => 'gpt-3.5-turbo-0301',
         'text-davinci-003' => 'text-davinci-003',
         'text-davinci-002' => 'text-davinci-002',
         'text-davinci-001' => 'text-davinci-001',

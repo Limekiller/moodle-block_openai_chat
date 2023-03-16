@@ -15,35 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * API endpoint for retrieving GPT-3 completion
+ * API endpoint for retrieving GPT completion
  *
  * @package    block_openai_chat
  * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use \block_openai_chat\completion;
+
 require_once('../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
-
-function build_source_of_truth() {
-    $sourceoftruth = get_config('block_openai_chat', 'sourceoftruth');
-
-    if ($sourceoftruth) {
-        $sourceoftruth = 
-            get_string('sourceoftruthpreamble', 'block_openai_chat')
-            . $sourceoftruth 
-            . "\n\n";
-        }
-    return $sourceoftruth;
-}
-
-function get_setting($settingname, $default_value) {
-    $setting = get_config('block_openai_chat', $settingname);
-    if (!$setting && (float) $setting != 0) {
-        $setting = $default_value;
-    }
-    return $setting;
-}
 
 if (get_config('block_openai_chat', 'restrictusage') !== "0") {
     require_login();
@@ -56,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $body = json_decode(file_get_contents('php://input'), true);
 $message = clean_param($body['message'], PARAM_NOTAGS);
-$history = clean_param($body['history'], PARAM_NOTAGS);
+$history = clean_param_array($body['history'], PARAM_NOTAGS, true);
+$localsourceoftruth = clean_param($body['sourceOfTruth'], PARAM_NOTAGS);
 
 if (!$message) {
     http_response_code(400);
@@ -64,43 +47,28 @@ if (!$message) {
     die();
 }
 
-$apikey = get_config('block_openai_chat', 'apikey');
-$prompt = get_setting('prompt', get_string('defaultprompt', 'block_openai_chat'));
-$agentname = get_setting('agentname', get_string('defaultagentname', 'block_openai_chat'));
-$username = get_setting('username', get_string('defaultusername', 'block_openai_chat'));
-
-$sourceoftruth = build_source_of_truth();
-if ($sourceoftruth) {
-    $prompt .= get_string('sourceoftruthreinforcement', 'block_openai_chat');
-}
-
-$prompt .= "\n\n";
-$history .= $username . ": ";
-
-$model = get_setting('model', 'text-davinci-003');
-$temperature = get_setting('temperature', 0.5);
-$maxlength = get_setting('maxlength', 500);
-$topp = get_setting('topp', 1);
-$frequency = get_setting('frequency', 1);
-$presence = get_setting('presence', 1);
-
-$curlbody = [
-    "prompt" => $sourceoftruth . $prompt . $history . $message . "\n" . $agentname . ':',
-    "temperature" => (float) $temperature,
-    "max_tokens" => (int) $maxlength,
-    "top_p" => (float) $topp,
-    "frequency_penalty" => (float) $frequency,
-    "presence_penalty" => (float) $presence,
-    "stop" => $username . ":"
+$engines = [
+    'gpt-3.5-turbo-0301' => 'chat',
+    'gpt-3.5-turbo' => 'chat',
+    'text-davinci-003' => 'basic',
+    'text-davinci-002' => 'basic',
+    'text-davinci-001' => 'basic',
+    'text-curie-001' => 'basic',
+    'text-babbage-001' => 'basic',
+    'text-ada-001' => 'basic',
+    'davinci' => 'basic',
+    'curie' => 'basic',
+    'babbage' => 'basic',
+    'ada' => 'basic'
 ];
 
-$curl = new \curl();
-$curl->setopt(array(
-    'CURLOPT_HTTPHEADER' => array(
-        'Authorization: Bearer ' . $apikey,
-        'Content-Type: application/json'
-    ),
-));
+$model = get_config('block_openai_chat', 'model');
+if (!$model) {
+    $model = 'text-davinci-003';
+}
 
-$response = $curl->post("https://api.openai.com/v1/engines/$model/completions", json_encode($curlbody));
+$engine_class = '\block_openai_chat\completion\\' . $engines[$model];
+$completion = new $engine_class(...[$model, $message, $history, $localsourceoftruth]);
+$response = $completion->create_completion();
+
 echo $response;

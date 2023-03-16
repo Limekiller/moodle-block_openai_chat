@@ -34,5 +34,10 @@ class block_openai_chat_edit_form extends block_edit_form {
 
         $mform->addElement('advcheckbox', 'config_showlabels', get_string('showlabels', 'block_openai_chat'), '&nbsp;');
         $mform->setDefault('config_showlabels', 1);
+
+        $mform->addElement('textarea', 'config_sourceoftruth', get_string('sourceoftruth', 'block_openai_chat'), 'd');
+        $mform->setDefault('config_sourceoftruth', '');
+        $mform->setType('config_sourceoftruth', PARAM_TEXT);
+        $mform->addHelpButton('config_sourceoftruth', 'config_sourceoftruth', 'block_openai_chat');
     }
 }

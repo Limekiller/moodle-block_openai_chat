@@ -1,11 +1,11 @@
 var questionString = 'Ask a question...'
 var errorString = 'An error occurred! Please try again later.'
 
-const init = () => {
+const init = (Y, sourceOfTruth) => {
     document.querySelector('#openai_input').addEventListener('keyup', e => {
-        if (e.which === 13) {
+        if (e.which === 13 && e.target.value !== "") {
             addToChatLog('user', e.target.value)
-            createCompletion(e.target.value)
+            createCompletion(e.target.value, sourceOfTruth)
             e.target.value = ''
         }
     })
@@ -43,7 +43,7 @@ const addToChatLog = (type, message) => {
     messageContainer.scrollTop = messageContainer.scrollHeight
 }
 
-const createCompletion = (message) => {
+const createCompletion = (message, sourceOfTruth) => {
     /**
      * Makes an API request to get a completion from GPT-3, and adds it to the chat log
      * @param {string} message The text to get a completion for
@@ -59,7 +59,8 @@ const createCompletion = (message) => {
         method: 'POST',
         body: JSON.stringify({
             message: message,
-            history: history
+            history: history,
+            sourceOfTruth: sourceOfTruth
         })
     })
     .then(response => {
@@ -75,7 +76,7 @@ const createCompletion = (message) => {
     })
     .then(data => {
         try {
-            addToChatLog('bot', data.choices[0].text)
+            data.choices[0].text ? addToChatLog('bot', data.choices[0].text) : addToChatLog('bot', data.choices[0].message.content);
         } catch (error) {
             addToChatLog('bot', data.error.message)
         }
@@ -90,9 +91,9 @@ const createCompletion = (message) => {
 const buildTranscript = () => {
     /**
      * Using the existing messages in the chat history, create a string that can be used to aid completion
-     * @return {string} A transcript of the conversation up to this point
+     * @return {JSONObject} A transcript of the conversation up to this point
      */
-    let transcript = ''
+    let transcript = []
     document.querySelectorAll('.openai_message').forEach((message, index) => {
         if (index === document.querySelectorAll('.openai_message').length - 1) {
             return
@@ -100,9 +101,9 @@ const buildTranscript = () => {
 
         let user = userName
         if (message.classList.contains('bot')) {
-            user = agentName
+            user = assistantName
         }
-        transcript += `${user}: ${message.innerText}\n`
+        transcript.push({"user": user, "message": message.innerText})
     })
 
     return transcript
