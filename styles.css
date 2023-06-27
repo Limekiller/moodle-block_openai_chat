@@ -58,19 +58,39 @@
 }
 
 @keyframes block_openai_chat_popup {
-    0% {opacity: 0; transform: translateY(5px);}
-    70% {opacity: 1; transform: translateY(-2.5px);}
-    85% {transform: translateY(2.5px);}
-    100% {transform: translateY(0px);}
+    0% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(-2.5px);
+    }
+    85% {
+        transform: translateY(2.5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
 @keyframes block_openai_chat_thinking {
-    0% {opacity: 1;}
-    50% {opacity: 0.25;}
-    100% {opacity: 1;}
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.25;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes block_openai_chat_fade-in {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
