@@ -29,8 +29,8 @@ defined('MOODLE_INTERNAL') || die;
 
 class chat extends \block_openai_chat\completion {
 
-    public function __construct($model, $message, $history, $localsourceoftruth) {
-        parent::__construct($model, $message, $history, $localsourceoftruth);
+    public function __construct($model, $message, $history, $block_settings) {
+        parent::__construct($model, $message, $history, $block_settings);
     }
 
     /**
@@ -70,20 +70,14 @@ class chat extends \block_openai_chat\completion {
      * @return JSON: The response from OpenAI
      */
     private function make_api_call($history) {
-        $temperature = $this->get_setting('temperature', 0.5);
-        $maxlength = $this->get_setting('maxlength', 500);
-        $topp = $this->get_setting('topp', 1);
-        $frequency = $this->get_setting('frequency', 1);
-        $presence = $this->get_setting('presence', 1);
-
         $curlbody = [
             "model" => $this->model,
             "messages" => $history,
-            "temperature" => (float) $temperature,
-            "max_tokens" => (int) $maxlength,
-            "top_p" => (float) $topp,
-            "frequency_penalty" => (float) $frequency,
-            "presence_penalty" => (float) $presence,
+            "temperature" => (float) $this->temperature,
+            "max_tokens" => (int) $this->maxlength,
+            "top_p" => (float) $this->topp,
+            "frequency_penalty" => (float) $this->frequency,
+            "presence_penalty" => (float) $this->presence,
             "stop" => $this->username . ":"
         ];
 

@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot .'/blocks/openai_chat/lib.php');
+
 $settings->add(new admin_setting_configcheckbox(
     'block_openai_chat/restrictusage',
     get_string('restrictusage', 'block_openai_chat'),
@@ -79,25 +81,19 @@ $settings->add(new admin_setting_heading(
     get_string('advanceddesc', 'block_openai_chat')
 ));
 
+$settings->add(new admin_setting_configcheckbox(
+    'block_openai_chat/allowinstancesettings',
+    get_string('allowinstancesettings', 'block_openai_chat'),
+    get_string('allowinstancesettingsdesc', 'block_openai_chat'),
+    0
+));
+
 $settings->add(new admin_setting_configselect(
     'block_openai_chat/model',
     get_string('model', 'block_openai_chat'),
     get_string('modeldesc', 'block_openai_chat'),
     'text-davinci-003',
-    [
-        'gpt-3.5-turbo' => 'gpt-3.5-turbo',
-        'gpt-3.5-turbo-0301' => 'gpt-3.5-turbo-0301',
-        'text-davinci-003' => 'text-davinci-003',
-        'text-davinci-002' => 'text-davinci-002',
-        'text-davinci-001' => 'text-davinci-001',
-        'text-curie-001' => 'text-curie-001',
-        'text-babbage-001' => 'text-babbage-001',
-        'text-ada-001' => 'text-ada-001',
-        'davinci' => 'davinci',
-        'curie' => 'curie',
-        'babbage' => 'babbage',
-        'ada' => 'ada'
-    ]
+    get_models()['models']
 ));
 
 $settings->add(new admin_setting_configtext(

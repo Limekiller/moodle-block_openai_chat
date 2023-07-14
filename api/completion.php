@@ -26,6 +26,9 @@ use \block_openai_chat\completion;
 
 require_once('../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->dirroot . '/blocks/openai_chat/lib.php');
+
+global $DB;
 
 if (get_config('block_openai_chat', 'restrictusage') !== "0") {
     require_login();
@@ -39,36 +42,46 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $body = json_decode(file_get_contents('php://input'), true);
 $message = clean_param($body['message'], PARAM_NOTAGS);
 $history = clean_param_array($body['history'], PARAM_NOTAGS, true);
-$localsourceoftruth = clean_param($body['sourceOfTruth'], PARAM_NOTAGS);
+$block_id = clean_param($body['blockID'], PARAM_INT, true);
 
-if (!$message) {
-    http_response_code(400);
-    echo "'message' not included in request";
-    die();
+// So that we're not leaking info to the client like API key, the block makes an API request including its ID
+// Then we can look up that specific block to pull out its config data
+$instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
+$instance = block_instance('openai_chat', $instance_record);
+
+$block_settings = [];
+$setting_names = [
+    'sourceoftruth', 
+    'prompt', 
+    'username', 
+    'assistantname', 
+    'apikey', 
+    'model', 
+    'temperature', 
+    'maxlength', 
+    'topp', 
+    'frequency', 
+    'presence'
+];
+foreach ($setting_names as $setting) {
+    if ($instance->config) {
+        $block_settings[$setting] = $instance->config->$setting ? $instance->config->$setting : "";
+    } else {
+        $block_settings[$setting] = "";
+    }
 }
 
-$engines = [
-    'gpt-3.5-turbo-0301' => 'chat',
-    'gpt-3.5-turbo' => 'chat',
-    'text-davinci-003' => 'basic',
-    'text-davinci-002' => 'basic',
-    'text-davinci-001' => 'basic',
-    'text-curie-001' => 'basic',
-    'text-babbage-001' => 'basic',
-    'text-ada-001' => 'basic',
-    'davinci' => 'basic',
-    'curie' => 'basic',
-    'babbage' => 'basic',
-    'ada' => 'basic'
-];
-
+$engines = get_models()['types'];
 $model = get_config('block_openai_chat', 'model');
+if (get_config('block_openai_chat', 'allowinstancesettings') === "1" && $block_settings['model']) {
+    $model = $block_settings['model'];
+}
 if (!$model) {
     $model = 'text-davinci-003';
 }
 
 $engine_class = '\block_openai_chat\completion\\' . $engines[$model];
-$completion = new $engine_class(...[$model, $message, $history, $localsourceoftruth]);
+$completion = new $engine_class(...[$model, $message, $history, $block_settings]);
 $response = $completion->create_completion();
 
 echo $response;
