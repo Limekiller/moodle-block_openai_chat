@@ -76,7 +76,7 @@ $settings->add(new admin_setting_configtextarea(
 $settings->add(new admin_setting_heading(
     'block_openai_chat/advanced', 
     get_string('advanced', 'block_openai_chat'),
-    get_string('advanceddesc', 'block_openai_chat'),
+    get_string('advanceddesc', 'block_openai_chat')
 ));
 
 $settings->add(new admin_setting_configselect(
