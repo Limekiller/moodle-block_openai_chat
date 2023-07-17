@@ -35,11 +35,19 @@ const init = (Y, blockID) => {
  */
 const addToChatLog = (type, message) => {
     let messageContainer = document.querySelector('#openai_chat_log')
-    messageContainer.insertAdjacentHTML('beforeend', `
-        <div class='openai_message ${type}'>
-            ${message}
-        </div>
-    `)
+    const messageElem = document.createElement('div')
+    messageElem.classList.add('openai_message')
+
+    for (let className of type.split(' ')) {
+        messageElem.classList.add(className)
+    }
+
+    const messageText = document.createElement('span')
+    messageText.innerHTML = message
+    messageElem.append(messageText)
+
+    messageContainer.append(messageElem)
+    messageElem.style.width = (messageText.offsetWidth + 40) + "px"
     messageContainer.scrollTop = messageContainer.scrollHeight
 }
 
