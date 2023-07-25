@@ -67,6 +67,8 @@ class block_openai_chat extends block_base {
             $assistantname = $this->config->assistantname ? $this->config->assistantname : $assistantname;
             $username = $this->config->username ? $this->config->username : $username;
         }
+        $assistantname = format_string($assistantname, true, ['context' => $this->context]);
+        $username = format_string($username, true, ['context' => $this->context]);
 
         $this->content = new stdClass;
         $this->content->text = '
