@@ -64,8 +64,8 @@ class block_openai_chat extends block_base {
 
         // Then, override with local settings if available
         if (!empty($this->config)) {
-            $assistantname = $this->config->assistantname ? $this->config->assistantname : $assistantname;
-            $username = $this->config->username ? $this->config->username : $username;
+            $assistantname = (property_exists($this->config, 'assistantname') && $this->config->assistantname) ? $this->config->assistantname : $assistantname;
+            $username = (property_exists($this->config, 'username') && $this->config->username) ? $this->config->username : $username;
         }
 
         $this->content = new stdClass;
@@ -85,7 +85,7 @@ class block_openai_chat extends block_base {
                 }
             </style>
 
-            <div id="openai_chat_log"></div>
+            <div id="openai_chat_log" role="log"></div>
         ';
 
         $this->content->footer = get_config('block_openai_chat', 'apikey') ? '

@@ -64,7 +64,7 @@ $setting_names = [
     'presence'
 ];
 foreach ($setting_names as $setting) {
-    if ($instance->config) {
+    if ($instance->config && property_exists($instance->config, $setting)) {
         $block_settings[$setting] = $instance->config->$setting ? $instance->config->$setting : "";
     } else {
         $block_settings[$setting] = "";

@@ -35,9 +35,9 @@ const init = (Y, blockID) => {
  */
 const addToChatLog = (type, message) => {
     let messageContainer = document.querySelector('#openai_chat_log')
+    
     const messageElem = document.createElement('div')
     messageElem.classList.add('openai_message')
-
     for (let className of type.split(' ')) {
         messageElem.classList.add(className)
     }
@@ -88,6 +88,7 @@ const createCompletion = (message, blockID) => {
         } catch (error) {
             addToChatLog('bot', data.error.message)
         }
+        document.querySelector('#openai_input').focus()
     })
     .catch(error => {
         document.querySelector('#openai_input').classList.add('error')
