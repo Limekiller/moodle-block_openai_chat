@@ -84,4 +84,14 @@ $engine_class = '\block_openai_chat\completion\\' . $engines[$model];
 $completion = new $engine_class(...[$model, $message, $history, $block_settings]);
 $response = $completion->create_completion();
 
+// Convert messages from Markdown to HTML.
+// Decode the response
+$response = json_decode($response);
+// Format the markdown of each completion message into HTML.
+foreach($response->choices as $key => $choice ) {
+    $response->choices[$key]->message->content = format_text($choice->message->content, FORMAT_MARKDOWN, ['context' => $context]);
+}
+// Re-encode it the response.
+$response = json_encode($response);
+
 echo $response;
