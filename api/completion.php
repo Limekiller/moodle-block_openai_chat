@@ -51,12 +51,14 @@ $instance = block_instance('openai_chat', $instance_record);
 if (!$instance) {
     print_error('invalidblockinstance', 'error', $id);
 }
+
 $context = context::instance_by_id($instance_record->parentcontextid);
-if ($context->contextlevel != CONTEXT_COURSE) {
-    print_error('invalidcontext', 'error');
+if ($context->contextlevel == CONTEXT_COURSE) {
+    $course = get_course($context->instanceid);
+    $PAGE->set_course($course);
+} else {
+    $PAGE->set_context($context);
 }
-$course = get_course($context->instanceid);
-$PAGE->set_course($course);
 
 $block_settings = [];
 $setting_names = [
@@ -98,7 +100,11 @@ $response = $completion->create_completion($PAGE->context);
 $response = json_decode($response);
 // Format the markdown of each completion message into HTML.
 foreach($response->choices as $key => $choice ) {
-    $response->choices[$key]->message->content = format_text($choice->message->content, FORMAT_MARKDOWN, ['context' => $context]);
+    if ($engines[$model] == 'chat') {
+        $response->choices[$key]->message->content = format_text($choice->message->content, FORMAT_MARKDOWN, ['context' => $context]);
+    } else {
+        $response->choices[$key]->text = format_text($choice->text, FORMAT_MARKDOWN, ['context' => $context]);
+    }
 }
 // Re-encode it the response.
 $response = json_encode($response);
