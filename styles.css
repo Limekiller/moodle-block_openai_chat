@@ -5,6 +5,13 @@
     overflow-y: scroll;
     margin-bottom: 0.5rem;
 }
+.block_openai_chat #openai_chat_log p {
+    margin: 0;
+}
+.block_openai_chat #openai_chat_log a {
+    color: white;
+    text-decoration: underline;
+}
 .block_openai_chat #openai_input {
     padding: 0.5rem;
     border-radius: 0.5rem;
