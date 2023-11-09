@@ -58,6 +58,9 @@ The global block settings can be found by going to Site Administration > Plugins
 -  **User name:** This is the name that will be used for the User in the conversation. Both this and the above option can be used to influence the persona and responses of the AI.
 -  **Source of truth:** Here you can add a list of questions and answers that the AI will use to accurately respond to queries. Anything added here in the SoT at the plugin level will be applied to every block instance on the site.
 There is also an "Advanced" section that allows a user to fine-tune the AI's parameters. Please see OpenAI's documentation for more information on these options.
+- **Advanced:** These are extra, advanced parameters to adjust the behavior of the model
+  - Instance-level settings: Checking this box will allow anybody that can add a block to adjust all settings at a per-block level. Enabling this could incur extra charges.
+  - For more information on advanced settings, please see OpenAI documentation.
 
 ## Individual block settings
 
@@ -66,5 +69,13 @@ There are a few settings that can be changed on a per-block basis. You can acces
 - **Block title:** The title for this block
 - **Show labels:** Whether or not the names chosen for "Assistant name" and "User name" should appear in the chat UI
 - **Source of Truth:** Here you can add a list of questions and answers that the AI will use to accurately respond to queries at the block instance level. Information provided here will only apply to this specific block.
+  
+If "Instance-level settings" is checked in the global block settings, the following extra settings will also be available:
+- **Completion prompt:** This allows a completion prompt to be set per-block
+- **Advanced:** These are extra, advanced parameters to adjust the behavior of the model
+  - **OpenAI API Key:** This allows a separate API key to be used on individual block instances
+  - For more information on advanced settings, please see OpenAI documentation.
+    
+Note that any instance-level settings that are blank will default to the global block settings.
 
 Maintained by [Bryce Yoder](https://bryceyoder.com)
