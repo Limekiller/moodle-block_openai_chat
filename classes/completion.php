@@ -27,34 +27,56 @@ defined('MOODLE_INTERNAL') || die;
 
 class completion {
 
-    protected $apikey;
-    protected $assistantname;
-    protected $username;
-
-    protected $prompt;
-    protected $sourceoftruth;
-
-    protected $model;
     protected $message;
     protected $history;
 
+    protected $assistantname;
+    protected $username;
+    protected $prompt;
+    protected $sourceoftruth;
+
+    protected $apikey;
+    protected $model;
+    protected $temperature;
+    protected $maxlength;
+    protected $topp;
+    protected $frequency;
+    protected $presence;
+
     /**
      * Initialize all the class properties that we'll need regardless of model
+     * @param string model: The name of the model we're using
      * @param string message: The most recent message sent by the user
      * @param array history: An array of objects containing the history of the conversation
-     * @param string localsourceoftruth: The instance-level source of truth we got from the API call
+     * @param string block_settings: An object containing the instance-level settings if applicable
      */
-    public function __construct($model, $message, $history, $localsourceoftruth) {
+    public function __construct($model, $message, $history, $block_settings) {
+        // Set default values
+        $this->model = $model;
         $this->apikey = get_config('block_openai_chat', 'apikey');
         $this->prompt = $this->get_setting('prompt', get_string('defaultprompt', 'block_openai_chat'));
         $this->assistantname = $this->get_setting('assistantname', get_string('defaultassistantname', 'block_openai_chat'));
         $this->username = $this->get_setting('username', get_string('defaultusername', 'block_openai_chat'));
 
-        $this->model = $model;
+        $this->temperature = $this->get_setting('temperature', 0.5);
+        $this->maxlength = $this->get_setting('maxlength', 500);
+        $this->topp = $this->get_setting('topp', 1);
+        $this->frequency = $this->get_setting('frequency', 1);
+        $this->presence = $this->get_setting('presence', 1);
+
+        // Then override with block settings if applicable
+        if (get_config('block_openai_chat', 'allowinstancesettings') === "1") {
+            foreach ($block_settings as $name => $value) {
+                if ($value) {
+                    $this->$name = $value;
+                }
+            }
+        }
+
         $this->message = $message;
         $this->history = $history;
 
-        $this->build_source_of_truth($localsourceoftruth);
+        $this->build_source_of_truth($block_settings['sourceoftruth']);
     }
 
     /**

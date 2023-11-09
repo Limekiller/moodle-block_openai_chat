@@ -42,10 +42,8 @@ class block_openai_chat extends block_base {
             return $this->content;
         }
 
-        $sourceoftruth = !empty($this->config) && $this->config->sourceoftruth ? $this->config->sourceoftruth : '';
-
         $this->page->requires->js('/blocks/openai_chat/lib.js');
-        $this->page->requires->js_init_call('init', [$sourceoftruth]);
+        $this->page->requires->js_init_call('init', [$this->instance->id]);
 
         // Determine if name labels should be shown.
         $showlabelscss = '';
@@ -60,8 +58,17 @@ class block_openai_chat extends block_base {
             ';
         }
 
+        // First, fetch the global settings for these (and the defaults if not set)
         $assistantname = get_config('block_openai_chat', 'assistantname') ? get_config('block_openai_chat', 'assistantname') : get_string('defaultassistantname', 'block_openai_chat');
         $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : get_string('defaultusername', 'block_openai_chat');
+
+        // Then, override with local settings if available
+        if (!empty($this->config)) {
+            $assistantname = (property_exists($this->config, 'assistantname') && $this->config->assistantname) ? $this->config->assistantname : $assistantname;
+            $username = (property_exists($this->config, 'username') && $this->config->username) ? $this->config->username : $username;
+        }
+        $assistantname = format_string($assistantname, true, ['context' => $this->context]);
+        $username = format_string($username, true, ['context' => $this->context]);
 
         $this->content = new stdClass;
         $this->content->text = '
@@ -80,7 +87,7 @@ class block_openai_chat extends block_base {
                 }
             </style>
 
-            <div id="openai_chat_log"></div>
+            <div id="openai_chat_log" role="log"></div>
         ';
 
         $this->content->footer = get_config('block_openai_chat', 'apikey') ? '

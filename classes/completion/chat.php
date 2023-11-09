@@ -29,16 +29,17 @@ defined('MOODLE_INTERNAL') || die;
 
 class chat extends \block_openai_chat\completion {
 
-    public function __construct($model, $message, $history, $localsourceoftruth) {
-        parent::__construct($model, $message, $history, $localsourceoftruth);
+    public function __construct($model, $message, $history, $block_settings) {
+        parent::__construct($model, $message, $history, $block_settings);
     }
 
     /**
      * Given everything we know after constructing the parent, create a completion by constructing the prompt and making the api call
      * @return JSON: The API response from OpenAI
      */
-    public function create_completion() {
+    public function create_completion($context) {
         if ($this->sourceoftruth) {
+            $this->sourceoftruth = format_string($this->sourceoftruth, true, ['context' => $context]);
             $this->prompt .= get_string('sourceoftruthreinforcement', 'block_openai_chat');
         }
         $this->prompt .= "\n\n";
@@ -70,20 +71,14 @@ class chat extends \block_openai_chat\completion {
      * @return JSON: The response from OpenAI
      */
     private function make_api_call($history) {
-        $temperature = $this->get_setting('temperature', 0.5);
-        $maxlength = $this->get_setting('maxlength', 500);
-        $topp = $this->get_setting('topp', 1);
-        $frequency = $this->get_setting('frequency', 1);
-        $presence = $this->get_setting('presence', 1);
-
         $curlbody = [
             "model" => $this->model,
             "messages" => $history,
-            "temperature" => (float) $temperature,
-            "max_tokens" => (int) $maxlength,
-            "top_p" => (float) $topp,
-            "frequency_penalty" => (float) $frequency,
-            "presence_penalty" => (float) $presence,
+            "temperature" => (float) $this->temperature,
+            "max_tokens" => (int) $this->maxlength,
+            "top_p" => (float) $this->topp,
+            "frequency_penalty" => (float) $this->frequency,
+            "presence_penalty" => (float) $this->presence,
             "stop" => $this->username . ":"
         ];
 
