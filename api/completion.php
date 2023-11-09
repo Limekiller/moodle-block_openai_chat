@@ -28,7 +28,7 @@ require_once('../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->dirroot . '/blocks/openai_chat/lib.php');
 
-global $DB;
+global $DB, $PAGE;
 
 if (get_config('block_openai_chat', 'restrictusage') !== "0") {
     require_login();
@@ -48,6 +48,15 @@ $block_id = clean_param($body['blockID'], PARAM_INT, true);
 // Then we can look up that specific block to pull out its config data
 $instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
 $instance = block_instance('openai_chat', $instance_record);
+if (!$instance) {
+    print_error('invalidblockinstance', 'error', $id);
+}
+$context = context::instance_by_id($instance_record->parentcontextid);
+if ($context->contextlevel != CONTEXT_COURSE) {
+    print_error('invalidcontext', 'error');
+}
+$course = get_course($context->instanceid);
+$PAGE->set_course($course);
 
 $block_settings = [];
 $setting_names = [
@@ -82,7 +91,7 @@ if (!$model) {
 
 $engine_class = '\block_openai_chat\completion\\' . $engines[$model];
 $completion = new $engine_class(...[$model, $message, $history, $block_settings]);
-$response = $completion->create_completion();
+$response = $completion->create_completion($PAGE->context);
 
 // Convert messages from Markdown to HTML.
 // Decode the response

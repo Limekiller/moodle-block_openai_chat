@@ -37,8 +37,9 @@ class basic extends \block_openai_chat\completion {
      * Given everything we know after constructing the parent, create a completion by constructing the prompt and making the api call
      * @return JSON: The API response from OpenAI
      */
-    public function create_completion() {
+    public function create_completion($context) {
         if ($this->sourceoftruth) {
+            $this->sourceoftruth = format_string($this->sourceoftruth, true, ['context' => $context]);
             $this->prompt .= get_string('sourceoftruthreinforcement', 'block_openai_chat');
         }
         $this->prompt .= "\n\n";
