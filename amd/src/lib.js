@@ -1,7 +1,8 @@
 var questionString = 'Ask a question...'
 var errorString = 'An error occurred! Please try again later.'
 
-const init = (Y, blockID) => {
+export const init = (blockID) => {
+
     document.querySelector('#openai_input').addEventListener('keyup', e => {
         if (e.which === 13 && e.target.value !== "") {
             addToChatLog('user', e.target.value)
@@ -47,7 +48,9 @@ const addToChatLog = (type, message) => {
     messageElem.append(messageText)
 
     messageContainer.append(messageElem)
-    messageElem.style.width = (messageText.offsetWidth + 40) + "px"
+    if (messageText.offsetWidth) {
+        messageElem.style.width = (messageText.offsetWidth + 40) + "px"
+    }
     messageContainer.scrollTop = messageContainer.scrollHeight
 }
 

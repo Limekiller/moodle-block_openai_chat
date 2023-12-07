@@ -41,37 +41,57 @@ $settings->add(new admin_setting_configtext(
     PARAM_TEXT
 ));
 
-$settings->add(new admin_setting_configtextarea(
-    'block_openai_chat/prompt',
-    get_string('prompt', 'block_openai_chat'),
-    get_string('promptdesc', 'block_openai_chat'),
-    "Below is a conversation between a user and a support assistant for a Moodle site, where users go for online learning.",
-    PARAM_TEXT
+$settings->add(new admin_setting_configselect(
+    'block_openai_chat/type',
+    get_string('type', 'block_openai_chat'),
+    get_string('typedesc', 'block_openai_chat'),
+    'chat',
+    ['chat' => 'chat', 'assistant' => 'assistant']
 ));
 
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/assistantname',
-    get_string('assistantname', 'block_openai_chat'),
-    get_string('assistantnamedesc', 'block_openai_chat'),
-    'Assistant',
-    PARAM_TEXT
-));
+if (get_config('block_openai_chat', 'type') === 'assistant') {
 
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/username',
-    get_string('username', 'block_openai_chat'),
-    get_string('usernamedesc', 'block_openai_chat'),
-    'User',
-    PARAM_TEXT
-));
+} else {
+    $settings->add(new admin_setting_heading(
+        'block_openai_chat/chatheading', 
+        get_string('chatheading', 'block_openai_chat'),
+        get_string('chatheadingdesc', 'block_openai_chat')
+    ));
 
-$settings->add(new admin_setting_configtextarea(
-    'block_openai_chat/sourceoftruth',
-    get_string('sourceoftruth', 'block_openai_chat'),
-    get_string('sourceoftruthdesc', 'block_openai_chat'),
-    '',
-    PARAM_TEXT
-));
+    $settings->add(new admin_setting_configtextarea(
+        'block_openai_chat/prompt',
+        get_string('prompt', 'block_openai_chat'),
+        get_string('promptdesc', 'block_openai_chat'),
+        "Below is a conversation between a user and a support assistant for a Moodle site, where users go for online learning.",
+        PARAM_TEXT
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/assistantname',
+        get_string('assistantname', 'block_openai_chat'),
+        get_string('assistantnamedesc', 'block_openai_chat'),
+        'Assistant',
+        PARAM_TEXT
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/username',
+        get_string('username', 'block_openai_chat'),
+        get_string('usernamedesc', 'block_openai_chat'),
+        'User',
+        PARAM_TEXT
+    ));
+    
+    $settings->add(new admin_setting_configtextarea(
+        'block_openai_chat/sourceoftruth',
+        get_string('sourceoftruth', 'block_openai_chat'),
+        get_string('sourceoftruthdesc', 'block_openai_chat'),
+        '',
+        PARAM_TEXT
+    ));
+}
+
+
 
 // Advanced Settings //
 
