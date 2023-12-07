@@ -42,7 +42,10 @@ class block_openai_chat extends block_base {
             return $this->content;
         }
 
-        $this->page->requires->js_call_amd('block_openai_chat/lib', 'init', [$this->instance->id]);
+        $this->page->requires->js_call_amd('block_openai_chat/lib', 'init', [[
+            'blockId' => $this->instance->id,
+            'api_type' => get_config('block_openai_chat', 'type') ? get_config('block_openai_chat', 'type') : 'chat'
+        ]]);
 
         // Determine if name labels should be shown.
         $showlabelscss = '';

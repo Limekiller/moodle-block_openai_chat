@@ -1,12 +1,19 @@
 var questionString = 'Ask a question...'
 var errorString = 'An error occurred! Please try again later.'
 
-export const init = (blockID) => {
+export const init = (data) => {
+
+    const blockId = data['blockId']
+    const api_type = data['api_type']
+
+    addEventListener("beforeunload", e => {
+        localStorage.removeItem("block_openai_chat_threadId");
+    })
 
     document.querySelector('#openai_input').addEventListener('keyup', e => {
         if (e.which === 13 && e.target.value !== "") {
             addToChatLog('user', e.target.value)
-            createCompletion(e.target.value, blockID)
+            createCompletion(e.target.value, blockId, api_type)
             e.target.value = ''
         }
     })
@@ -57,9 +64,17 @@ const addToChatLog = (type, message) => {
 /**
  * Makes an API request to get a completion from GPT-3, and adds it to the chat log
  * @param {string} message The text to get a completion for
+ * @param {int} blockId The ID of the block this message is being sent from -- used to override settings if necessary
+ * @param {string} api_type "assistant" | "chat" The type of API to use
  */
-const createCompletion = (message, blockID) => {
+const createCompletion = (message, blockId, api_type) => {
+    let threadId = null
+    if (api_type === 'assistant') {
+        threadId = localStorage.getItem("block_openai_chat_threadId")
+    }  
+
     const history = buildTranscript()
+
     document.querySelector('#openai_input').classList.add('disabled')
     document.querySelector('#openai_input').classList.remove('error')
     document.querySelector('#openai_input').placeholder = questionString
@@ -71,7 +86,9 @@ const createCompletion = (message, blockID) => {
         body: JSON.stringify({
             message: message,
             history: history,
-            blockID: blockID
+            blockId: blockId,
+            api_type: api_type,
+            threadId: threadId
         })
     })
     .then(response => {
@@ -87,7 +104,10 @@ const createCompletion = (message, blockID) => {
     })
     .then(data => {
         try {
-            data.choices[0].text ? addToChatLog('bot', data.choices[0].text) : addToChatLog('bot', data.choices[0].message.content);
+            addToChatLog('bot', data.message)
+            if (data.thread_id) {
+                localStorage.setItem("block_openai_chat_threadId", data.thread_id);
+            }
         } catch (error) {
             addToChatLog('bot', data.error.message)
         }
@@ -97,7 +117,6 @@ const createCompletion = (message, blockID) => {
         document.querySelector('#openai_input').classList.add('error')
         document.querySelector('#openai_input').placeholder = errorString
     })
-
 }
 
 /**

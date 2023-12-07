@@ -24,6 +24,48 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+function get_type_to_display() {
+    // If a type was passed explicitly, use it
+    $page_type = optional_param('type', null, PARAM_RAW);
+    if ($page_type) {
+        return $page_type;
+    }
+
+    // If no type was passed, but we have a saved config setting, use that
+    $stored_type = get_config('block_openai_chat', 'type');
+    if ($stored_type) {
+        return $stored_type;
+    }
+
+    // Otherwise default to chat
+    return 'chat';
+}
+
+function fetch_assistants_array() {
+    $apikey = get_config('block_openai_chat', 'apikey');
+    if (!$apikey) {
+        return [];
+    }
+
+    $curl = new \curl();
+    $curl->setopt(array(
+        'CURLOPT_HTTPHEADER' => array(
+            'Authorization: Bearer ' . $apikey,
+            'Content-Type: application/json',
+            'OpenAI-Beta: assistants=v1'
+        ),
+    ));
+
+    $response = $curl->get("https://api.openai.com/v1/assistants?order=desc");
+    $response = json_decode($response);
+    $assistant_array = [];
+    foreach ($response->data as $assistant) {
+        $assistant_array[$assistant->id] = $assistant->name;
+    }
+
+    return $assistant_array;
+}
+
 function get_models() {
     return [
         "models" => [

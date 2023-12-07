@@ -35,9 +35,16 @@ $string['restrictusagedesc'] = 'If this box is checked, only logged-in users wil
 $string['apikey'] = 'OpenAI API Key';
 $string['apikeydesc'] = 'The API Key for your OpenAI account';
 $string['type'] = 'API Type';
-$string['typedesc'] = 'The API type that the plugin should use. This setting influences the other options that are available—make sure you save after changing it.';
+$string['typedesc'] = 'The API type that the plugin should use';
+
+$string['assistantheading'] = 'Assistant API Settings';
+$string['assistantheadingdesc'] = 'These settings only apply to the Assistant API type.';
+$string['assistant'] = 'Assistant';
+$string['assistantdesc'] = 'Which assistant attached to your OpenAI account you would like to use for the response';
+$string['noassistants'] = 'You haven\'t created any assistants yet. You need to create one <a target="_blank" href="https://platform.openai.com/assistants">in your OpenAI account</a> before you can select it here.';
+
 $string['chatheading'] = 'Chat API Settings';
-$string['chatheadingdesc'] = 'These settings only apply to the Chat API type. If you\'ve just changed the API type to something else, you should save before going any further.';
+$string['chatheadingdesc'] = 'These settings only apply to the Chat API type.';
 $string['prompt'] = 'Completion prompt';
 $string['promptdesc'] = 'The prompt the AI will be given before the conversation transcript';
 $string['assistantname'] = 'Assistant name';

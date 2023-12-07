@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die;
 
 class chat extends \block_openai_chat\completion {
 
-    public function __construct($model, $message, $history, $block_settings) {
+    public function __construct($model, $message, $history, $block_settings, $thread_id = null) {
         parent::__construct($model, $message, $history, $block_settings);
     }
 
@@ -91,6 +91,11 @@ class chat extends \block_openai_chat\completion {
         ));
 
         $response = $curl->post("https://api.openai.com/v1/chat/completions", json_encode($curlbody));
-        return $response;
+        $response = json_decode($response);
+
+        return [
+            "id" => $response->id,
+            "message" => $response->choices[0]->message->content
+        ];
     }
 }

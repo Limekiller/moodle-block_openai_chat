@@ -18,13 +18,19 @@
  * Plugin settings
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot .'/blocks/openai_chat/lib.php');
+
+$type = get_type_to_display();
+$assistant_array = fetch_assistants_array();
+
+global $PAGE;
+$PAGE->requires->js_call_amd('block_openai_chat/settings', 'init', [$type]);
 
 $settings->add(new admin_setting_configcheckbox(
     'block_openai_chat/restrictusage',
@@ -49,9 +55,34 @@ $settings->add(new admin_setting_configselect(
     ['chat' => 'chat', 'assistant' => 'assistant']
 ));
 
-if (get_config('block_openai_chat', 'type') === 'assistant') {
+// Assistant settings //
 
+if ($type === 'assistant') {
+    $settings->add(new admin_setting_heading(
+        'block_openai_chat/assistantheading', 
+        get_string('assistantheading', 'block_openai_chat'),
+        get_string('assistantheadingdesc', 'block_openai_chat')
+    ));
+
+    if (count($assistant_array)) {
+        $settings->add(new admin_setting_configselect(
+            'block_openai_chat/assistant',
+            get_string('assistant', 'block_openai_chat'),
+            get_string('assistantdesc', 'block_openai_chat'),
+            count($assistant_array) ? reset($assistant_array) : null,
+            $assistant_array
+        ));
+    } else {
+        $settings->add(new admin_setting_description(
+            'block_openai_chat/noassistants',
+            get_string('assistant', 'block_openai_chat'),
+            get_string('noassistants', 'block_openai_chat'),
+        ));    
+    }
 } else {
+
+    // Chat settings //
+
     $settings->add(new admin_setting_heading(
         'block_openai_chat/chatheading', 
         get_string('chatheading', 'block_openai_chat'),
@@ -92,7 +123,6 @@ if (get_config('block_openai_chat', 'type') === 'assistant') {
 }
 
 
-
 // Advanced Settings //
 
 $settings->add(new admin_setting_heading(
@@ -108,50 +138,54 @@ $settings->add(new admin_setting_configcheckbox(
     0
 ));
 
-$settings->add(new admin_setting_configselect(
-    'block_openai_chat/model',
-    get_string('model', 'block_openai_chat'),
-    get_string('modeldesc', 'block_openai_chat'),
-    'text-davinci-003',
-    get_models()['models']
-));
+if ($type === 'assistant') {
 
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/temperature',
-    get_string('temperature', 'block_openai_chat'),
-    get_string('temperaturedesc', 'block_openai_chat'),
-    0.5,
-    PARAM_FLOAT
-));
-
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/maxlength',
-    get_string('maxlength', 'block_openai_chat'),
-    get_string('maxlengthdesc', 'block_openai_chat'),
-    500,
-    PARAM_INT
-));
-
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/topp',
-    get_string('topp', 'block_openai_chat'),
-    get_string('toppdesc', 'block_openai_chat'),
-    1,
-    PARAM_FLOAT
-));
-
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/frequency',
-    get_string('frequency', 'block_openai_chat'),
-    get_string('frequencydesc', 'block_openai_chat'),
-    1,
-    PARAM_FLOAT
-));
-
-$settings->add(new admin_setting_configtext(
-    'block_openai_chat/presence',
-    get_string('presence', 'block_openai_chat'),
-    get_string('presencedesc', 'block_openai_chat'),
-    1,
-    PARAM_FLOAT
-));
+} else {
+    $settings->add(new admin_setting_configselect(
+        'block_openai_chat/model',
+        get_string('model', 'block_openai_chat'),
+        get_string('modeldesc', 'block_openai_chat'),
+        'text-davinci-003',
+        get_models()['models']
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/temperature',
+        get_string('temperature', 'block_openai_chat'),
+        get_string('temperaturedesc', 'block_openai_chat'),
+        0.5,
+        PARAM_FLOAT
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/maxlength',
+        get_string('maxlength', 'block_openai_chat'),
+        get_string('maxlengthdesc', 'block_openai_chat'),
+        500,
+        PARAM_INT
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/topp',
+        get_string('topp', 'block_openai_chat'),
+        get_string('toppdesc', 'block_openai_chat'),
+        1,
+        PARAM_FLOAT
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/frequency',
+        get_string('frequency', 'block_openai_chat'),
+        get_string('frequencydesc', 'block_openai_chat'),
+        1,
+        PARAM_FLOAT
+    ));
+    
+    $settings->add(new admin_setting_configtext(
+        'block_openai_chat/presence',
+        get_string('presence', 'block_openai_chat'),
+        get_string('presencedesc', 'block_openai_chat'),
+        1,
+        PARAM_FLOAT
+    ));
+}
