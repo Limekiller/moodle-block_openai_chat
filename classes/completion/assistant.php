@@ -99,6 +99,9 @@ class assistant extends \block_openai_chat\completion {
         $curlbody = [
             "assistant_id" => $this->assistant,
         ];
+        if ($this->instructions) {
+            $curlbody["instructions"] = $this->instructions;
+        }
 
         $curl = new \curl();
         $curl->setopt(array(

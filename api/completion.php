@@ -65,7 +65,8 @@ if ($context->contextlevel == CONTEXT_COURSE) {
 $block_settings = [];
 $setting_names = [
     'sourceoftruth', 
-    'prompt', 
+    'prompt',
+    'instructions',
     'username', 
     'assistantname', 
     'apikey', 
@@ -74,7 +75,8 @@ $setting_names = [
     'maxlength', 
     'topp', 
     'frequency', 
-    'presence'
+    'presence',
+    'assistant'
 ];
 foreach ($setting_names as $setting) {
     if ($instance->config && property_exists($instance->config, $setting)) {
@@ -102,7 +104,6 @@ if ($api_type === 'assistant') {
 $completion = new $engine_class(...[$model, $message, $history, $block_settings, $thread_id]);
 $response = $completion->create_completion($PAGE->context);
 
-// Convert messages from Markdown to HTML.
 // Format the markdown of each completion message into HTML.
 $response["message"] = format_text($response["message"], FORMAT_MARKDOWN, ['context' => $context]);
 $response = json_encode($response);

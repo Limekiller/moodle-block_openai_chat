@@ -64,6 +64,11 @@
     opacity: 0;
 }
 
+.block_openai_chat.disabled {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
 @keyframes block_openai_chat_popup {
     0% {
         opacity: 0;

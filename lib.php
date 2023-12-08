@@ -41,8 +41,17 @@ function get_type_to_display() {
     return 'chat';
 }
 
-function fetch_assistants_array() {
-    $apikey = get_config('block_openai_chat', 'apikey');
+function fetch_assistants_array($block_id = null) {
+    global $DB;
+
+    if (!$block_id) {
+        $apikey = get_config('block_openai_chat', 'apikey');
+    } else {
+        $instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
+        $instance = block_instance('openai_chat', $instance_record);
+        $apikey = $instance->config->apikey ? $instance->config->apikey : get_config('block_openai_chat', 'apikey');
+    }
+
     if (!$apikey) {
         return [];
     }

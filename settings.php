@@ -30,14 +30,7 @@ $type = get_type_to_display();
 $assistant_array = fetch_assistants_array();
 
 global $PAGE;
-$PAGE->requires->js_call_amd('block_openai_chat/settings', 'init', [$type]);
-
-$settings->add(new admin_setting_configcheckbox(
-    'block_openai_chat/restrictusage',
-    get_string('restrictusage', 'block_openai_chat'),
-    get_string('restrictusagedesc', 'block_openai_chat'),
-    1
-));
+$PAGE->requires->js_call_amd('block_openai_chat/settings', 'init');
 
 $settings->add(new admin_setting_configtext(
     'block_openai_chat/apikey',
@@ -53,6 +46,13 @@ $settings->add(new admin_setting_configselect(
     get_string('typedesc', 'block_openai_chat'),
     'chat',
     ['chat' => 'chat', 'assistant' => 'assistant']
+));
+
+$settings->add(new admin_setting_configcheckbox(
+    'block_openai_chat/restrictusage',
+    get_string('restrictusage', 'block_openai_chat'),
+    get_string('restrictusagedesc', 'block_openai_chat'),
+    1
 ));
 
 // Assistant settings //

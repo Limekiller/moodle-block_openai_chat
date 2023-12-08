@@ -43,6 +43,7 @@ class completion {
     protected $presence;
 
     protected $assistant;
+    protected $instructions;
 
     /**
      * Initialize all the class properties that we'll need regardless of model
@@ -71,6 +72,7 @@ class completion {
         $this->presence = $this->get_setting('presence', 1);
 
         $this->assistant = $this->get_setting('assistant');
+        $this->instructions = $this->get_setting('instructions');
 
         // Then override with block settings if applicable
         if (get_config('block_openai_chat', 'allowinstancesettings') === "1") {

@@ -1,9 +1,8 @@
-export const init = (type) => {
-    document.querySelector('#id_s_block_openai_chat_type').value = type
+export const init = () => {
     document.querySelector('#id_s_block_openai_chat_type').addEventListener('change', e => {
-        window.onbeforeunload = null
-        const parser = new URL(window.location);
-        parser.searchParams.set('type', e.target.value);
-        window.location = parser.href;
+        // If the API Type is changed, programmatically hit save so the page automatically reloads with the new options
+        document.querySelector('.settingsform').classList.add('block_openai_chat')
+        document.querySelector('.settingsform').classList.add('disabled')
+        document.querySelector('.settingsform button[type="submit"]').click()
     })
 }
