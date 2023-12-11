@@ -25,19 +25,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 function get_type_to_display() {
-    // If a type was passed explicitly, use it
-    $page_type = optional_param('type', null, PARAM_RAW);
-    if ($page_type) {
-        return $page_type;
-    }
-
-    // If no type was passed, but we have a saved config setting, use that
     $stored_type = get_config('block_openai_chat', 'type');
     if ($stored_type) {
         return $stored_type;
     }
-
-    // Otherwise default to chat
+    
     return 'chat';
 }
 

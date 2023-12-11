@@ -12,19 +12,36 @@
     color: white;
     text-decoration: underline;
 }
+.block_openai_chat #control_bar {
+    display: flex;
+    gap: 0.5rem;
+}
+.block_openai_chat #control_bar button {
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 0.5rem;
+    width: 2.5rem;
+}
+.block_openai_chat #control_bar #go {
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+.block_openai_chat #control_bar #refresh {
+    background-color: var(--secondary);
+    color: black;
+}
+.block_openai_chat #input_bar {
+    display: flex;
+}
 .block_openai_chat #openai_input {
     padding: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.5rem 0 0 0.5rem;
     border: 1px solid gray;
     width: 100%;
     transition: background 0.4s ease;
 }
 .block_openai_chat #openai_input.error {
     border: 1px solid red;
-}
-.block_openai_chat #openai_input.disabled {
-    background: #dbdbdb;
-    pointer-events: none;
 }
 .block_openai_chat .openai_message {
     padding: 0.75rem 1rem;
@@ -64,7 +81,8 @@
     opacity: 0;
 }
 
-.block_openai_chat.disabled {
+.block_openai_chat.disabled,
+.block_openai_chat .disabled {
     opacity: 0.25;
     pointer-events: none;
 }

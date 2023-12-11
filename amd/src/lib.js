@@ -5,10 +5,37 @@ export const init = (data) => {
 
     const blockId = data['blockId']
     const api_type = data['api_type']
+    const persistConvo = data['persistConvo']
 
-    addEventListener("beforeunload", e => {
-        localStorage.removeItem("block_openai_chat_threadId");
-    })
+    // Initialize local data storage if necessary
+    // If a thread ID exists for this block, make an API request to get existing messages
+    if (api_type === 'assistant') {
+        chatData = localStorage.getItem("block_openai_chat_data")
+        if (chatData) {
+            chatData = JSON.parse(chatData)
+            if (chatData[blockId] && chatData[blockId]['threadId'] && persistConvo === "1") {
+                fetch(`${M.cfg.wwwroot}/blocks/openai_chat/api/thread.php?thread_id=${chatData[blockId]['threadId']}`)
+                .then(response => response.json())
+                .then(data => {
+                    for (let message of data) {
+                        addToChatLog(message.role === 'user' ? 'user' : 'bot', message.message)
+                    }
+                })
+                // Some sort of error in the API call. Probably the thread no longer exists, so lets reset it
+                .catch(error => {
+                    chatData[blockId] = {}
+                    localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
+                })
+            // The block ID doesn't exist in the chat data object, so let's create it
+            } else {
+                chatData[blockId] = {}
+            }
+        // We don't even have a chat data object, so we'll create one
+        } else {
+            chatData = {[blockId]: {}}
+        }
+        localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
+    }
 
     document.querySelector('#openai_input').addEventListener('keyup', e => {
         if (e.which === 13 && e.target.value !== "") {
@@ -16,6 +43,18 @@ export const init = (data) => {
             createCompletion(e.target.value, blockId, api_type)
             e.target.value = ''
         }
+    })
+    document.querySelector('.block_openai_chat #go').addEventListener('click', e => {
+        const input = document.querySelector('#openai_input')
+        if (input.value !== "") {
+            addToChatLog('user', input.value)
+            createCompletion(input.value, blockId, api_type)
+            input.value = ''
+        }
+    })
+
+    document.querySelector('.block_openai_chat #refresh').addEventListener('click', e => {
+        clearHistory(blockId)
     })
 
     require(['core/str'], function(str) {
@@ -62,6 +101,21 @@ const addToChatLog = (type, message) => {
 }
 
 /**
+ * Clears the thread ID from local storage and removes the messages from the UI in order to refresh the chat
+ */
+const clearHistory = (blockId) => {
+    chatData = localStorage.getItem("block_openai_chat_data")
+    if (chatData) {
+        chatData = JSON.parse(chatData)
+        if (chatData[blockId]) {
+            chatData[blockId] = {}
+            localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
+        }
+    }
+    document.querySelector('#openai_chat_log').innerHTML = ""
+}
+
+/**
  * Makes an API request to get a completion from GPT-3, and adds it to the chat log
  * @param {string} message The text to get a completion for
  * @param {int} blockId The ID of the block this message is being sent from -- used to override settings if necessary
@@ -69,13 +123,25 @@ const addToChatLog = (type, message) => {
  */
 const createCompletion = (message, blockId, api_type) => {
     let threadId = null
+    let chatData
+
+    // If the type is assistant, attempt to fetch a thread ID
     if (api_type === 'assistant') {
-        threadId = localStorage.getItem("block_openai_chat_threadId")
+        chatData = localStorage.getItem("block_openai_chat_data")
+        if (chatData) {
+            chatData = JSON.parse(chatData)
+            if (chatData[blockId]) {
+                threadId = chatData[blockId]['threadId'] || null
+            }
+        } else {
+            // create the chat data item if necessary
+            chatData = {[blockId]: {}}
+        }
     }  
 
     const history = buildTranscript()
 
-    document.querySelector('#openai_input').classList.add('disabled')
+    document.querySelector('.block_openai_chat #control_bar').classList.add('disabled')
     document.querySelector('#openai_input').classList.remove('error')
     document.querySelector('#openai_input').placeholder = questionString
     document.querySelector('#openai_input').blur()
@@ -87,14 +153,13 @@ const createCompletion = (message, blockId, api_type) => {
             message: message,
             history: history,
             blockId: blockId,
-            api_type: api_type,
             threadId: threadId
         })
     })
     .then(response => {
         let messageContainer = document.querySelector('#openai_chat_log')
         messageContainer.removeChild(messageContainer.lastElementChild)
-        document.querySelector('#openai_input').classList.remove('disabled')
+        document.querySelector('.block_openai_chat #control_bar').classList.remove('disabled')
 
         if (!response.ok) {
             throw Error(response.statusText)
@@ -106,14 +171,17 @@ const createCompletion = (message, blockId, api_type) => {
         try {
             addToChatLog('bot', data.message)
             if (data.thread_id) {
-                localStorage.setItem("block_openai_chat_threadId", data.thread_id);
+                chatData[blockId]['threadId'] = data.thread_id
+                localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
             }
         } catch (error) {
+            console.log(error)
             addToChatLog('bot', data.error.message)
         }
         document.querySelector('#openai_input').focus()
     })
     .catch(error => {
+        console.log(error)
         document.querySelector('#openai_input').classList.add('error')
         document.querySelector('#openai_input').placeholder = errorString
     })

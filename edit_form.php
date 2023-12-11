@@ -41,11 +41,16 @@ class block_openai_chat_edit_form extends block_edit_form {
 
         if ($type === 'assistant') {
             // Assistant settings //
+
             if (get_config('block_openai_chat', 'allowinstancesettings') === "1") {
                 $mform->addElement('select', 'config_assistant', get_string('assistant', 'block_openai_chat'), fetch_assistants_array($block_id));
                 $mform->setDefault('config_assistant', get_config('block_openai_chat', 'assistant'));
                 $mform->setType('config_assistant', PARAM_TEXT);
                 $mform->addHelpButton('config_assistant', 'config_assistant', 'block_openai_chat');
+
+                $mform->addElement('advcheckbox', 'config_persistconvo', get_string('persistconvo', 'block_openai_chat'));
+                $mform->addHelpButton('config_persistconvo', 'config_persistconvo', 'block_openai_chat');
+                $mform->setDefault('config_persistconvo', 1);
 
                 $mform->addElement('textarea', 'config_instructions', get_string('config_instructions', 'block_openai_chat'));
                 $mform->setDefault('config_instructions', '');

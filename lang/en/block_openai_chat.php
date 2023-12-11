@@ -18,7 +18,7 @@
  * Language strings
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -40,8 +40,10 @@ $string['typedesc'] = 'The API type that the plugin should use';
 $string['assistantheading'] = 'Assistant API Settings';
 $string['assistantheadingdesc'] = 'These settings only apply to the Assistant API type.';
 $string['assistant'] = 'Assistant';
-$string['assistantdesc'] = 'The assistant attached to your OpenAI account that you would like to use for the response';
+$string['assistantdesc'] = 'The default assistant attached to your OpenAI account that you would like to use for the response';
 $string['noassistants'] = 'You haven\'t created any assistants yet. You need to create one <a target="_blank" href="https://platform.openai.com/assistants">in your OpenAI account</a> before you can select it here.';
+$string['persistconvo'] = 'Persist conversations';
+$string['persistconvodesc'] = 'If this box is checked, the assistant will remember the conversation between page loads. However, separate block instances will maintain separate conversations. For example, a user\'s conversation will be retained between page loads within the same course, but chatting with an assistant in a different course will not carry on the same conversation.';
 
 $string['chatheading'] = 'Chat API Settings';
 $string['chatheadingdesc'] = 'These settings only apply to the Chat API type.';
@@ -83,6 +85,8 @@ $string['config_username'] = "User name";
 $string['config_username_help'] = "This is the name that the AI will use for the user. If blank, the site-wide user name will be used.";
 $string['config_assistantname'] = "Assistant name";
 $string['config_assistantname_help'] = "This is the name that the AI will use for the assistant. If blank, the site-wide assistant name will be used.";
+$string['config_persistconvo'] = 'Persist conversation';
+$string['config_persistconvo_help'] = 'If this box is checked, the assistant will remember conversations in this block between page loads';
 $string['config_apikey'] = "API Key";
 $string['config_apikey_help'] = "You can specify an API key to use with this block here. If blank, the site-wide key will be used. If you are using the Assistants API, the list of available assistants will be pulled from this key. Make sure to return to these settings after changing the API key in order to select the desired assistant.";
 $string['config_model'] = "Model";

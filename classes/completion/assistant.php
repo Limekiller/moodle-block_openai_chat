@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class providing completions for chat models (3.5 and up)
+ * Class providing completions for assistant API
  *
  * @package    block_openai_chat
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>

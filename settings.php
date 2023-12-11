@@ -79,6 +79,14 @@ if ($type === 'assistant') {
             get_string('noassistants', 'block_openai_chat'),
         ));    
     }
+
+    $settings->add(new admin_setting_configcheckbox(
+        'block_openai_chat/persistconvo',
+        get_string('persistconvo', 'block_openai_chat'),
+        get_string('persistconvodesc', 'block_openai_chat'),
+        1
+    ));
+
 } else {
 
     // Chat settings //

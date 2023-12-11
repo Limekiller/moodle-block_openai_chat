@@ -18,7 +18,7 @@
  * API endpoint for retrieving GPT completion
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -43,7 +43,6 @@ $body = json_decode(file_get_contents('php://input'), true);
 $message = clean_param($body['message'], PARAM_NOTAGS);
 $history = clean_param_array($body['history'], PARAM_NOTAGS, true);
 $block_id = clean_param($body['blockId'], PARAM_INT, true);
-$api_type = clean_param($body['api_type'], PARAM_NOTAGS, true);
 $thread_id = clean_param($body['threadId'], PARAM_NOTAGS, true);
 
 // So that we're not leaking info to the client like API key, the block makes an API request including its ID
@@ -88,6 +87,7 @@ foreach ($setting_names as $setting) {
 
 $engine_class;
 $model = get_config('block_openai_chat', 'model');
+$api_type = get_config('block_openai_chat', 'type');
 if ($api_type === 'assistant') {
     $engine_class = '\block_openai_chat\completion\assistant';
 } else {
