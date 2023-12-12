@@ -57,6 +57,16 @@ class block_openai_chat_edit_form extends block_edit_form {
                 $mform->setType('config_instructions', PARAM_TEXT);
                 $mform->addHelpButton('config_instructions', 'config_instructions', 'block_openai_chat');
 
+                $mform->addElement('text', 'config_username', get_string('username', 'block_openai_chat'));
+                $mform->setDefault('config_username', '');
+                $mform->setType('config_username', PARAM_TEXT);
+                $mform->addHelpButton('config_username', 'config_username', 'block_openai_chat');
+        
+                $mform->addElement('text', 'config_assistantname', get_string('assistantname', 'block_openai_chat'));
+                $mform->setDefault('config_assistantname', '');
+                $mform->setType('config_assistantname', PARAM_TEXT);
+                $mform->addHelpButton('config_assistantname', 'config_assistantname', 'block_openai_chat');
+
                 $mform->addElement('header', 'config_adv_header', get_string('advanced', 'block_openai_chat'));
 
                 $mform->addElement('text', 'config_apikey', get_string('apikey', 'block_openai_chat'));

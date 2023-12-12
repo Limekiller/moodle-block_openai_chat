@@ -55,6 +55,22 @@ $settings->add(new admin_setting_configcheckbox(
     1
 ));
 
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/assistantname',
+    get_string('assistantname', 'block_openai_chat'),
+    get_string('assistantnamedesc', 'block_openai_chat'),
+    'Assistant',
+    PARAM_TEXT
+));
+
+$settings->add(new admin_setting_configtext(
+    'block_openai_chat/username',
+    get_string('username', 'block_openai_chat'),
+    get_string('usernamedesc', 'block_openai_chat'),
+    'User',
+    PARAM_TEXT
+));
+
 // Assistant settings //
 
 if ($type === 'assistant') {
@@ -102,22 +118,6 @@ if ($type === 'assistant') {
         get_string('prompt', 'block_openai_chat'),
         get_string('promptdesc', 'block_openai_chat'),
         "Below is a conversation between a user and a support assistant for a Moodle site, where users go for online learning.",
-        PARAM_TEXT
-    ));
-    
-    $settings->add(new admin_setting_configtext(
-        'block_openai_chat/assistantname',
-        get_string('assistantname', 'block_openai_chat'),
-        get_string('assistantnamedesc', 'block_openai_chat'),
-        'Assistant',
-        PARAM_TEXT
-    ));
-    
-    $settings->add(new admin_setting_configtext(
-        'block_openai_chat/username',
-        get_string('username', 'block_openai_chat'),
-        get_string('usernamedesc', 'block_openai_chat'),
-        'User',
         PARAM_TEXT
     ));
     
