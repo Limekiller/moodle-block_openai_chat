@@ -1,6 +1,6 @@
 # moodle-block_openai_chat
 
-<img align="right" src="https://user-images.githubusercontent.com/33644013/162025197-52c34e24-66a8-46e7-ab95-b0f65268031b.png" />
+<img align="right" src="https://github.com/Limekiller/moodle-block_openai_chat/assets/33644013/21f73adc-5bd4-4539-999b-a3b0a83736e0" />
 
 ### GPT powered AI chat block for Moodle
 
