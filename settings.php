@@ -91,6 +91,12 @@ if ($type === 'assistant') {
 
     // Chat settings //
 
+    $settings->add(new admin_setting_heading(
+        'block_openai_chat/chatheading', 
+        get_string('chatheading', 'block_openai_chat'),
+        get_string('chatheadingdesc', 'block_openai_chat')
+    ));
+
     $settings->add(new admin_setting_configtext(
         'block_openai_chat/assistantname',
         get_string('assistantname', 'block_openai_chat'),
@@ -105,12 +111,6 @@ if ($type === 'assistant') {
         get_string('usernamedesc', 'block_openai_chat'),
         'User',
         PARAM_TEXT
-    ));
-
-    $settings->add(new admin_setting_heading(
-        'block_openai_chat/chatheading', 
-        get_string('chatheading', 'block_openai_chat'),
-        get_string('chatheadingdesc', 'block_openai_chat')
     ));
 
     $settings->add(new admin_setting_configtextarea(
