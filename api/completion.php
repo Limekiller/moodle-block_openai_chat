@@ -18,7 +18,7 @@
  * API endpoint for retrieving GPT completion
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $body = json_decode(file_get_contents('php://input'), true);
 $message = clean_param($body['message'], PARAM_NOTAGS);
 $history = clean_param_array($body['history'], PARAM_NOTAGS, true);
-$block_id = clean_param($body['blockID'], PARAM_INT, true);
+$block_id = clean_param($body['blockId'], PARAM_INT, true);
+$thread_id = clean_param($body['threadId'], PARAM_NOTAGS, true);
 
 // So that we're not leaking info to the client like API key, the block makes an API request including its ID
 // Then we can look up that specific block to pull out its config data
@@ -63,7 +64,8 @@ if ($context->contextlevel == CONTEXT_COURSE) {
 $block_settings = [];
 $setting_names = [
     'sourceoftruth', 
-    'prompt', 
+    'prompt',
+    'instructions',
     'username', 
     'assistantname', 
     'apikey', 
@@ -72,7 +74,8 @@ $setting_names = [
     'maxlength', 
     'topp', 
     'frequency', 
-    'presence'
+    'presence',
+    'assistant'
 ];
 foreach ($setting_names as $setting) {
     if ($instance->config && property_exists($instance->config, $setting)) {
@@ -82,31 +85,27 @@ foreach ($setting_names as $setting) {
     }
 }
 
-$engines = get_models()['types'];
+$engine_class;
 $model = get_config('block_openai_chat', 'model');
-if (get_config('block_openai_chat', 'allowinstancesettings') === "1" && $block_settings['model']) {
-    $model = $block_settings['model'];
-}
-if (!$model) {
-    $model = 'text-davinci-003';
+$api_type = get_config('block_openai_chat', 'type');
+if ($api_type === 'assistant') {
+    $engine_class = '\block_openai_chat\completion\assistant';
+} else {
+    $engines = get_models()['types'];
+    if (get_config('block_openai_chat', 'allowinstancesettings') === "1" && $block_settings['model']) {
+        $model = $block_settings['model'];
+    }
+    if (!$model) {
+        $model = 'gpt-3.5-turbo';
+    }
+    $engine_class = '\block_openai_chat\completion\\' . $engines[$model];
 }
 
-$engine_class = '\block_openai_chat\completion\\' . $engines[$model];
-$completion = new $engine_class(...[$model, $message, $history, $block_settings]);
+$completion = new $engine_class(...[$model, $message, $history, $block_settings, $thread_id]);
 $response = $completion->create_completion($PAGE->context);
 
-// Convert messages from Markdown to HTML.
-// Decode the response
-$response = json_decode($response);
 // Format the markdown of each completion message into HTML.
-foreach($response->choices as $key => $choice ) {
-    if ($engines[$model] == 'chat') {
-        $response->choices[$key]->message->content = format_text($choice->message->content, FORMAT_MARKDOWN, ['context' => $context]);
-    } else {
-        $response->choices[$key]->text = format_text($choice->text, FORMAT_MARKDOWN, ['context' => $context]);
-    }
-}
-// Re-encode it the response.
+$response["message"] = format_text($response["message"], FORMAT_MARKDOWN, ['context' => $context]);
 $response = json_encode($response);
 
 echo $response;

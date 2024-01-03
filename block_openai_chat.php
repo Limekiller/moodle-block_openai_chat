@@ -18,7 +18,7 @@
  * Block class
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -42,8 +42,16 @@ class block_openai_chat extends block_base {
             return $this->content;
         }
 
-        $this->page->requires->js('/blocks/openai_chat/lib.js');
-        $this->page->requires->js_init_call('init', [$this->instance->id]);
+        // Send data to front end
+        $persistconvo = get_config('block_openai_chat', 'persistconvo');
+        if (!empty($this->config)) {
+            $persistconvo = (property_exists($this->config, 'persistconvo') && get_config('block_openai_chat', 'allowinstancesettings')) ? $this->config->persistconvo : $persistconvo;
+        }
+        $this->page->requires->js_call_amd('block_openai_chat/lib', 'init', [[
+            'blockId' => $this->instance->id,
+            'api_type' => get_config('block_openai_chat', 'type') ? get_config('block_openai_chat', 'type') : 'chat',
+            'persistConvo' => $persistconvo
+        ]]);
 
         // Determine if name labels should be shown.
         $showlabelscss = '';
@@ -91,7 +99,13 @@ class block_openai_chat extends block_base {
         ';
 
         $this->content->footer = get_config('block_openai_chat', 'apikey') ? '
-            <input id="openai_input" placeholder="' . get_string('askaquestion', 'block_openai_chat') .'" type="text" name="message" />'
+            <div id="control_bar">
+                <div id="input_bar">
+                    <input id="openai_input" placeholder="' . get_string('askaquestion', 'block_openai_chat') .'" type="text" name="message" />
+                    <button title="Submit" id="go"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+                <button title="New chat" id="refresh"><i class="fa-solid fa-arrows-rotate"></i></button>
+            </div>'
         : get_string('apikeymissing', 'block_openai_chat');
 
         return $this->content;

@@ -24,47 +24,74 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+function get_type_to_display() {
+    $stored_type = get_config('block_openai_chat', 'type');
+    if ($stored_type) {
+        return $stored_type;
+    }
+    
+    return 'chat';
+}
+
+function fetch_assistants_array($block_id = null) {
+    global $DB;
+
+    if (!$block_id) {
+        $apikey = get_config('block_openai_chat', 'apikey');
+    } else {
+        $instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
+        $instance = block_instance('openai_chat', $instance_record);
+        $apikey = $instance->config->apikey ? $instance->config->apikey : get_config('block_openai_chat', 'apikey');
+    }
+
+    if (!$apikey) {
+        return [];
+    }
+
+    $curl = new \curl();
+    $curl->setopt(array(
+        'CURLOPT_HTTPHEADER' => array(
+            'Authorization: Bearer ' . $apikey,
+            'Content-Type: application/json',
+            'OpenAI-Beta: assistants=v1'
+        ),
+    ));
+
+    $response = $curl->get("https://api.openai.com/v1/assistants?order=desc");
+    $response = json_decode($response);
+    $assistant_array = [];
+    foreach ($response->data as $assistant) {
+        $assistant_array[$assistant->id] = $assistant->name;
+    }
+
+    return $assistant_array;
+}
+
 function get_models() {
     return [
         "models" => [
             'gpt-4' => 'gpt-4',
-            'gpt-4-0314' => 'gpt-4-0314',
+            'gpt-4-1106-preview' => 'gpt-4-1106-preview',
             'gpt-4-0613' => 'gpt-4-0613',
+            'gpt-4-0314' => 'gpt-4-0314',
             'gpt-3.5-turbo' => 'gpt-3.5-turbo',
             'gpt-3.5-turbo-16k-0613' => 'gpt-3.5-turbo-16k-0613',
             'gpt-3.5-turbo-16k' => 'gpt-3.5-turbo-16k',
+            'gpt-3.5-turbo-1106' => 'gpt-3.5-turbo-1106',
             'gpt-3.5-turbo-0613' => 'gpt-3.5-turbo-0613',
             'gpt-3.5-turbo-0301' => 'gpt-3.5-turbo-0301',
-            'text-davinci-003' => 'text-davinci-003',
-            'text-davinci-002' => 'text-davinci-002',
-            'text-davinci-001' => 'text-davinci-001',
-            'text-curie-001' => 'text-curie-001',
-            'text-babbage-001' => 'text-babbage-001',
-            'text-ada-001' => 'text-ada-001',
-            'davinci' => 'davinci',
-            'curie' => 'curie',
-            'babbage' => 'babbage',
-            'ada' => 'ada'
         ],
         "types" => [
             'gpt-4' => 'chat',
-            'gpt-4-0314' => 'chat',
+            'gpt-4-1106-preview' => 'chat',
             'gpt-4-0613' => 'chat',
+            'gpt-4-0314' => 'chat',
             'gpt-3.5-turbo' => 'chat',
             'gpt-3.5-turbo-16k-0613' => 'chat',
             'gpt-3.5-turbo-16k' => 'chat',
+            'gpt-3.5-turbo-1106' => 'chat',
             'gpt-3.5-turbo-0613' => 'chat',
             'gpt-3.5-turbo-0301' => 'chat',
-            'text-davinci-003' => 'basic',
-            'text-davinci-002' => 'basic',
-            'text-davinci-001' => 'basic',
-            'text-curie-001' => 'basic',
-            'text-babbage-001' => 'basic',
-            'text-ada-001' => 'basic',
-            'davinci' => 'basic',
-            'curie' => 'basic',
-            'babbage' => 'basic',
-            'ada' => 'basic'
         ]
     ];
 }

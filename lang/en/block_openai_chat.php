@@ -18,7 +18,7 @@
  * Language strings
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,6 +34,19 @@ $string['restrictusage'] = 'Restrict chat usage to logged-in users';
 $string['restrictusagedesc'] = 'If this box is checked, only logged-in users will be able to use the chat box.';
 $string['apikey'] = 'OpenAI API Key';
 $string['apikeydesc'] = 'The API Key for your OpenAI account';
+$string['type'] = 'API Type';
+$string['typedesc'] = 'The API type that the plugin should use';
+
+$string['assistantheading'] = 'Assistant API Settings';
+$string['assistantheadingdesc'] = 'These settings only apply to the Assistant API type.';
+$string['assistant'] = 'Assistant';
+$string['assistantdesc'] = 'The default assistant attached to your OpenAI account that you would like to use for the response';
+$string['noassistants'] = 'You haven\'t created any assistants yet. You need to create one <a target="_blank" href="https://platform.openai.com/assistants">in your OpenAI account</a> before you can select it here.';
+$string['persistconvo'] = 'Persist conversations';
+$string['persistconvodesc'] = 'If this box is checked, the assistant will remember the conversation between page loads. However, separate block instances will maintain separate conversations. For example, a user\'s conversation will be retained between page loads within the same course, but chatting with an assistant in a different course will not carry on the same conversation.';
+
+$string['chatheading'] = 'Chat API Settings';
+$string['chatheadingdesc'] = 'These settings only apply to the Chat API type.';
 $string['prompt'] = 'Completion prompt';
 $string['promptdesc'] = 'The prompt the AI will be given before the conversation transcript';
 $string['assistantname'] = 'Assistant name';
@@ -60,16 +73,22 @@ $string['frequencydesc'] = 'How much to penalize new tokens based on their exist
 $string['presence'] = 'Presence penalty';
 $string['presencedesc'] = 'How much to penalize new tokens based on whether they appear in the text so far. Increases the model\'s likelihood to talk about new topics.';
 
+$string['config_assistant'] = "Assistant";
+$string['config_assistant_help'] = "Choose the assistant you would like to use for this block. More assistants can be created in the OpenAI account that this block is configured to use.";
 $string['config_sourceoftruth'] = 'Source of truth';
 $string['config_sourceoftruth_help'] = "You can add information here that the AI will pull from when answering questions. The information should be in question and answer format exactly like the following:\n\nQ: When is section 3 due?<br />A: Thursday, March 16.\n\nQ: When are office hours?<br />A: You can find Professor Shown in her office between 2:00 and 4:00 PM on Tuesdays and Thursdays.";
+$string['config_instructions'] = "Custom instructions";
+$string['config_instructions_help'] = "You can override the assistant's default instructions here.";
 $string['config_prompt'] = "Completion prompt";
 $string['config_prompt_help'] = "This is the prompt the AI will be given before the conversation transcript. You can influence the AI's personality by altering this description. By default, the prompt is \n\n\"Below is a conversation between a user and a support assistant for a Moodle site, where users go for online learning.\"\n\nIf blank, the site-wide prompt will be used.";
 $string['config_username'] = "User name";
 $string['config_username_help'] = "This is the name that the AI will use for the user. If blank, the site-wide user name will be used.";
 $string['config_assistantname'] = "Assistant name";
 $string['config_assistantname_help'] = "This is the name that the AI will use for the assistant. If blank, the site-wide assistant name will be used.";
+$string['config_persistconvo'] = 'Persist conversation';
+$string['config_persistconvo_help'] = 'If this box is checked, the assistant will remember conversations in this block between page loads';
 $string['config_apikey'] = "API Key";
-$string['config_apikey_help'] = "You can specify an API key to use with this block here. If blank, the site-wide key will be used.";
+$string['config_apikey_help'] = "You can specify an API key to use with this block here. If blank, the site-wide key will be used. If you are using the Assistants API, the list of available assistants will be pulled from this key. Make sure to return to these settings after changing the API key in order to select the desired assistant.";
 $string['config_model'] = "Model";
 $string['config_model_help'] = "The model which will  generate the completion";
 $string['config_temperature'] = "Temperature";
