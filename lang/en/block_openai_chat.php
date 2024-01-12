@@ -18,7 +18,7 @@
  * Language strings
  *
  * @package    block_openai_chat
- * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2024 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,10 +30,10 @@ $string['privacy:metadata'] = 'The OpenAI Chat block stores no personal user dat
 
 $string['blocktitle'] = 'Block title';
 
-$string['restrictusage'] = 'Restrict chat usage to logged-in users';
+$string['restrictusage'] = 'Restrict usage to logged-in users';
 $string['restrictusagedesc'] = 'If this box is checked, only logged-in users will be able to use the chat box.';
-$string['apikey'] = 'OpenAI API Key';
-$string['apikeydesc'] = 'The API Key for your OpenAI account';
+$string['apikey'] = 'API Key';
+$string['apikeydesc'] = 'The API Key for your OpenAI account or Azure API key';
 $string['type'] = 'API Type';
 $string['typedesc'] = 'The API type that the plugin should use';
 
@@ -45,8 +45,16 @@ $string['noassistants'] = 'You haven\'t created any assistants yet. You need to 
 $string['persistconvo'] = 'Persist conversations';
 $string['persistconvodesc'] = 'If this box is checked, the assistant will remember the conversation between page loads. However, separate block instances will maintain separate conversations. For example, a user\'s conversation will be retained between page loads within the same course, but chatting with an assistant in a different course will not carry on the same conversation.';
 
+$string['azureheading'] = 'Azure API Settings';
+$string['azureheadingdesc'] = 'These settings only apply to the Azure API type.';
+$string['resourcename'] = 'Resource name';
+$string['resourcenamedesc'] = 'The name of your Azure OpenAI Resource.';
+$string['deploymentid'] = 'Deployment ID';
+$string['deploymentiddesc'] = 'The deployment name you chose when you deployed the model.';
+$string['apiversion'] = 'API Version';
+$string['apiversiondesc'] = 'The API version to use for this operation. This follows the YYYY-MM-DD format.';
 $string['chatheading'] = 'Chat API Settings';
-$string['chatheadingdesc'] = 'These settings only apply to the Chat API type.';
+$string['chatheadingdesc'] = 'These settings only apply to the Chat API and Azure API types.';
 $string['prompt'] = 'Completion prompt';
 $string['promptdesc'] = 'The prompt the AI will be given before the conversation transcript';
 $string['assistantname'] = 'Assistant name';
