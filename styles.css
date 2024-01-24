@@ -22,6 +22,10 @@
     border: none;
     border-radius: 0.5rem;
     width: 2.5rem;
+    transition: filter 0.2s ease;
+}
+.block_openai_chat #control_bar button:hover {
+    filter: brightness(0.8);
 }
 .block_openai_chat #control_bar #go {
     border-radius: 0 0.5rem 0.5rem 0;
@@ -32,6 +36,9 @@
 }
 .block_openai_chat #input_bar {
     display: flex;
+}
+.block_openai_chat svg {
+    transform: scale(0.6);
 }
 .block_openai_chat #openai_input {
     padding: 0.5rem;
