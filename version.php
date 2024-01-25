@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_openai_chat';
-$plugin->version = 2024012301;
+$plugin->version = 2024012500;
 $plugin->requires = 2022041600;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.1.1';
+$plugin->release = '2.1.2';
