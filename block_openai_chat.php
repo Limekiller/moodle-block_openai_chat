@@ -31,6 +31,10 @@ class block_openai_chat extends block_base {
         return true;
     }
 
+    function applicable_formats() {
+        return array('all' => true);
+    }
+
     public function specialization() {
         if (!empty($this->config->title)) {
             $this->title = $this->config->title;
