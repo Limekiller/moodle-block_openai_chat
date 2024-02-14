@@ -60,8 +60,10 @@ function fetch_assistants_array($block_id = null) {
     $response = $curl->get("https://api.openai.com/v1/assistants?order=desc");
     $response = json_decode($response);
     $assistant_array = [];
-    foreach ($response->data as $assistant) {
-        $assistant_array[$assistant->id] = $assistant->name;
+    if (property_exists($response, 'data')) {
+        foreach ($response->data as $assistant) {
+            $assistant_array[$assistant->id] = $assistant->name;
+        }
     }
 
     return $assistant_array;

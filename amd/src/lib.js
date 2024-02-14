@@ -37,6 +37,11 @@ export const init = (data) => {
         localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
     }
 
+    // Prevent sidebar from closing when osk pops up (hack for MDL-77957)
+    window.addEventListener('resize', event => {
+        event.stopImmediatePropagation();
+    }, true);
+
     document.querySelector('#openai_input').addEventListener('keyup', e => {
         if (e.which === 13 && e.target.value !== "") {
             addToChatLog('user', e.target.value)

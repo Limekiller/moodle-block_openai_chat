@@ -88,18 +88,7 @@ foreach ($setting_names as $setting) {
 $engine_class;
 $model = get_config('block_openai_chat', 'model');
 $api_type = get_config('block_openai_chat', 'type');
-if ($api_type === 'assistant') {
-    $engine_class = '\block_openai_chat\completion\assistant';
-} else {
-    $engines = get_models()['types'];
-    if (get_config('block_openai_chat', 'allowinstancesettings') === "1" && $block_settings['model']) {
-        $model = $block_settings['model'];
-    }
-    if (!$model) {
-        $model = 'gpt-3.5-turbo';
-    }
-    $engine_class = '\block_openai_chat\completion\\' . $engines[$model];
-}
+$engine_class = "\block_openai_chat\completion\\$api_type";
 
 $completion = new $engine_class(...[$model, $message, $history, $block_settings, $thread_id]);
 $response = $completion->create_completion($PAGE->context);

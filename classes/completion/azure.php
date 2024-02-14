@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class providing completions for chat models (3.5 and up)
+ * Class providing completions for Azure
  *
  * @package    block_openai_chat
- * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2024 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 */
 
@@ -27,15 +27,23 @@ namespace block_openai_chat\completion;
 use block_openai_chat\completion;
 defined('MOODLE_INTERNAL') || die;
 
-class chat extends \block_openai_chat\completion {
+class azure extends \block_openai_chat\completion\chat {
+
+    private $resourcename;
+    private $deploymentid;
+    private $apiversion;
 
     public function __construct($model, $message, $history, $block_settings, $thread_id = null) {
         parent::__construct($model, $message, $history, $block_settings);
+
+        $this->resourcename = $this->get_setting('resourcename');
+        $this->deploymentid = $this->get_setting('deploymentid');
+        $this->apiversion = $this->get_setting('apiversion');
     }
 
     /**
      * Given everything we know after constructing the parent, create a completion by constructing the prompt and making the api call
-     * @return JSON: The API response from OpenAI
+     * @return JSON: The API response from Azure
      */
     public function create_completion($context) {
         if ($this->sourceoftruth) {
@@ -54,23 +62,11 @@ class chat extends \block_openai_chat\completion {
     }
 
     /**
-     * Format the history JSON into a string that we can pass in the prompt
-     * @return string: The string representing the chat history to add to the prompt
-     */
-    protected function format_history() {
-        $history = [];
-        foreach ($this->history as $index => $message) {
-            $role = $index % 2 === 0 ? 'user' : 'assistant';
-            array_push($history, ["role" => $role, "content" => $message["message"]]);
-        }
-        return $history;
-    }
-
-    /**
-     * Make the actual API call to OpenAI
-     * @return JSON: The response from OpenAI
+     * Make the actual API call to Azure
+     * @return JSON: The response from Azure
      */
     private function make_api_call($history) {
+
         $curlbody = [
             "model" => $this->model,
             "messages" => $history,
@@ -85,24 +81,20 @@ class chat extends \block_openai_chat\completion {
         $curl = new \curl();
         $curl->setopt(array(
             'CURLOPT_HTTPHEADER' => array(
-                'Authorization: Bearer ' . $this->apikey,
+                'api-key: ' . $this->apikey,
                 'Content-Type: application/json'
             ),
         ));
 
-        $response = $curl->post("https://api.openai.com/v1/chat/completions", json_encode($curlbody));
+        $response = $curl->post(
+            "https://" . $this->resourcename . ".openai.azure.com/openai/deployments/" . $this->deploymentid . "/chat/completions?api-version=" . $this->apiversion, 
+            json_encode($curlbody)
+        );
         $response = json_decode($response);
 
-        $message = null;
-        if (property_exists($response, 'error')) {
-            $message = 'ERROR: ' . $response->error->message;
-        } else {
-            $message = $response->choices[0]->message->content;
-        }
-
         return [
-            "id" => property_exists($response, 'id') ? $response->id : 'error',
-            "message" => $message
+            "id" => $response->id,
+            "message" => $response->choices[0]->message->content
         ];
     }
 }
