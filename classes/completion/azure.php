@@ -92,9 +92,16 @@ class azure extends \block_openai_chat\completion\chat {
         );
         $response = json_decode($response);
 
+        $message = null;
+        if (property_exists($response, 'error')) {
+            $message = 'ERROR: ' . $response->error->message;
+        } else {
+            $message = $response->choices[0]->message->content;
+        }
+
         return [
-            "id" => $response->id,
-            "message" => $response->choices[0]->message->content
+            "id" => property_exists($response, 'id') ? $response->id : 'error',
+            "message" => $message
         ];
     }
 }
