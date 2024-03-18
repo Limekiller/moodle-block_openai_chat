@@ -1,0 +1,39 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_openai_chat/conrol_bar
+
+    This template renders the control_bar.
+
+    Example context (json):
+    {
+        "pix_arrow_right": relatvie url of the arrow right pix to the root of moodle.
+        "pix_refresh": relatvie url of the refresh pix to the root of moodle.
+    }
+}}
+
+<div id="control_bar">
+    <div class="openai_input_bar {{{additionalclass}}}" id="input_bar">
+        <input id="openai_input" placeholder="{{#str}}askaquestion, block_openai_chat{{/str}}" type="text" name="message" />
+        <button class='openai_input_submit_btn' title="{{#str}} submit {{/str}}" id="go">
+            <img src="{{{ pix_arrow_right }}}" class='openai_input_submit_btn_icon'/>
+        </button>
+    </div>
+    <button class='openai_input_refresh_btn' title="{{#str}} new_chat, block_openai_chat {{/str}}" id="refresh">
+        <img src="{{{ pix_refresh }}}" class='openai_input_refresh_btn_icon' />
+    </button>
+</div>
