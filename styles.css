@@ -28,20 +28,33 @@
     border-radius: 0 0.5rem 0.5rem 0;
 }
 
-.openai_input_submit_btn {
-    background-color: var(--primary);
-    color: var(--white);
+.block_openai_chat #control_bar button  {
+    transition: filter 0.2s ease;
     border: none;
     border-radius: 0.5rem;
     width: 2.5rem;
-    transition: filter 0.2s ease;
+}
+
+.openai_input_submit_btn {
+    background-color: var(--primary);
+    color: var(--white);
 }
 
 .openai_input_refresh_btn {
-    width: 2.5rem;
-    background-color: var(--color-secondary);
+    background-color: var(--secondary);
     color: black;
-    border-radius: 0.5rem;
+}
+
+.block_openai_chat .openai_input_popout_btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 99rem;
+    padding: 0.4rem;
+    display: flex;
+    border: none;
 }
 
 .openai_input_submit_btn_icon,
@@ -51,14 +64,11 @@
 
 .openai_input_bar {
     display: flex;
-}
-
-.openai_input_bar_fullwidth {
     width: 100%;
 }
 
-.block_openai_chat svg {
-    transform: scale(0.6);
+.block_openai_chat img {
+    transform: scale(0.7);
 }
 
 .block_openai_chat #openai_input {
@@ -121,6 +131,40 @@
 .block_openai_chat .disabled {
     opacity: 0.25;
     pointer-events: none;
+}
+
+.block_openai_chat.expanded {
+    position: fixed;
+    height: 70vh;
+    width: 30rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 999px #0000008c;
+    z-index: 2;
+}
+
+.block_openai_chat.expanded .card-body {
+    overflow-y: auto;
+}
+
+.block_openai_chat.expanded #openai_chat_log {
+    max-height: unset;
+    overflow-y: unset;
+    padding-bottom: 3rem !important;
+    padding-top: 1rem;
+}
+
+.block_openai_chat.expanded #control_bar {
+    display: flex;
+    gap: .5rem;
+    position: fixed;
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+}
+
+.block_openai_chat.expanded .openai_message {
+    width: unset !important;
 }
 
 @keyframes block_openai_chat_popup {

@@ -21,19 +21,26 @@
 
     Example context (json):
     {
-        "pix_arrow_right": relatvie url of the arrow right pix to the root of moodle.
-        "pix_refresh": relatvie url of the refresh pix to the root of moodle.
+        "is_edit_mode": boolean; true if edit mode is active
+        "pix_popout": relative url of the popout pix to the root of moodle
+        "pix_arrow_right": relative url of the arrow right pix to the root of moodle
+        "pix_refresh": relative url of the refresh pix to the root of moodle
     }
 }}
 
+{{^is_edit_mode}}
+    <button class='openai_input_popout_btn' title="{{#str}}popout, block_openai_chat {{/str}}" id="popout">
+        <img src="{{{ pix_popout }}}" class='openai_input_popout_btn_icon' />
+    </button>
+{{/is_edit_mode}}
 <div id="control_bar">
-    <div class="openai_input_bar {{{additionalclass}}}" id="input_bar">
-        <input id="openai_input" placeholder="{{#str}}askaquestion, block_openai_chat{{/str}}" type="text" name="message" />
+    <div class="openai_input_bar" id="input_bar">
+        <textarea id="openai_input" placeholder="{{#str}}askaquestion, block_openai_chat{{/str}}" type="text" name="message"></textarea>
         <button class='openai_input_submit_btn' title="{{#str}} submit {{/str}}" id="go">
             <img src="{{{ pix_arrow_right }}}" class='openai_input_submit_btn_icon'/>
         </button>
     </div>
-    <button class='openai_input_refresh_btn' title="{{#str}} new_chat, block_openai_chat {{/str}}" id="refresh">
+    <button class='openai_input_refresh_btn' title="{{#str}}new_chat, block_openai_chat {{/str}}" id="refresh">
         <img src="{{{ pix_refresh }}}" class='openai_input_refresh_btn_icon' />
     </button>
 </div>

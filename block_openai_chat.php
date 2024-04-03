@@ -43,6 +43,7 @@ class block_openai_chat extends block_base {
 
     public function get_content() {
         global $OUTPUT;
+        global $PAGE;
 
         if ($this->content !== null) {
             return $this->content;
@@ -108,13 +109,11 @@ class block_openai_chat extends block_base {
             $this->content->footer = get_string('apikeymissing', 'block_openai_chat');
         } else {
             $contextdata = [
+                'is_edit_mode' => $PAGE->user_is_editing(),
+                'pix_popout' => '/blocks/openai_chat/pix/arrow-up-right-from-square.svg',
                 'pix_arrow_right' => '/blocks/openai_chat/pix/arrow-right.svg',
                 'pix_refresh' => '/blocks/openai_chat/pix/refresh.svg',
             ];
-
-            if (get_config('block_openai_chat', 'inputsetfullwidth')) {
-                $contextdata['additionalclass'] = "openai_input_bar_fullwidth";
-            }
 
             $this->content->footer = $OUTPUT->render_from_template('block_openai_chat/control_bar', $contextdata);
         }

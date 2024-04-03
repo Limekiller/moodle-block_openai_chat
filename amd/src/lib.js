@@ -62,6 +62,10 @@ export const init = (data) => {
         clearHistory(blockId)
     })
 
+    document.querySelector('.block_openai_chat #popout').addEventListener('click', e => {
+        document.querySelector('.block_openai_chat').classList.toggle('expanded')
+    })
+
     require(['core/str'], function(str) {
         var strings = [
             {

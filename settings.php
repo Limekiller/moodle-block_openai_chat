@@ -234,12 +234,4 @@ if ($hassiteconfig && $ADMIN->fulltree) {
             PARAM_FLOAT
         ));
     }
-
-    // Style Settings
-    $settings->add(new admin_setting_configcheckbox(
-        'block_openai_chat/inputsetfullwidth',
-        get_string('inputsetfullwidth', 'block_openai_chat'),
-        get_string('inputsetfullwidthdesc', 'block_openai_chat'),
-        0
-    ));
 }
