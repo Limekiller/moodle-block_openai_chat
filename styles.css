@@ -47,7 +47,7 @@
 
 .block_openai_chat .openai_input_popout_btn {
     position: absolute;
-    top: 0.5rem;
+    top: 0.75rem;
     right: 0.5rem;
     width: 2rem;
     height: 2rem;
@@ -55,6 +55,7 @@
     padding: 0.4rem;
     display: flex;
     border: none;
+    z-index: 2;
 }
 
 .openai_input_submit_btn_icon,
@@ -165,6 +166,25 @@
 
 .block_openai_chat.expanded .openai_message {
     width: unset !important;
+}
+
+@media screen and (max-width: 750px) {
+    .drawerheader {
+        pointer-events: none;
+    }
+    .drawerheader button {
+        pointer-events: all;
+    }
+    .block_openai_chat.expanded {
+        transform: unset;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+    .block_openai_chat.expanded .openai_input_popout_btn {
+        right: 3rem;
+    }
 }
 
 @keyframes block_openai_chat_popup {
