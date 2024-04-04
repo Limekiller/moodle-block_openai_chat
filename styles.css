@@ -165,7 +165,7 @@
 }
 
 .block_openai_chat.expanded .openai_message {
-    width: unset !important;
+    width: fit-content !important;
 }
 
 @media screen and (max-width: 750px) {

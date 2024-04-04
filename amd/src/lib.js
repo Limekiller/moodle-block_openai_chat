@@ -107,6 +107,7 @@ const addToChatLog = (type, message) => {
         messageElem.style.width = (messageText.offsetWidth + 40) + "px"
     }
     messageContainer.scrollTop = messageContainer.scrollHeight
+    messageContainer.closest('.card-body').scrollTop = messageContainer.scrollHeight
 }
 
 /**
