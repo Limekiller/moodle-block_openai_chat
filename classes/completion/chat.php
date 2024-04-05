@@ -50,7 +50,9 @@ class chat extends \block_openai_chat\completion {
 
         array_push($history_json, ["role" => "user", "content" => $this->message]);
 
-        return $this->make_api_call($history_json);
+        $response_data = $this->make_api_call($history_json);
+        $this->log_message($this->message, $response_data['message']);
+        return $response_data;
     }
 
     /**
