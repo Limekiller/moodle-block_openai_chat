@@ -26,7 +26,12 @@ $string['pluginname'] = 'OpenAI Chat Block';
 $string['openai_chat'] = 'OpenAI Chat';
 $string['openai_chat:addinstance'] = 'Add a new OpenAI Chat block';
 $string['openai_chat:myaddinstance'] = 'Add a new OpenAI Chat block to the My Moodle page';
-$string['privacy:metadata'] = 'The OpenAI Chat block stores no personal user data; nor does it, by default, send personal data to OpenAI. However, chat messages submitted by users are sent in their entirety to OpenAI, and are then subject to OpenAI\'s privacy policy (https://openai.com/api/policies/privacy/), which may store messages in order to improve the API.';
+$string['privacy:metadata:openai_chat_log'] = 'Logged user messages sent to OpenAI. This includes the user ID of the user that sent the message, the content of the message, the response from OpenAI, and the time that the message was sent.';
+$string['privacy:metadata:openai_chat_log:userid'] = 'The ID of the user that sent the message.';
+$string['privacy:metadata:openai_chat_log:usermessage'] = 'The content of the message.';
+$string['privacy:metadata:openai_chat_log:airesponse'] = 'The response from OpenAI.';
+$string['privacy:metadata:openai_chat_log:timecreated'] = 'The time the message was sent.';
+$string['privacy:chatmessagespath'] = 'Sent AI chat messages';
 
 $string['blocktitle'] = 'Block title';
 
@@ -36,6 +41,8 @@ $string['apikey'] = 'API Key';
 $string['apikeydesc'] = 'The API Key for your OpenAI account or Azure API key';
 $string['type'] = 'API Type';
 $string['typedesc'] = 'The API type that the plugin should use';
+$string['logging'] = 'Enable logging';
+$string['loggingdesc'] = 'If this setting is active, all user messages and AI responses will be logged.';
 
 $string['assistantheading'] = 'Assistant API Settings';
 $string['assistantheadingdesc'] = 'These settings only apply to the Assistant API type.';

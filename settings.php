@@ -76,6 +76,13 @@ if ($hassiteconfig && $ADMIN->fulltree) {
         PARAM_TEXT
     ));
 
+    $settings->add(new admin_setting_configcheckbox(
+        'block_openai_chat/logging',
+        get_string('logging', 'block_openai_chat'),
+        get_string('loggingdesc', 'block_openai_chat'),
+        0
+    ));
+
     // Assistant settings //
 
     if ($type === 'assistant') {
