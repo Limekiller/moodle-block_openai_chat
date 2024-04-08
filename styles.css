@@ -169,6 +169,18 @@
     width: fit-content !important;
 }
 
+.block_openai_chat .recording {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #ff0000;
+    position: absolute;
+    top: 1.5rem;
+    right: 3rem;
+    border-radius: 99rem;
+    filter: opacity(0.5);
+    animation: block_openai_chat_thinking 3s linear infinite;
+}
+
 @media screen and (max-width: 750px) {
     .drawerheader {
         pointer-events: none;
@@ -185,6 +197,9 @@
     }
     .block_openai_chat.expanded .openai_input_popout_btn {
         right: 3rem;
+    }
+    .block_openai_chat .recording {
+        right: 5.5rem;
     }
 }
 

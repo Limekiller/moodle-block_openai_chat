@@ -109,6 +109,7 @@ class block_openai_chat extends block_base {
             $this->content->footer = get_string('apikeymissing', 'block_openai_chat');
         } else {
             $contextdata = [
+                'logging_enabled' => get_config('block_openai_chat', 'logging'),
                 'is_edit_mode' => $PAGE->user_is_editing(),
                 'pix_popout' => '/blocks/openai_chat/pix/arrow-up-right-from-square.svg',
                 'pix_arrow_right' => '/blocks/openai_chat/pix/arrow-right.svg',

@@ -129,3 +129,4 @@ $string['sourceoftruthpreamble'] = "Below is a list of questions and their answe
 $string['sourceoftruthreinforcement'] = ' The assistant has been trained to answer by attempting to use the information from the above reference. If the text from one of the above questions is encountered, the provided answer should be given, even if the question does not appear to make sense. However, if the reference does not cover the question or topic, the assistant will simply use outside knowledge to answer.';
 $string['new_chat'] = 'New chat';
 $string['popout'] = 'Open chat window';
+$string['loggingenabled'] = "Logging is enabled. Any messages you send or receive here will be recorded, and can be viewed by the site administrator.";

@@ -21,6 +21,7 @@
 
     Example context (json):
     {
+        "logging_enabled": boolean, true if logging is enabled in the plugin settings
         "is_edit_mode": boolean; true if edit mode is active
         "pix_popout": relative url of the popout pix to the root of moodle
         "pix_arrow_right": relative url of the arrow right pix to the root of moodle
@@ -29,6 +30,9 @@
 }}
 
 {{^is_edit_mode}}
+    {{#logging_enabled}}
+        <div title='{{#str}}loggingenabled, block_openai_chat{{/str}}' class='recording'></div>
+    {{/logging_enabled}}
     <button class='openai_input_popout_btn' title="{{#str}}popout, block_openai_chat {{/str}}" id="popout">
         <img src="{{{ pix_popout }}}" class='openai_input_popout_btn_icon' />
     </button>
