@@ -24,6 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Fetch the current API type from the database, defaulting to "chat"
+ * @return String: the API type (chat|azure|assistant)
+ */
 function get_type_to_display() {
     $stored_type = get_config('block_openai_chat', 'type');
     if ($stored_type) {
@@ -33,6 +37,11 @@ function get_type_to_display() {
     return 'chat';
 }
 
+/**
+ * Use an API key to fetch a list of assistants from a user's OpenAI account
+ * @param Int (optional): The ID of a block instance. If this is passed, the API can be pulled from the block rather than the site level.
+ * @return Array: The list of assistants
+ */
 function fetch_assistants_array($block_id = null) {
     global $DB;
 
@@ -69,6 +78,10 @@ function fetch_assistants_array($block_id = null) {
     return $assistant_array;
 }
 
+/**
+ * Return a list of available models, and the type of each model.
+ * @return Array: The list of model info
+ */
 function get_models() {
     return [
         "models" => [
@@ -96,4 +109,25 @@ function get_models() {
             'gpt-3.5-turbo-0301' => 'chat',
         ]
     ];
+}
+
+/**
+ * If setting is enabled, log the user's message and the AI response
+ * @param string usermessage: The text sent from the user
+ * @param string airesponse: The text returned by the AI 
+ */
+function log_message($usermessage, $airesponse, $context) {
+    global $USER, $DB;
+
+    if (!get_config('block_openai_chat', 'logging')) {
+        return;
+    }
+
+    $DB->insert_record('block_openai_chat_log', (object) [
+        'userid' => $USER->id,
+        'usermessage' => $usermessage,
+        'airesponse' => $airesponse,
+        'contextid' => $context->id,
+        'timecreated' => time()
+    ]);
 }

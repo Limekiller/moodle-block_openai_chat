@@ -72,7 +72,8 @@
     transform: scale(0.7);
 }
 
-.block_openai_chat #openai_input {
+.block_openai_chat #openai_input,
+.openai_input_bar input {
     padding: 0.5rem;
     border-radius: 0.5rem 0 0 0.5rem;
     border: 1px solid gray;

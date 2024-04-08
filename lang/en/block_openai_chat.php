@@ -24,6 +24,7 @@
 
 $string['pluginname'] = 'OpenAI Chat Block';
 $string['openai_chat'] = 'OpenAI Chat';
+$string['openai_chat_logs'] = 'OpenAI Chat Logs';
 $string['openai_chat:addinstance'] = 'Add a new OpenAI Chat block';
 $string['openai_chat:myaddinstance'] = 'Add a new OpenAI Chat block to the My Moodle page';
 $string['privacy:metadata:openai_chat_log'] = 'Logged user messages sent to OpenAI. This includes the user ID of the user that sent the message, the content of the message, the response from OpenAI, and the time that the message was sent.';
@@ -32,6 +33,7 @@ $string['privacy:metadata:openai_chat_log:usermessage'] = 'The content of the me
 $string['privacy:metadata:openai_chat_log:airesponse'] = 'The response from OpenAI.';
 $string['privacy:metadata:openai_chat_log:timecreated'] = 'The time the message was sent.';
 $string['privacy:chatmessagespath'] = 'Sent AI chat messages';
+$string['downloadfilename'] = 'block_openai_chat_logs';
 
 $string['blocktitle'] = 'Block title';
 

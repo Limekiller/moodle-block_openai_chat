@@ -95,6 +95,9 @@ $response = $completion->create_completion($PAGE->context);
 
 // Format the markdown of each completion message into HTML.
 $response["message"] = format_text($response["message"], FORMAT_MARKDOWN, ['context' => $context]);
-$response = json_encode($response);
 
+// Log the message
+log_message($message, $response['message'], $context);
+
+$response = json_encode($response);
 echo $response;

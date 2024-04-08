@@ -47,9 +47,7 @@ class assistant extends \block_openai_chat\completion {
      */
     public function create_completion($context) {
         $this->add_message_to_thread();
-        $message_content = $this->run();
-        $this->log_message($this->message, $message_content['message']);
-        return $message_content;
+        return $this->run();
     }
 
     private function create_thread() {

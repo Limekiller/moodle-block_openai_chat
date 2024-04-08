@@ -104,26 +104,6 @@ class completion {
     }
 
     /**
-     * If setting is enabled, log the user's message and the AI response
-     * @param string usermessage: The text sent from the user
-     * @param string airesponse: The text returned by the AI 
-     */
-    protected function log_message($usermessage, $airesponse) {
-        global $USER, $DB;
-
-        if (!get_config('block_openai_chat', 'logging')) {
-            return;
-        }
-
-        $DB->insert_record('block_openai_chat_log', (object) [
-            'userid' => $USER->id,
-            'usermessage' => $usermessage,
-            'airesponse' => $airesponse,
-            'timecreated' => time()
-        ]);
-    }
-
-    /**
      * Make the source of truth ready to add to the prompt by appending some extra information
      * @param string localsourceoftruth: The instance-level source of truth we got from the API call 
      */
