@@ -32,6 +32,11 @@ $pageurl = $CFG->wwwroot . '/blocks/openai_chat/report.php';
 
 $download = optional_param('download', '', PARAM_ALPHA);
 $user = optional_param('user', '', PARAM_TEXT);
+$starttime = optional_param('starttime', '', PARAM_TEXT);
+$endtime = optional_param('endtime', '', PARAM_TEXT);
+
+$starttime_ts = strtotime($starttime);
+$endtime_ts = strtotime($endtime);
 
 $datetime = new DateTime();
 $table = new \block_openai_chat\report(time());
@@ -50,18 +55,40 @@ if (!$table->is_downloading()) {
     $PAGE->navbar->add(get_string('openai_chat_logs', 'block_openai_chat'), new moodle_url($pageurl));
     echo $OUTPUT->header();
 
-    echo "<form method='GET' action='" . (new moodle_url('/blocks/openai_chat/report.php'))->out() . "'>
-        <label for='user'>Search by user name</label>
-        <div class='openai_input_bar' style='width: 400px; margin-bottom: 1rem;'>
-            <input name='user' type='text' value='$user' placeholder='User name'/>
-            <button style='border-radius: 0 0.5rem 0.5rem 0;' type='submit' class='btn btn-primary'>Search</button>
+    echo "<form class='block_openai_chat' method='GET' action='" . (new moodle_url('/blocks/openai_chat/report.php'))->out() . "'>
+        <div class='report_container'>
+            <div style='display: flex; flex-direction: column'>
+                <label for='user'>Search by user name</label>
+                <input name='user' type='text' value='$user' placeholder='User name'/>
+            </div>
+            <div style='display: flex; flex-direction: column'>
+                <label for='starttime'>Start time</label>
+                <input type='datetime-local' name='starttime' value='$starttime' />
+            </div>
+            <div style='display: flex; flex-direction: column'>
+                <label for='endtime'>End time</label>
+                <input type='datetime-local' name='endtime' value='$endtime' />
+            </div>
         </div>
+        <button class='btn btn-primary' type='submit'>Search</button>
     </form>";
 }
 
 $where = "1=1";
+$out = 10;
 if ($user) {
+    $out = -1;
     $where = "CONCAT(u.firstname, ' ', u.lastname) like '%$user%'";
+}
+
+if ($starttime_ts) {
+    $out = -1;
+    $where .= " AND ocl.timecreated > $starttime_ts";
+}
+
+if ($endtime_ts) {
+    $out = -1;
+    $where .= " AND ocl.timecreated < $endtime_ts";
 }
 
 $table->set_sql(
@@ -70,7 +97,7 @@ $table->set_sql(
     $where
 );
 $table->define_baseurl($pageurl);
-$table->out(10, true);
+$table->out($out, true);
 
 if (!$table->is_downloading()) {
     echo $OUTPUT->footer();

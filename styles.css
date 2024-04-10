@@ -181,6 +181,18 @@
     animation: block_openai_chat_thinking 3s linear infinite;
 }
 
+.block_openai_chat input {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid grey;
+}
+
+.block_openai_chat .report_container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
 @media screen and (max-width: 750px) {
     .drawerheader {
         pointer-events: none;
@@ -200,6 +212,9 @@
     }
     .block_openai_chat.expanded .recording {
         right: 5.5rem;
+    }
+    .block_openai_chat .report_container {
+        flex-direction: column;
     }
 }
 
