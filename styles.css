@@ -198,7 +198,7 @@
     .block_openai_chat.expanded .openai_input_popout_btn {
         right: 3rem;
     }
-    .block_openai_chat .recording {
+    .block_openai_chat.expanded .recording {
         right: 5.5rem;
     }
 }
