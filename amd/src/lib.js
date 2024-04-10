@@ -63,6 +63,7 @@ export const init = (data) => {
     })
 
     document.querySelector('.block_openai_chat #popout').addEventListener('click', e => {
+        document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
         document.querySelector('.block_openai_chat').classList.toggle('expanded')
     })
 
