@@ -63,7 +63,9 @@ export const init = (data) => {
     })
 
     document.querySelector('.block_openai_chat #popout').addEventListener('click', e => {
-        document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
+        if (document.querySelector('.drawer.drawer-right')) {
+            document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
+        }
         document.querySelector('.block_openai_chat').classList.toggle('expanded')
     })
 
@@ -108,7 +110,7 @@ const addToChatLog = (type, message) => {
         messageElem.style.width = (messageText.offsetWidth + 40) + "px"
     }
     messageContainer.scrollTop = messageContainer.scrollHeight
-    messageContainer.closest('.card-body').scrollTop = messageContainer.scrollHeight
+    messageContainer.closest('.block_openai_chat > div').scrollTop = messageContainer.scrollHeight
 }
 
 /**
