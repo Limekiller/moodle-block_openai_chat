@@ -42,6 +42,9 @@ class block_openai_chat extends block_base {
     }
 
     public function get_content() {
+        global $OUTPUT;
+        global $PAGE;
+
         if ($this->content !== null) {
             return $this->content;
         }
@@ -102,18 +105,19 @@ class block_openai_chat extends block_base {
             <div id="openai_chat_log" role="log"></div>
         ';
 
-        $arrow_img = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>';
-        $refresh_img = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M105.1 202.6c7.7-21.8 20.2-42.3 37.8-59.8c62.5-62.5 163.8-62.5 226.3 0L386.3 160H352c-17.7 0-32 14.3-32 32s14.3 32 32 32H463.5c0 0 0 0 0 0h.4c17.7 0 32-14.3 32-32V80c0-17.7-14.3-32-32-32s-32 14.3-32 32v35.2L414.4 97.6c-87.5-87.5-229.3-87.5-316.8 0C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5zM39 289.3c-5 1.5-9.8 4.2-13.7 8.2c-4 4-6.7 8.8-8.1 14c-.3 1.2-.6 2.5-.8 3.8c-.3 1.7-.4 3.4-.4 5.1V432c0 17.7 14.3 32 32 32s32-14.3 32-32V396.9l17.6 17.5 0 0c87.5 87.4 229.3 87.4 316.7 0c24.4-24.4 42.1-53.1 52.9-83.7c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.5 62.5-163.8 62.5-226.3 0l-.1-.1L125.6 352H160c17.7 0 32-14.3 32-32s-14.3-32-32-32H48.4c-1.6 0-3.2 .1-4.8 .3s-3.1 .5-4.6 1z"/></svg>';
+        if (empty(get_config('block_openai_chat', 'apikey'))) {
+            $this->content->footer = get_string('apikeymissing', 'block_openai_chat');
+        } else {
+            $contextdata = [
+                'logging_enabled' => get_config('block_openai_chat', 'logging'),
+                'is_edit_mode' => $PAGE->user_is_editing(),
+                'pix_popout' => '/blocks/openai_chat/pix/arrow-up-right-from-square.svg',
+                'pix_arrow_right' => '/blocks/openai_chat/pix/arrow-right.svg',
+                'pix_refresh' => '/blocks/openai_chat/pix/refresh.svg',
+            ];
 
-        $this->content->footer = get_config('block_openai_chat', 'apikey') ? '
-            <div id="control_bar">
-                <div id="input_bar">
-                    <input id="openai_input" placeholder="' . get_string('askaquestion', 'block_openai_chat') .'" type="text" name="message" />
-                    <button title="Submit" id="go">' . $arrow_img . '</button>
-                </div>
-                <button title="New chat" id="refresh">' . $refresh_img . '</button>
-            </div>'
-        : get_string('apikeymissing', 'block_openai_chat');
+            $this->content->footer = $OUTPUT->render_from_template('block_openai_chat/control_bar', $contextdata);
+        }
 
         return $this->content;
     }

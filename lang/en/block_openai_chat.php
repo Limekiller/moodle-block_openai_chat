@@ -24,9 +24,16 @@
 
 $string['pluginname'] = 'OpenAI Chat Block';
 $string['openai_chat'] = 'OpenAI Chat';
+$string['openai_chat_logs'] = 'OpenAI Chat Logs';
 $string['openai_chat:addinstance'] = 'Add a new OpenAI Chat block';
 $string['openai_chat:myaddinstance'] = 'Add a new OpenAI Chat block to the My Moodle page';
-$string['privacy:metadata'] = 'The OpenAI Chat block stores no personal user data; nor does it, by default, send personal data to OpenAI. However, chat messages submitted by users are sent in their entirety to OpenAI, and are then subject to OpenAI\'s privacy policy (https://openai.com/api/policies/privacy/), which may store messages in order to improve the API.';
+$string['privacy:metadata:openai_chat_log'] = 'Logged user messages sent to OpenAI. This includes the user ID of the user that sent the message, the content of the message, the response from OpenAI, and the time that the message was sent.';
+$string['privacy:metadata:openai_chat_log:userid'] = 'The ID of the user that sent the message.';
+$string['privacy:metadata:openai_chat_log:usermessage'] = 'The content of the message.';
+$string['privacy:metadata:openai_chat_log:airesponse'] = 'The response from OpenAI.';
+$string['privacy:metadata:openai_chat_log:timecreated'] = 'The time the message was sent.';
+$string['privacy:chatmessagespath'] = 'Sent AI chat messages';
+$string['downloadfilename'] = 'block_openai_chat_logs';
 
 $string['blocktitle'] = 'Block title';
 
@@ -36,6 +43,8 @@ $string['apikey'] = 'API Key';
 $string['apikeydesc'] = 'The API Key for your OpenAI account or Azure API key';
 $string['type'] = 'API Type';
 $string['typedesc'] = 'The API type that the plugin should use';
+$string['logging'] = 'Enable logging';
+$string['loggingdesc'] = 'If this setting is active, all user messages and AI responses will be logged.';
 
 $string['assistantheading'] = 'Assistant API Settings';
 $string['assistantheadingdesc'] = 'These settings only apply to the Assistant API type.';
@@ -118,3 +127,6 @@ $string['apikeymissing'] = 'Please add your OpenAI API key to the global block s
 $string['erroroccurred'] = 'An error occurred! Please try again later.';
 $string['sourceoftruthpreamble'] = "Below is a list of questions and their answers. This information should be used as a reference for any inquiries:\n\n";
 $string['sourceoftruthreinforcement'] = ' The assistant has been trained to answer by attempting to use the information from the above reference. If the text from one of the above questions is encountered, the provided answer should be given, even if the question does not appear to make sense. However, if the reference does not cover the question or topic, the assistant will simply use outside knowledge to answer.';
+$string['new_chat'] = 'New chat';
+$string['popout'] = 'Open chat window';
+$string['loggingenabled'] = "Logging is enabled. Any messages you send or receive here will be recorded, and can be viewed by the site administrator.";

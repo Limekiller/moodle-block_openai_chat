@@ -18,23 +18,111 @@
  * Privacy API Provider
  *
  * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @copyright  2024 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_openai_chat\privacy;
 
-class provider implements
-    // This plugin does not store any personal user data.
-    \core_privacy\local\metadata\null_provider {
+use \core_privacy\local\metadata\collection;
+use \core_privacy\local\request\writer;
+use \core_privacy\local\request\contextlist;
+use \core_privacy\local\request\approved_contextlist;
+use \core_privacy\local\request\userlist;
+use core_privacy\local\request\approved_userlist;
 
-    /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
-     *
-     * @return  string
-     */
-    public static function get_reason() : string {
-        return 'privacy:metadata';
+defined('MOODLE_INTERNAL') || die();
+
+class provider implements 
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\core_userlist_provider {
+
+    public static function get_metadata(collection $collection): collection {
+        $collection->add_database_table(
+            'block_openai_chat_log',
+             [
+                'userid' => 'privacy:metadata:openai_chat_log:userid',
+                'usermessage' => 'privacy:metadata:openai_chat_log:usermessage',
+                'airesponse' => 'privacy:metadata:openai_chat_log:airesponse',
+                'timecreated' => 'privacy:metadata:openai_chat_log:timecreated'
+             ],
+            'privacy:metadata:openai_chat_log'
+        );
+    
+        return $collection;
+    }
+
+    public static function get_contexts_for_userid(int $userid): contextlist {
+        $contextlist = new \core_privacy\local\request\contextlist();
+        $sql = "SELECT id FROM {context} WHERE contextlevel = 30 AND instanceid = :userid";
+        $contextlist->add_from_sql($sql, ['userid' => $userid]);
+        return $contextlist;
+    }
+
+    public static function get_users_in_context(userlist $userlist) {
+        $context = $userlist->get_context();
+        if (!$context instanceof \context_user) {
+            return;
+        }
+
+        if ($DB->record_exists('block_openai_chat_log', ['userid' => $context->instanceid])) {
+            $userlist->add_user($context->instanceid);
+        }
+    }
+
+    public static function export_user_data(approved_contextlist $contextlist) {
+        global $DB;
+
+        $context = $contextlist->current();
+        $user = $contextlist->get_user();
+        $userid = $user->id;
+
+        // Sent messages.
+        $sql = "SELECT id, userid, usermessage, airesponse, timecreated FROM {block_openai_chat_log} WHERE userid = :userid";
+        $records = $DB->get_records_sql($sql, ["userid" => $userid]);
+
+        if (!empty($records)) {
+            $messages = new \stdClass();
+            foreach ($records as $message) {
+                $messages->{$message->id} = [
+                    "userid" => $message->userid,
+                    "usermessage" => $message->usermessage,
+                    "airesponse" => $message->airesponse,
+                    "timecreated" => $message->timecreated
+                ];
+            }
+    
+            writer::with_context($context)->export_data(
+                [get_string('privacy:chatmessagespath', 'block_openai_chat')],
+                $messages
+            );
+        }
+    }
+
+    public static function delete_data_for_all_users_in_context(\context $context) {
+        global $DB;
+        // Only delete data for a user context.
+        if ($context->contextlevel == CONTEXT_USER) {
+            $DB->delete_records('block_openai_chat_log', ['userid' => $context->instanceid]);
+        }
+    }
+
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
+        global $DB;
+        foreach ($contextlist as $context) {
+            // Let's be super certain that we have the right information for this user here.
+            if ($context->contextlevel == CONTEXT_USER && $contextlist->get_user()->id == $context->instanceid) {
+                $DB->delete_records('block_openai_chat_log', ['userid' => $context->instanceid]);
+            }
+        }
+    }
+
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+        $context = $userlist->get_context();
+        if ($context instanceof \context_user && in_array($context->instanceid, $userlist->get_userids())) {
+            $DB->delete_records('block_openai_chat_log', ['userid' => $context->instanceid]);
+        }
     }
 }

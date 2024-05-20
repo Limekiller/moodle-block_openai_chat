@@ -56,7 +56,7 @@ class assistant extends \block_openai_chat\completion {
             'CURLOPT_HTTPHEADER' => array(
                 'Authorization: Bearer ' . $this->apikey,
                 'Content-Type: application/json',
-                'OpenAI-Beta: assistants=v1'
+                'OpenAI-Beta: assistants=v2'
             ),
         ));
 

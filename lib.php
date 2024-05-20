@@ -24,6 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Fetch the current API type from the database, defaulting to "chat"
+ * @return String: the API type (chat|azure|assistant)
+ */
 function get_type_to_display() {
     $stored_type = get_config('block_openai_chat', 'type');
     if ($stored_type) {
@@ -33,6 +37,11 @@ function get_type_to_display() {
     return 'chat';
 }
 
+/**
+ * Use an API key to fetch a list of assistants from a user's OpenAI account
+ * @param Int (optional): The ID of a block instance. If this is passed, the API can be pulled from the block rather than the site level.
+ * @return Array: The list of assistants
+ */
 function fetch_assistants_array($block_id = null) {
     global $DB;
 
@@ -69,31 +78,74 @@ function fetch_assistants_array($block_id = null) {
     return $assistant_array;
 }
 
+/**
+ * Return a list of available models, and the type of each model.
+ * @return Array: The list of model info
+ */
 function get_models() {
     return [
         "models" => [
-            'gpt-4' => 'gpt-4',
+            'gpt-4o-2024-05-13' => 'gpt-4o-2024-05-13',
+            'gpt-4o' => 'gpt-4o',
+            'gpt-4-turbo-preview' => 'gpt-4-turbo-preview',
+            'gpt-4-turbo-2024-04-09' => 'gpt-4-turbo-2024-04-09',
+            'gpt-4-turbo' => 'gpt-4-turbo',
+            'gpt-4-32k-0314' => 'gpt-4-32k-0314',
+            'gpt-4-1106-vision-preview' => 'gpt-4-1106-vision-preview',
             'gpt-4-1106-preview' => 'gpt-4-1106-preview',
             'gpt-4-0613' => 'gpt-4-0613',
             'gpt-4-0314' => 'gpt-4-0314',
-            'gpt-3.5-turbo' => 'gpt-3.5-turbo',
+            'gpt-4-0125-preview' => 'gpt-4-0125-preview',
+            'gpt-4' => 'gpt-4',
             'gpt-3.5-turbo-16k-0613' => 'gpt-3.5-turbo-16k-0613',
             'gpt-3.5-turbo-16k' => 'gpt-3.5-turbo-16k',
             'gpt-3.5-turbo-1106' => 'gpt-3.5-turbo-1106',
             'gpt-3.5-turbo-0613' => 'gpt-3.5-turbo-0613',
             'gpt-3.5-turbo-0301' => 'gpt-3.5-turbo-0301',
+            'gpt-3.5-turbo-0125' => 'gpt-3.5-turbo-0125',
+            'gpt-3.5-turbo' => 'gpt-3.5-turbo'
         ],
         "types" => [
-            'gpt-4' => 'chat',
-            'gpt-4-1106-preview' => 'chat',
-            'gpt-4-0613' => 'chat',
-            'gpt-4-0314' => 'chat',
-            'gpt-3.5-turbo' => 'chat',
-            'gpt-3.5-turbo-16k-0613' => 'chat',
-            'gpt-3.5-turbo-16k' => 'chat',
-            'gpt-3.5-turbo-1106' => 'chat',
-            'gpt-3.5-turbo-0613' => 'chat',
-            'gpt-3.5-turbo-0301' => 'chat',
+            'gpt-4o-2024-05-13'          =>  'chat',
+            'gpt-4o'                     =>  'chat',
+            'gpt-4-turbo-preview'        =>  'chat',
+            'gpt-4-turbo-2024-04-09'     =>  'chat',
+            'gpt-4-turbo'                =>  'chat',
+            'gpt-4-32k-0314'             =>  'chat',
+            'gpt-4-1106-vision-preview'  =>  'chat',
+            'gpt-4-1106-preview'         =>  'chat',
+            'gpt-4-0613'                 =>  'chat',
+            'gpt-4-0314'                 =>  'chat',
+            'gpt-4-0125-preview'         =>  'chat',
+            'gpt-4'                      =>  'chat',
+            'gpt-3.5-turbo-16k-0613'     =>  'chat',
+            'gpt-3.5-turbo-16k'          =>  'chat',
+            'gpt-3.5-turbo-1106'         =>  'chat',
+            'gpt-3.5-turbo-0613'         =>  'chat',
+            'gpt-3.5-turbo-0301'         =>  'chat',
+            'gpt-3.5-turbo-0125'         =>  'chat',
+            'gpt-3.5-turbo'              =>  'chat'
         ]
     ];
+}
+
+/**
+ * If setting is enabled, log the user's message and the AI response
+ * @param string usermessage: The text sent from the user
+ * @param string airesponse: The text returned by the AI 
+ */
+function log_message($usermessage, $airesponse, $context) {
+    global $USER, $DB;
+
+    if (!get_config('block_openai_chat', 'logging')) {
+        return;
+    }
+
+    $DB->insert_record('block_openai_chat_log', (object) [
+        'userid' => $USER->id,
+        'usermessage' => $usermessage,
+        'airesponse' => $airesponse,
+        'contextid' => $context->id,
+        'timecreated' => time()
+    ]);
 }

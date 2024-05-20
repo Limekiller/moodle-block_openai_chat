@@ -1,0 +1,50 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_openai_chat/conrol_bar
+
+    This template renders the control_bar.
+
+    Example context (json):
+    {
+        "logging_enabled": boolean, true if logging is enabled in the plugin settings
+        "is_edit_mode": boolean; true if edit mode is active
+        "pix_popout": relative url of the popout pix to the root of moodle
+        "pix_arrow_right": relative url of the arrow right pix to the root of moodle
+        "pix_refresh": relative url of the refresh pix to the root of moodle
+    }
+}}
+
+{{^is_edit_mode}}
+    {{#logging_enabled}}
+        <div title='{{#str}}loggingenabled, block_openai_chat{{/str}}' class='recording'></div>
+    {{/logging_enabled}}
+    <button class='openai_input_popout_btn' title="{{#str}}popout, block_openai_chat {{/str}}" id="popout">
+        <img src="{{{ pix_popout }}}" class='openai_input_popout_btn_icon' />
+    </button>
+{{/is_edit_mode}}
+<div id="control_bar">
+    <div class="openai_input_bar" id="input_bar">
+        <textarea rows=1 id="openai_input" placeholder="{{#str}}askaquestion, block_openai_chat{{/str}}" type="text" name="message"></textarea>
+        <button class='openai_input_submit_btn' title="{{#str}} submit {{/str}}" id="go">
+            <img src="{{{ pix_arrow_right }}}" class='openai_input_submit_btn_icon'/>
+        </button>
+    </div>
+    <button class='openai_input_refresh_btn' title="{{#str}}new_chat, block_openai_chat {{/str}}" id="refresh">
+        <img src="{{{ pix_refresh }}}" class='openai_input_refresh_btn_icon' />
+    </button>
+</div>

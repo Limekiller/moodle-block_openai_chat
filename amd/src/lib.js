@@ -62,6 +62,13 @@ export const init = (data) => {
         clearHistory(blockId)
     })
 
+    document.querySelector('.block_openai_chat #popout').addEventListener('click', e => {
+        if (document.querySelector('.drawer.drawer-right')) {
+            document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
+        }
+        document.querySelector('.block_openai_chat').classList.toggle('expanded')
+    })
+
     require(['core/str'], function(str) {
         var strings = [
             {
@@ -103,6 +110,7 @@ const addToChatLog = (type, message) => {
         messageElem.style.width = (messageText.offsetWidth + 40) + "px"
     }
     messageContainer.scrollTop = messageContainer.scrollHeight
+    messageContainer.closest('.block_openai_chat > div').scrollTop = messageContainer.scrollHeight
 }
 
 /**
