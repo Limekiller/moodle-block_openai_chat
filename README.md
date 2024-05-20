@@ -18,6 +18,7 @@ The global block settings can be found by going to Site Administration > Plugins
 -  **Restrict chat usage to logged-in users:** If this box is checked, only logged-in users will be able to use the chat box.
 -  **Assistant name:** When the Chat API is enabled, the AI will use this name for itself in the conversation. It is also always used for the UI headings in the chat window.
 -  **User name:** When the Chat API is enabled, the AI will use this name for the user in the conversation. Both this and the above option can be used to influence the persona and responses of the AI. It is also always used for the UI headings in the chat window.
+-  **Enable logging:** Checking this box will record all messages sent by users along with the AI response. When logging is enabled, a recording icon is displayed in the block to indicate to users that their messages are being saved. Interactions with the AI can be found at Site Administration > Reports > OpenAI Chat Logs.
   
 ### Assistant API settings
 These settings only appear when "Assistant" is chosen as the API Type
