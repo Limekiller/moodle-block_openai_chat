@@ -34,17 +34,17 @@
         <div title='{{#str}}loggingenabled, block_openai_chat{{/str}}' class='recording'></div>
     {{/logging_enabled}}
     <button class='openai_input_popout_btn' title="{{#str}}popout, block_openai_chat {{/str}}" id="popout">
-        <img src="{{{ pix_popout }}}" class='openai_input_popout_btn_icon' />
+        <img src="{{{config.wwwroot}}}{{{ pix_popout }}}" class='openai_input_popout_btn_icon' />
     </button>
 {{/is_edit_mode}}
 <div id="control_bar">
     <div class="openai_input_bar" id="input_bar">
         <textarea rows=1 id="openai_input" placeholder="{{#str}}askaquestion, block_openai_chat{{/str}}" type="text" name="message"></textarea>
         <button class='openai_input_submit_btn' title="{{#str}} submit {{/str}}" id="go">
-            <img src="{{{ pix_arrow_right }}}" class='openai_input_submit_btn_icon'/>
+            <img src="{{{config.wwwroot}}}{{{ pix_arrow_right }}}" class='openai_input_submit_btn_icon'/>
         </button>
     </div>
     <button class='openai_input_refresh_btn' title="{{#str}}new_chat, block_openai_chat {{/str}}" id="refresh">
-        <img src="{{{ pix_refresh }}}" class='openai_input_refresh_btn_icon' />
+        <img src="{{{config.wwwroot}}}{{{ pix_refresh }}}" class='openai_input_refresh_btn_icon' />
     </button>
 </div>
