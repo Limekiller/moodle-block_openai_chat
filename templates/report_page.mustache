@@ -1,0 +1,50 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_openai_chat/report_page
+
+    This template renders the report page form
+
+    Example context (json):
+    {
+        "courseid": int, the ID of the course we are looking at
+        "link": string, the URL for the form action
+        "user": string, the value of the user field
+        "starttime": string, the value of the starttime field
+        "endtime": string, the value of the endtime field
+    }
+}}
+
+<form class='block_openai_chat' method='GET' action='{{link}}'>
+    <input type='hidden' name='courseid' value='{{courseid}}' />
+    <div class='report_container'>
+        <div style='display: flex; flex-direction: column'>
+            <label for='user'>Search by user name</label>
+            <input name='user' type='text' value='{{user}}' placeholder='User name'/>
+        </div>
+        <div style='display: flex; flex-direction: column'>
+            <label for='starttime'>Start time</label>
+            <input type='datetime-local' name='starttime' value='{{starttime}}' />
+        </div>
+        <div style='display: flex; flex-direction: column'>
+            <label for='endtime'>End time</label>
+            <input type='datetime-local' name='endtime' value='{{endtime}}' />
+        </div>
+    </div>
+    <button class='btn btn-primary' type='submit'>Search</button>
+</form>
+<br />

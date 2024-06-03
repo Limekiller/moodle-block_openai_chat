@@ -54,12 +54,11 @@ if (!$instance) {
 }
 
 $context = context::instance_by_id($instance_record->parentcontextid);
-if ($context->contextlevel == CONTEXT_COURSE) {
-    $course = get_course($context->instanceid);
-    $PAGE->set_course($course);
-} else {
-    $PAGE->set_context($context);
-}
+try {
+    $context = $context->get_course_context();
+} catch (Exception $e) {}
+
+$PAGE->set_context($context);
 
 $block_settings = [];
 $setting_names = [
