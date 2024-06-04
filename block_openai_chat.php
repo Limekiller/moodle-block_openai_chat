@@ -105,7 +105,10 @@ class block_openai_chat extends block_base {
             <div id="openai_chat_log" role="log"></div>
         ';
 
-        if (empty(get_config('block_openai_chat', 'apikey'))) {
+        if (
+            empty(get_config('block_openai_chat', 'apikey')) && 
+            (!get_config('block_openai_chat', 'allowinstancesettings') || empty($this->config->apikey))
+        ) {
             $this->content->footer = get_string('apikeymissing', 'block_openai_chat');
         } else {
             $contextdata = [

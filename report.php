@@ -25,18 +25,27 @@
 use \block_openai_chat\report;
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir.'/tablelib.php');
+global $DB;
 
-admin_externalpage_setup('openai_chat_report');
-$pageurl = $CFG->wwwroot . '/blocks/openai_chat/report.php';
-
+$courseid = required_param('courseid', PARAM_INT);
 $download = optional_param('download', '', PARAM_ALPHA);
 $user = optional_param('user', '', PARAM_TEXT);
 $starttime = optional_param('starttime', '', PARAM_TEXT);
 $endtime = optional_param('endtime', '', PARAM_TEXT);
 
+$pageurl = $CFG->wwwroot . "/blocks/openai_chat/report.php?courseid=$courseid" .
+    "&user=$user" .
+    "&starttime=$starttime" .
+    "&endtime=$endtime";
 $starttime_ts = strtotime($starttime);
 $endtime_ts = strtotime($endtime);
+$course = $DB->get_record('course', ['id' => $courseid]);
+
+$PAGE->set_url($pageurl);
+require_login($course);
+$context = context_course::instance($courseid);
+require_capability('block/openai_chat:viewreport', $context);
 
 $datetime = new DateTime();
 $table = new \block_openai_chat\report(time());
@@ -49,51 +58,48 @@ $table->is_downloading(
 );
 
 if (!$table->is_downloading()) {
-    $PAGE->set_url($pageurl);
+    $PAGE->set_pagelayout('report');
     $PAGE->set_title(get_string('openai_chat_logs', 'block_openai_chat'));
     $PAGE->set_heading(get_string('openai_chat_logs', 'block_openai_chat'));
+    $PAGE->navbar->add($course->shortname, new moodle_url('/course/view.php', ['id' => $course->id]));
     $PAGE->navbar->add(get_string('openai_chat_logs', 'block_openai_chat'), new moodle_url($pageurl));
-    echo $OUTPUT->header();
 
-    echo "<form class='block_openai_chat' method='GET' action='" . (new moodle_url('/blocks/openai_chat/report.php'))->out() . "'>
-        <div class='report_container'>
-            <div style='display: flex; flex-direction: column'>
-                <label for='user'>Search by user name</label>
-                <input name='user' type='text' value='$user' placeholder='User name'/>
-            </div>
-            <div style='display: flex; flex-direction: column'>
-                <label for='starttime'>Start time</label>
-                <input type='datetime-local' name='starttime' value='$starttime' />
-            </div>
-            <div style='display: flex; flex-direction: column'>
-                <label for='endtime'>End time</label>
-                <input type='datetime-local' name='endtime' value='$endtime' />
-            </div>
-        </div>
-        <button class='btn btn-primary' type='submit'>Search</button>
-    </form>";
+    echo $OUTPUT->header();
+    echo $OUTPUT->render_from_template('block_openai_chat/report_page', [
+        "courseid" => $courseid,
+        "user" => $user,
+        "starttime" => $starttime,
+        "endtime" => $endtime,
+        "link" => (new moodle_url("/blocks/openai_chat/report.php"))->out()
+    ]);
 }
 
 $where = "1=1";
 $out = 10;
-if ($user) {
-    $out = -1;
-    $where = "CONCAT(u.firstname, ' ', u.lastname) like '%$user%'";
+
+// If courseid is 1, we're assuming this is an admin report wanting the entire log table
+// otherwise, we'll limit it to responses in the course context for this course
+if ($courseid !== 1) {
+    $where = "c.contextlevel = 50 AND co.id = $courseid";
 }
 
+// filter by user, starttime, endtime
+if ($user) {
+    $where .= " AND CONCAT(u.firstname, ' ', u.lastname) like '%$user%'";
+}
 if ($starttime_ts) {
-    $out = -1;
     $where .= " AND ocl.timecreated > $starttime_ts";
 }
-
 if ($endtime_ts) {
-    $out = -1;
     $where .= " AND ocl.timecreated < $endtime_ts";
 }
 
 $table->set_sql(
     "ocl.*, CONCAT(u.firstname, ' ', u.lastname) as user_name", 
-    "{block_openai_chat_log} ocl JOIN {user} u ON u.id = ocl.userid", 
+    "{block_openai_chat_log} ocl 
+        JOIN {user} u ON u.id = ocl.userid 
+        JOIN {context} c ON c.id = ocl.contextid
+        LEFT JOIN {course} co ON co.id = c.instanceid",
     $where
 );
 $table->define_baseurl($pageurl);

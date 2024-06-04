@@ -62,7 +62,7 @@ function fetch_assistants_array($block_id = null) {
         'CURLOPT_HTTPHEADER' => array(
             'Authorization: Bearer ' . $apikey,
             'Content-Type: application/json',
-            'OpenAI-Beta: assistants=v1'
+            'OpenAI-Beta: assistants=v2'
         ),
     ));
 
@@ -148,4 +148,15 @@ function log_message($usermessage, $airesponse, $context) {
         'contextid' => $context->id,
         'timecreated' => time()
     ]);
+}
+
+function block_openai_chat_extend_navigation_course($nav, $course, $context) {
+    if ($nav->get('coursereports')) {
+        $nav->get('coursereports')->add(
+            get_string('openai_chat_logs', 'block_openai_chat'),
+            new moodle_url('/blocks/openai_chat/report.php', ['courseid' => $course->id]),
+            navigation_node::TYPE_SETTING,
+            null
+        );
+    }
 }
