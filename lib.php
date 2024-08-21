@@ -87,6 +87,7 @@ function get_models() {
         "models" => [
             'gpt-4o-2024-05-13' => 'gpt-4o-2024-05-13',
             'gpt-4o' => 'gpt-4o',
+            'gpt-4o-mini' => 'gpt-4o-mini',
             'gpt-4-turbo-preview' => 'gpt-4-turbo-preview',
             'gpt-4-turbo-2024-04-09' => 'gpt-4-turbo-2024-04-09',
             'gpt-4-turbo' => 'gpt-4-turbo',
@@ -108,6 +109,7 @@ function get_models() {
         "types" => [
             'gpt-4o-2024-05-13'          =>  'chat',
             'gpt-4o'                     =>  'chat',
+            'gpt-4o-mini'                =>  'chat',
             'gpt-4-turbo-preview'        =>  'chat',
             'gpt-4-turbo-2024-04-09'     =>  'chat',
             'gpt-4-turbo'                =>  'chat',
