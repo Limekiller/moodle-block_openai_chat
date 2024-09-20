@@ -52,6 +52,14 @@ class report extends \table_sql {
 
     function col_contextid($values) {
         $context = \context::instance_by_id($values->contextid);
+
+        $coursecontext;
+        try {
+            $coursecontext = $context->get_course_context();
+        } catch (\Throwable $e) {
+            $coursecontext = $context;
+        }
+        
         if ($this->is_downloading()) {
             return '=HYPERLINK("' . $context->get_url() . '","' . $context->get_context_name() . '")';
         } else {

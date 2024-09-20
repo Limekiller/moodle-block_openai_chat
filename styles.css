@@ -225,6 +225,18 @@
 .block_openai_chat.expanded .edw-block-body .recording {
     top: 1.5rem;
 }
+.block_openai_chat.expanded .edw-block-body #control_bar {
+    width: calc(100% - 4rem);
+}
+.block_openai_chat.expanded .block-body-wrapper {
+    height: calc(100% - 4rem);
+    overflow: auto;
+}
+#block-region-side-pre .block_openai_chat.expanded .block-body-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0 2rem;
+}
 .drawer {
     filter: unset !important;
 }
