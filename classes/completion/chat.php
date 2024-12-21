@@ -75,12 +75,6 @@ class chat extends \block_openai_chat\completion {
         $curlbody = [
             "model" => $this->model,
             "messages" => $history,
-            "temperature" => (float) $this->temperature,
-            "max_tokens" => (int) $this->maxlength,
-            "top_p" => (float) $this->topp,
-            "frequency_penalty" => (float) $this->frequency,
-            "presence_penalty" => (float) $this->presence,
-            "stop" => $this->username . ":"
         ];
 
         $curl = new \curl();
@@ -91,7 +85,7 @@ class chat extends \block_openai_chat\completion {
             ),
         ));
 
-        $response = $curl->post("https://api.openai.com/v1/chat/completions", json_encode($curlbody));
+        $response = $curl->post("https://openai.inference.de-txl.ionos.com/v1/chat/completions", json_encode($curlbody));
         $response = json_decode($response);
 
         $message = null;
