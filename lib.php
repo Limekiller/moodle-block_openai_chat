@@ -85,46 +85,12 @@ function fetch_assistants_array($block_id = null) {
 function get_models() {
     return [
         "models" => [
-            'gpt-4o-2024-05-13' => 'gpt-4o-2024-05-13',
-            'gpt-4o' => 'gpt-4o',
-            'gpt-4-turbo-preview' => 'gpt-4-turbo-preview',
-            'gpt-4-turbo-2024-04-09' => 'gpt-4-turbo-2024-04-09',
-            'gpt-4-turbo' => 'gpt-4-turbo',
-            'gpt-4-32k-0314' => 'gpt-4-32k-0314',
-            'gpt-4-1106-vision-preview' => 'gpt-4-1106-vision-preview',
-            'gpt-4-1106-preview' => 'gpt-4-1106-preview',
-            'gpt-4-0613' => 'gpt-4-0613',
-            'gpt-4-0314' => 'gpt-4-0314',
-            'gpt-4-0125-preview' => 'gpt-4-0125-preview',
-            'gpt-4' => 'gpt-4',
-            'gpt-3.5-turbo-16k-0613' => 'gpt-3.5-turbo-16k-0613',
-            'gpt-3.5-turbo-16k' => 'gpt-3.5-turbo-16k',
-            'gpt-3.5-turbo-1106' => 'gpt-3.5-turbo-1106',
-            'gpt-3.5-turbo-0613' => 'gpt-3.5-turbo-0613',
-            'gpt-3.5-turbo-0301' => 'gpt-3.5-turbo-0301',
-            'gpt-3.5-turbo-0125' => 'gpt-3.5-turbo-0125',
-            'gpt-3.5-turbo' => 'gpt-3.5-turbo'
+         'meta-llama/Meta-Llama-3.1-8B-Instruct' => 'meta-llama/Meta-Llama-3.1-8B-Instruct',
+         'meta-llama/Meta-Llama-3.1-70B-Instruct' => 'meta-llama/Meta-Llama-3.1-70B-Instruct'
         ],
         "types" => [
-            'gpt-4o-2024-05-13'          =>  'chat',
-            'gpt-4o'                     =>  'chat',
-            'gpt-4-turbo-preview'        =>  'chat',
-            'gpt-4-turbo-2024-04-09'     =>  'chat',
-            'gpt-4-turbo'                =>  'chat',
-            'gpt-4-32k-0314'             =>  'chat',
-            'gpt-4-1106-vision-preview'  =>  'chat',
-            'gpt-4-1106-preview'         =>  'chat',
-            'gpt-4-0613'                 =>  'chat',
-            'gpt-4-0314'                 =>  'chat',
-            'gpt-4-0125-preview'         =>  'chat',
-            'gpt-4'                      =>  'chat',
-            'gpt-3.5-turbo-16k-0613'     =>  'chat',
-            'gpt-3.5-turbo-16k'          =>  'chat',
-            'gpt-3.5-turbo-1106'         =>  'chat',
-            'gpt-3.5-turbo-0613'         =>  'chat',
-            'gpt-3.5-turbo-0301'         =>  'chat',
-            'gpt-3.5-turbo-0125'         =>  'chat',
-            'gpt-3.5-turbo'              =>  'chat'
+          'meta-llama/Meta-Llama-3.1-8B-Instruct' => 'chat',
+          'meta-llama/Meta-Llama-3.1-70B-Instruct' => 'chat'
         ]
     ];
 }
