@@ -1,3 +1,11 @@
+Fork:
+This is a fork that changes the url openai adresses to the addresses of IONOS.
+The available models are only llama. Those were compatible with the chat framework.
+Also the request to IONOS were simplified, since temperature and other options were not compatible with the ionos API
+
+-------
+Original Text
+
 # moodle-block_openai_chat
 
 <img align="right" src="https://github.com/Limekiller/moodle-block_openai_chat/assets/33644013/21f73adc-5bd4-4539-999b-a3b0a83736e0" />
