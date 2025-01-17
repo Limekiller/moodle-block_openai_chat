@@ -1,3 +1,7 @@
+.block_openai_chat {
+    position: relative;
+}
+
 .block_openai_chat #openai_chat_log {
     display: flex;
     flex-direction: column;
@@ -56,6 +60,13 @@
     display: flex;
     border: none;
     z-index: 2;
+}
+.block_openai_chat .openai_input_popout_btn img {
+    max-width: 1.25rem;
+    pointer-events: none;
+}
+.drawercontent {
+    position: unset;
 }
 
 .openai_input_submit_btn_icon,
@@ -144,6 +155,7 @@
     transform: translate(-50%, -50%);
     outline: 100vw solid #00000029;
     z-index: 2;
+    background-color: white !important;
 }
 
 .block_openai_chat.expanded .card-body {
@@ -155,6 +167,7 @@
     overflow-y: unset;
     padding-bottom: 3rem !important;
     padding-top: 1rem;
+    min-height: 2rem;
 }
 
 .block_openai_chat.expanded #control_bar {
@@ -191,6 +204,41 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
+}
+
+/* dumbass remui styles */
+.block_openai_chat.expanded .block-header-wrapper {
+    padding: 1rem !important;
+}
+.block_openai_chat.expanded .edw-block-body {
+    box-shadow: none !important;
+}
+.block_openai_chat .edw-block-body #popout {
+    top: 0;
+}
+.block_openai_chat .edw-block-body .recording {
+    top: 0.75rem;
+}
+.block_openai_chat.expanded .edw-block-body #popout {
+    top: 0.75rem;
+}
+.block_openai_chat.expanded .edw-block-body .recording {
+    top: 1.5rem;
+}
+.block_openai_chat.expanded .edw-block-body #control_bar {
+    width: calc(100% - 4rem);
+}
+.block_openai_chat.expanded .block-body-wrapper {
+    height: calc(100% - 4rem);
+    overflow: auto;
+}
+#block-region-side-pre .block_openai_chat.expanded .block-body-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0 2rem;
+}
+.drawer {
+    filter: unset !important;
 }
 
 @media screen and (max-width: 750px) {

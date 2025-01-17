@@ -26,12 +26,14 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
 
-    $ADMIN->add('reports', new admin_externalpage(
-        'openai_chat_report', 
-        get_string('openai_chat_logs', 'block_openai_chat'), 
-        new moodle_url("$CFG->wwwroot/blocks/openai_chat/report.php", ['courseid' => 1]),
-        'moodle/site:config'
-    ));
+    if (!defined('BEHAT_SITE_RUNNING')) {
+        $ADMIN->add('reports', new admin_externalpage(
+            'openai_chat_report', 
+            get_string('openai_chat_logs', 'block_openai_chat'), 
+            new moodle_url("$CFG->wwwroot/blocks/openai_chat/report.php", ['courseid' => 1]),
+            'moodle/site:config'
+        ));
+    }
 
     if ($ADMIN->fulltree) {
 

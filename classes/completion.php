@@ -97,7 +97,7 @@ class completion {
      */
     protected function get_setting($settingname, $default_value = null) {
         $setting = get_config('block_openai_chat', $settingname);
-        if (!$setting && (float) $setting != 0) {
+        if (!$setting && $setting != 0) {
             $setting = $default_value;
         }
         return $setting;

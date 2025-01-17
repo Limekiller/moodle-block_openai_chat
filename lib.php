@@ -80,18 +80,23 @@ function fetch_assistants_array($block_id = null) {
 
 /**
  * Return a list of available models, and the type of each model.
+ * (Type used to be relevant before OpenAI released the Assistant API. Currently it is no longer useful as all models are of type "chat,"
+ * but I left it here in case the API is changed significantly in the future)
  * @return Array: The list of model info
  */
 function get_models() {
     return [
         "models" => [
-            'gpt-4o-2024-05-13' => 'gpt-4o-2024-05-13',
             'gpt-4o' => 'gpt-4o',
+            'gpt-4o-2024-11-20' => 'gpt-4o-2024-11-20',
+            'gpt-4o-2024-08-06' => 'gpt-4o-2024-08-06',
+            'gpt-4o-2024-05-13' => 'gpt-4o-2024-05-13',
+            'gpt-4o-mini-2024-07-18' => 'gpt-4o-mini-2024-07-18',
+            'gpt-4o-mini' => 'gpt-4o-mini',
             'gpt-4-turbo-preview' => 'gpt-4-turbo-preview',
             'gpt-4-turbo-2024-04-09' => 'gpt-4-turbo-2024-04-09',
             'gpt-4-turbo' => 'gpt-4-turbo',
             'gpt-4-32k-0314' => 'gpt-4-32k-0314',
-            'gpt-4-1106-vision-preview' => 'gpt-4-1106-vision-preview',
             'gpt-4-1106-preview' => 'gpt-4-1106-preview',
             'gpt-4-0613' => 'gpt-4-0613',
             'gpt-4-0314' => 'gpt-4-0314',
@@ -100,19 +105,20 @@ function get_models() {
             'gpt-3.5-turbo-16k-0613' => 'gpt-3.5-turbo-16k-0613',
             'gpt-3.5-turbo-16k' => 'gpt-3.5-turbo-16k',
             'gpt-3.5-turbo-1106' => 'gpt-3.5-turbo-1106',
-            'gpt-3.5-turbo-0613' => 'gpt-3.5-turbo-0613',
-            'gpt-3.5-turbo-0301' => 'gpt-3.5-turbo-0301',
             'gpt-3.5-turbo-0125' => 'gpt-3.5-turbo-0125',
             'gpt-3.5-turbo' => 'gpt-3.5-turbo'
         ],
         "types" => [
+            'gpt-4o-2024-11-20'          =>  'chat',
+            'gpt-4o-2024-08-06'          =>  'chat',
             'gpt-4o-2024-05-13'          =>  'chat',
             'gpt-4o'                     =>  'chat',
+            'gpt-4o-mini-2024-07-18'     =>  'chat',
+            'gpt-4o-mini'                =>  'chat',
             'gpt-4-turbo-preview'        =>  'chat',
             'gpt-4-turbo-2024-04-09'     =>  'chat',
             'gpt-4-turbo'                =>  'chat',
             'gpt-4-32k-0314'             =>  'chat',
-            'gpt-4-1106-vision-preview'  =>  'chat',
             'gpt-4-1106-preview'         =>  'chat',
             'gpt-4-0613'                 =>  'chat',
             'gpt-4-0314'                 =>  'chat',
@@ -121,8 +127,6 @@ function get_models() {
             'gpt-3.5-turbo-16k-0613'     =>  'chat',
             'gpt-3.5-turbo-16k'          =>  'chat',
             'gpt-3.5-turbo-1106'         =>  'chat',
-            'gpt-3.5-turbo-0613'         =>  'chat',
-            'gpt-3.5-turbo-0301'         =>  'chat',
             'gpt-3.5-turbo-0125'         =>  'chat',
             'gpt-3.5-turbo'              =>  'chat'
         ]

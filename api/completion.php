@@ -54,10 +54,6 @@ if (!$instance) {
 }
 
 $context = context::instance_by_id($instance_record->parentcontextid);
-try {
-    $context = $context->get_course_context();
-} catch (Exception $e) {}
-
 $PAGE->set_context($context);
 
 $block_settings = [];
