@@ -80,6 +80,8 @@ function fetch_assistants_array($block_id = null) {
 
 /**
  * Return a list of available models, and the type of each model.
+ * (Type used to be relevant before OpenAI released the Assistant API. Currently it is no longer useful as all models are of type "chat,"
+ * but I left it here in case the API is changed significantly in the future)
  * @return Array: The list of model info
  */
 function get_models() {

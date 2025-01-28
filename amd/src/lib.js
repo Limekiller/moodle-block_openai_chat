@@ -2,7 +2,6 @@ var questionString = 'Ask a question...'
 var errorString = 'An error occurred! Please try again later.'
 
 export const init = (data) => {
-
     const blockId = data['blockId']
     const api_type = data['api_type']
     const persistConvo = data['persistConvo']
@@ -18,7 +17,7 @@ export const init = (data) => {
                 .then(response => response.json())
                 .then(data => {
                     for (let message of data) {
-                        addToChatLog(message.role === 'user' ? 'user' : 'bot', message.message)
+                        addToChatLog(message.role === 'user' ? 'user' : 'bot', message.message, blockId)
                     }
                 })
                 // Some sort of error in the API call. Probably the thread no longer exists, so lets reset it
@@ -42,31 +41,31 @@ export const init = (data) => {
         event.stopImmediatePropagation();
     }, true);
 
-    document.querySelector('#openai_input').addEventListener('keyup', e => {
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).addEventListener('keyup', e => {
         if (e.which === 13 && e.target.value !== "") {
-            addToChatLog('user', e.target.value)
+            addToChatLog('user', e.target.value, blockId)
             createCompletion(e.target.value, blockId, api_type)
             e.target.value = ''
         }
     })
-    document.querySelector('.block_openai_chat #go').addEventListener('click', e => {
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #go`).addEventListener('click', e => {
         const input = document.querySelector('#openai_input')
         if (input.value !== "") {
-            addToChatLog('user', input.value)
+            addToChatLog('user', input.value, blockId)
             createCompletion(input.value, blockId, api_type)
             input.value = ''
         }
     })
 
-    document.querySelector('.block_openai_chat #refresh').addEventListener('click', e => {
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #refresh`).addEventListener('click', e => {
         clearHistory(blockId)
     })
 
-    document.querySelector('.block_openai_chat #popout').addEventListener('click', e => {
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #popout`).addEventListener('click', e => {
         if (document.querySelector('.drawer.drawer-right')) {
             document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
         }
-        document.querySelector('.block_openai_chat').classList.toggle('expanded')
+        document.querySelector(`.block_openai_chat[data-instance-id='${blockId}']`).classList.toggle('expanded')
     })
 
     require(['core/str'], function(str) {
@@ -91,9 +90,10 @@ export const init = (data) => {
  * Add a message to the chat UI
  * @param {string} type Which side of the UI the message should be on. Can be "user" or "bot"
  * @param {string} message The text of the message to add
+ * @param {int} blockId The ID of the block to manipulate
  */
-const addToChatLog = (type, message) => {
-    let messageContainer = document.querySelector('#openai_chat_log')
+const addToChatLog = (type, message, blockId) => {
+    let messageContainer = document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_chat_log`)
     
     const messageElem = document.createElement('div')
     messageElem.classList.add('openai_message')
@@ -125,7 +125,7 @@ const clearHistory = (blockId) => {
             localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
         }
     }
-    document.querySelector('#openai_chat_log').innerHTML = ""
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_chat_log`).innerHTML = ""
 }
 
 /**
@@ -152,13 +152,13 @@ const createCompletion = (message, blockId, api_type) => {
         }
     }  
 
-    const history = buildTranscript()
+    const history = buildTranscript(blockId)
 
-    document.querySelector('.block_openai_chat #control_bar').classList.add('disabled')
-    document.querySelector('#openai_input').classList.remove('error')
-    document.querySelector('#openai_input').placeholder = questionString
-    document.querySelector('#openai_input').blur()
-    addToChatLog('bot loading', '...');
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #control_bar`).classList.add('disabled')
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).classList.remove('error')
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).placeholder = questionString
+    document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).blur()
+    addToChatLog('bot loading', '...', blockId);
 
     fetch(`${M.cfg.wwwroot}/blocks/openai_chat/api/completion.php`, {
         method: 'POST',
@@ -170,9 +170,9 @@ const createCompletion = (message, blockId, api_type) => {
         })
     })
     .then(response => {
-        let messageContainer = document.querySelector('#openai_chat_log')
+        let messageContainer = document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_chat_log`)
         messageContainer.removeChild(messageContainer.lastElementChild)
-        document.querySelector('.block_openai_chat #control_bar').classList.remove('disabled')
+        document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #control_bar`).classList.remove('disabled')
 
         if (!response.ok) {
             throw Error(response.statusText)
@@ -182,32 +182,33 @@ const createCompletion = (message, blockId, api_type) => {
     })
     .then(data => {
         try {
-            addToChatLog('bot', data.message)
+            addToChatLog('bot', data.message, blockId)
             if (data.thread_id) {
                 chatData[blockId]['threadId'] = data.thread_id
                 localStorage.setItem("block_openai_chat_data", JSON.stringify(chatData));
             }
         } catch (error) {
             console.log(error)
-            addToChatLog('bot', data.error.message)
+            addToChatLog('bot', data.error.message, blockId)
         }
-        document.querySelector('#openai_input').focus()
+        document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).focus()
     })
     .catch(error => {
         console.log(error)
-        document.querySelector('#openai_input').classList.add('error')
-        document.querySelector('#openai_input').placeholder = errorString
+        document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).classList.add('error')
+        document.querySelector(`.block_openai_chat[data-instance-id='${blockId}'] #openai_input`).placeholder = errorString
     })
 }
 
 /**
  * Using the existing messages in the chat history, create a string that can be used to aid completion
+ * @param {int} blockId The block from which to build the history
  * @return {JSONObject} A transcript of the conversation up to this point
  */
-const buildTranscript = () => {
+const buildTranscript = (blockId) => {
     let transcript = []
-    document.querySelectorAll('.openai_message').forEach((message, index) => {
-        if (index === document.querySelectorAll('.openai_message').length - 1) {
+    document.querySelectorAll(`.block_openai_chat[data-instance-id='${blockId}'] .openai_message`).forEach((message, index) => {
+        if (index === document.querySelectorAll(`.block_openai_chat[data-instance-id='${blockId}'] .openai_message`).length - 1) {
             return
         }
 
