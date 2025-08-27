@@ -33,7 +33,6 @@ $download = optional_param('download', '', PARAM_ALPHA);
 $user = optional_param('user', '', PARAM_TEXT);
 $starttime = optional_param('starttime', '', PARAM_TEXT);
 $endtime = optional_param('endtime', '', PARAM_TEXT);
-$tsort = optional_param('tsort', '', PARAM_TEXT);
 
 $pageurl = $CFG->wwwroot . "/blocks/openai_chat/report.php?courseid=$courseid" .
     "&user=$user" .
@@ -95,9 +94,6 @@ if ($endtime_ts) {
     $where .= " AND ocl.timecreated < $endtime_ts";
 }
 
-if (!$tsort) {
-    $where .= " ORDER BY ocl.timecreated DESC";
-}
 
 $table->set_sql(
     "ocl.*, CONCAT(u.firstname, ' ', u.lastname) as user_name", 
