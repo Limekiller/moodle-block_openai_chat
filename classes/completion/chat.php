@@ -27,6 +27,8 @@ namespace block_openai_chat\completion;
 use block_openai_chat\completion;
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->libdir.'/filelib.php');
+
 class chat extends \block_openai_chat\completion {
 
     public function __construct($model, $message, $history, $block_settings, $thread_id = null) {

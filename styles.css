@@ -92,6 +92,10 @@
     transition: background 0.4s ease;
 }
 
+ng-component textarea#openai_input {
+    height: 1em;
+}
+
 .block_openai_chat #openai_input.error {
     border: 1px solid red;
 }
@@ -129,6 +133,11 @@
 .block_openai_chat .openai_message.bot {
     background: var(--blue);
     color: var(--white);
+}
+
+ion-card.block_openai_chat .openai_message.bot {
+    background-color: #0f6cbf !important;
+    color: white !important;
 }
 
 .block_openai_chat .openai_message.loading {

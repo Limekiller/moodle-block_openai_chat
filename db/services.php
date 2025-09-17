@@ -15,17 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * File description.
  *
- * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_openai_chat
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_openai_chat';
-$plugin->version = 2025091800;
-$plugin->requires = 2022041600;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '3.0.1';
+$functions = array(
+
+    'block_openai_chat_answer' => array(
+        'classpath'   => 'blocks/openai_chat/classes/external/answer.php',
+        'classname'   => 'block_openai_chat\external\answer',
+        'methodname'  => 'execute',
+        'description' => 'Get answer.',
+        'type'        => 'read',
+        'ajax'        => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+    ),
+);
