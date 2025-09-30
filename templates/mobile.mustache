@@ -28,6 +28,7 @@
     }
 }}
 {{=<% %>=}}
+<div style="padding: 0 0.5em 0.5em 0.5em">
 <h3><%#str%> openai_chat, block_openai_chat <%/str%></h3>
 <div id="openai_chat_log" role="log"></div>
 <div id="control_bar">
@@ -42,9 +43,11 @@
         (onSuccess)="this.answer($event)"
         (onError)="this.answer($event)"
         [useOtherDataForWS]="['message']"
-        ><img src="<%config.wwwroot%><% pix_arrow_right %>" alt="<%#str%>askaquestion, block_openai_chat<%/str%>" class='openai_input_submit_btn_icon' style="height: 2em;">
+        ><img style="transform: scale(1.3)" src="<%config.wwwroot%><% pix_arrow_right %>" alt="<%#str%>askaquestion, block_openai_chat<%/str%>" class='openai_input_submit_btn_icon'>
     </ion-button>
- <!--   <button class='openai_input_refresh_btn' title="<%#str%>new_chat, block_openai_chat <%/str%>" id="refresh">
-        <img src="<%config.wwwroot%><% pix_refresh %>" class='openai_input_refresh_btn_icon' alt="<%#str%>new_chat, block_openai_chat <%/str%>" />
-    </button> -->
+    <ion-button class='openai_input_refresh_btn' style="width: 1em; height: 1em; margin: 0;" color="secondary"
+        title="<%#str%>new_chat, block_openai_chat <%/str%>" id="refresh">
+        <img style="transform: scale(1.3)" src="<%config.wwwroot%><% pix_refresh %>" class='openai_input_refresh_btn_icon' alt="<%#str%>new_chat, block_openai_chat <%/str%>" />
+    </ion-button>
+</div>
 </div>

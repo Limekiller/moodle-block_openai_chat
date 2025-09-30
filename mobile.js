@@ -33,3 +33,6 @@ this.update_history = function(msg) {
     let lastMessage = document.querySelector('#openai_chat_log div:last-child');
     container.scrollTop = lastMessage.offsetTop;
 };
+document.querySelector(`.block_openai_chat #refresh`).addEventListener('click', e => {
+    document.querySelector(`#openai_chat_log`).innerHTML = ""
+})
