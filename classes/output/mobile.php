@@ -67,28 +67,15 @@ class mobile {
         }
         $assistantname = format_string($assistantname, true, ['context' => $context]);
         $username = format_string($username, true, ['context' => $context]);
-        $content = new \stdClass;
-        $content->text = '
-            <script>
-                var assistantName = "' . $assistantname . '";
-                var userName = "' . $username . '";
-            </script>
-
-            <style>
-                ' . $showlabelscss . '
-                .openai_message.user:before {
-                    content: "' . $username . '";
-                }
-                .openai_message.bot:before {
-                    content: "' . $assistantname . '";
-                }
-            </style>';
 
         $contextdata = [
             'logging_enabled' => get_config('block_openai_chat', 'logging'),
             'pix_popout' => '/blocks/openai_chat/pix/arrow-up-right-from-square.svg',
             'pix_arrow_right' => '/blocks/openai_chat/pix/arrow-right.svg',
             'pix_refresh' => '/blocks/openai_chat/pix/refresh.svg',
+            'username' => $username,
+            'assistantname' => $assistantname,
+            'showlabelscss' => $showlabelscss,
             'contextid' => $context->id,
         ];
 

@@ -24,7 +24,8 @@ this.update_history = function(msg) {
         let container = document.querySelector('#openai_chat_log');
         container.scrollTop = lq.offsetTop;
     }
-    let newHtml = '<div class="openai_message bot"><span><p>' + msg + '</p></span></div>';
+    let assistantname = document.getElementById('openai_assistantname');
+    let newHtml = '<span style="color: gray; margin-bottom: .2em">' + assistantname.innerHTML + '</span><div class="openai_message bot"><span><p>' + msg + '</p></span></div>';
 
     document.querySelector('.chat-loading').remove();
     document.getElementById('openai_chat_log').insertAdjacentHTML('beforeend', newHtml);
