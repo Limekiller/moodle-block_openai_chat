@@ -35,7 +35,7 @@ $addons = [
                 ],
                 'styles' => [
                     'url' => $CFG->wwwroot . '/blocks/openai_chat/styles.css',
-                    'version' => 8,
+                    'version' => 11,
                 ],
             ],
         ],

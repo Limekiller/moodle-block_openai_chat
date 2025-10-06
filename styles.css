@@ -28,7 +28,8 @@
     filter: brightness(0.8);
 }
 
-.block_openai_chat #control_bar #go {
+.block_openai_chat #control_bar #go,
+#control_bar #go button.button-native {
     border-radius: 0 0.5rem 0.5rem 0;
 }
 

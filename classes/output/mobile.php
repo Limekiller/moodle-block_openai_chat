@@ -32,7 +32,7 @@ class mobile {
      * @param array $args Data provided by standard CoreBlockDelegate.
      */
     public static function get_block_content($args) {
-        global $CFG, $OUTPUT;
+        global $CFG, $DB, $OUTPUT;
 
         $context = \core\context\block::instance($args['blockid']);
 
@@ -60,6 +60,16 @@ class mobile {
         $assistantname = get_config('block_openai_chat', 'assistantname') ? get_config('block_openai_chat', 'assistantname') : get_string('defaultassistantname', 'block_openai_chat');
         $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : get_string('defaultusername', 'block_openai_chat');
 
+        $title = get_string('openai_chat', 'block_openai_chat');
+        $configdata = $DB->get_field('block_instances', 'configdata', ['id' => $context->instanceid]);
+        if (!empty($configdata)) {
+            $cfg = base64_decode($configdata);
+            $cfg = unserialize_object($cfg);
+            if (!empty($cfg->title)) {
+                $title = $cfg->title;
+            }
+        }
+
         // Then, override with local settings if available
         if (!empty($config)) {
             $assistantname = (property_exists($config, 'assistantname') && $config->assistantname) ? $config->assistantname : $assistantname;
@@ -77,6 +87,7 @@ class mobile {
             'assistantname' => $assistantname,
             'showlabelscss' => $showlabelscss,
             'contextid' => $context->id,
+            'title' => $title,
         ];
 
         return [
