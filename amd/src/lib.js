@@ -20,13 +20,12 @@ import {getString} from 'core/str';
  * @param {object} data The initial block data from PHP
  */
 export const init = async data => {
-    console.log(data)
     if (data['persistConvo']) {
         data['chat'] = initChatData(data)
     }
 
     // Submit on enter
-    document.querySelector(`.block_openai_chat #openai_input`).addEventListener('keyup', e => {
+    document.querySelector(`.block_openai_chat #openai_input`)?.addEventListener('keyup', e => {
         if (e.which === 13 && e.target.value !== "") {
             addToChatLog('user', e.target.value)
             createCompletion(e.target.value, data)
@@ -34,7 +33,7 @@ export const init = async data => {
         }
     })
     // Submit on button click
-    document.querySelector(`.block_openai_chat #go`).addEventListener('click', () => {
+    document.querySelector(`.block_openai_chat #go`)?.addEventListener('click', () => {
         const input = document.querySelector('#openai_input')
         if (input.value !== "") {
             addToChatLog('user', input.value)
@@ -44,7 +43,7 @@ export const init = async data => {
     })
 
     // Clear history on button click
-    document.querySelector(`.block_openai_chat #refresh`).addEventListener('click', () => {
+    document.querySelector(`.block_openai_chat #refresh`)?.addEventListener('click', () => {
         data['chat'][data['blockId']] = {}
         document.querySelector(`.block_openai_chat #openai_chat_log`).innerHTML = ""
     })
