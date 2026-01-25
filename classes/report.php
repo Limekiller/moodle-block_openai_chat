@@ -33,6 +33,7 @@ class report extends \table_sql {
         $this->define_columns($columns);
         $this->no_sorting('usermessage');
         $this->no_sorting('airesponse');
+        $this->sortable(true, 'timecreated', SORT_DESC);
 
         // Define the titles of columns to show in header.
         $headers = array('User ID', 'User Name', 'User Message', 'AI Response', 'Context', 'Time');
