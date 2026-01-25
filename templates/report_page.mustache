@@ -34,17 +34,30 @@
     <div class='report_container'>
         <div style='display: flex; flex-direction: column'>
             <label for='user'>Search by user name</label>
-            <input name='user' type='text' value='{{user}}' placeholder='User name'/>
+            <input name='user' type='text' value='{{user}}' class="form-control" placeholder='User name'/>
         </div>
         <div style='display: flex; flex-direction: column'>
             <label for='starttime'>Start time</label>
-            <input type='datetime-local' name='starttime' value='{{starttime}}' />
+            <input type='datetime-local' name='starttime' class="form-control" value='{{starttime}}' />
         </div>
         <div style='display: flex; flex-direction: column'>
             <label for='endtime'>End time</label>
-            <input type='datetime-local' name='endtime' value='{{endtime}}' />
+            <input type='datetime-local' name='endtime' class="form-control" value='{{endtime}}' />
         </div>
     </div>
     <button class='btn btn-primary' type='submit'>Search</button>
 </form>
 <br />
+
+<style>
+.block_openai_chat .report_container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+@media screen and (max-width: 750px) {
+    .block_openai_chat .report_container {
+        flex-direction: column;
+    }
+}
+</style>

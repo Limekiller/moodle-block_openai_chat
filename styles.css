@@ -1,7 +1,13 @@
+/** General styles **/
 .block_openai_chat {
     position: relative;
 }
 
+.drawercontent {
+    position: unset;
+}
+
+/** Chat window styles **/
 .block_openai_chat #openai_chat_log {
     display: flex;
     flex-direction: column;
@@ -17,79 +23,6 @@
 .block_openai_chat #openai_chat_log a {
     color: white;
     text-decoration: underline;
-}
-
-.block_openai_chat #control_bar {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.block_openai_chat #control_bar button:hover {
-    filter: brightness(0.8);
-}
-
-.block_openai_chat #control_bar #go {
-    border-radius: 0 0.5rem 0.5rem 0;
-}
-
-.block_openai_chat #control_bar button  {
-    transition: filter 0.2s ease;
-    border: none;
-    border-radius: 0.5rem;
-    width: 2.5rem;
-}
-
-.openai_input_submit_btn {
-    background-color: var(--primary);
-    color: var(--white);
-}
-
-.openai_input_refresh_btn {
-    background-color: var(--secondary);
-    color: black;
-}
-
-.block_openai_chat .openai_input_popout_btn {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.5rem;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 99rem;
-    padding: 0.4rem;
-    display: flex;
-    border: none;
-    z-index: 2;
-}
-.block_openai_chat .openai_input_popout_btn img {
-    max-width: 1.25rem;
-    pointer-events: none;
-}
-.drawercontent {
-    position: unset;
-}
-
-.openai_input_submit_btn_icon,
-.openai_input_refresh_btn_icon {
-    width: 80%;
-}
-
-.openai_input_bar {
-    display: flex;
-    width: 100%;
-}
-
-.block_openai_chat img {
-    transform: scale(0.7);
-}
-
-.block_openai_chat #openai_input,
-.openai_input_bar input {
-    padding: 0.5rem;
-    border-radius: 0.5rem 0 0 0.5rem;
-    border: 1px solid gray;
-    width: 100%;
-    transition: background 0.4s ease;
 }
 
 .block_openai_chat #openai_input.error {
@@ -127,8 +60,8 @@
 }
 
 .block_openai_chat .openai_message.bot {
-    background: var(--blue);
-    color: var(--white);
+    background: var(--bs-blue);
+    color: var(--bs-white);
 }
 
 .block_openai_chat .openai_message.loading {
@@ -146,6 +79,19 @@
     pointer-events: none;
 }
 
+.block_openai_chat .recording {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #ff0000;
+    position: absolute;
+    top: 1.5rem;
+    right: 3rem;
+    border-radius: 99rem;
+    filter: opacity(0.5);
+    animation: block_openai_chat_thinking 3s linear infinite;
+}
+
+/** Expanded styles **/
 .block_openai_chat.expanded {
     position: fixed;
     height: 70vh;
@@ -171,42 +117,16 @@
 }
 
 .block_openai_chat.expanded #control_bar {
-    display: flex;
-    gap: .5rem;
     position: fixed;
     bottom: 1rem;
-    width: calc(100% - 2rem);
+    width: calc(100% - 2rem) !important;
 }
 
 .block_openai_chat.expanded .openai_message {
     width: fit-content !important;
 }
 
-.block_openai_chat .recording {
-    width: 0.5rem;
-    height: 0.5rem;
-    background: #ff0000;
-    position: absolute;
-    top: 1.5rem;
-    right: 3rem;
-    border-radius: 99rem;
-    filter: opacity(0.5);
-    animation: block_openai_chat_thinking 3s linear infinite;
-}
-
-.block_openai_chat input {
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    border: 1px solid grey;
-}
-
-.block_openai_chat .report_container {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-/* dumbass remui styles */
+/** RemUI styles **/
 .block_openai_chat.expanded .block-header-wrapper {
     padding: 1rem !important;
 }
@@ -237,17 +157,8 @@
     margin-right: 0;
     padding: 0 2rem;
 }
-.drawer {
-    filter: unset !important;
-}
 
 @media screen and (max-width: 750px) {
-    .drawerheader {
-        pointer-events: none;
-    }
-    .drawerheader button {
-        pointer-events: all;
-    }
     .block_openai_chat.expanded {
         transform: unset;
         top: 0;
@@ -256,13 +167,10 @@
         height: 100vh;
     }
     .block_openai_chat.expanded .openai_input_popout_btn {
-        right: 3rem;
+        display: none;
     }
     .block_openai_chat.expanded .recording {
-        right: 5.5rem;
-    }
-    .block_openai_chat .report_container {
-        flex-direction: column;
+        right: 2.5rem;
     }
 }
 
