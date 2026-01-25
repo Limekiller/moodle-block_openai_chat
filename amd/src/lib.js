@@ -50,12 +50,27 @@ export const init = async data => {
     })
 
     // Pop out window on button click
-    document.querySelector(`.block_openai_chat #popout`)?.addEventListener('click', () => {
-        if (document.querySelector('.drawer.drawer-right')) {
-            document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
-        }
+    document.querySelector(`.block_openai_chat #popout`)?.addEventListener('click', () => togglePopout())
+    document.querySelector(`.drawer-right .drawertoggle`)?.addEventListener('click', () => togglePopout(true, false))
+}
+
+/**
+ * Toggle the expanded chat window
+ * @param {boolean} force (optional) Whether to force a certain state
+ * @param {boolean} open (optional) Whether the window should be open or closed
+ */
+const togglePopout = (force = false, open = false) => {
+    if (document.querySelector('.drawer.drawer-right')) {
+        document.querySelector('.drawer.drawer-right').style.zIndex = '1041'
+    }
+    if (!force) {
         document.querySelector(`.block_openai_chat`).classList.toggle('expanded')
-    })
+    } else {
+        document.querySelector(`.block_openai_chat`).classList.remove('expanded')
+        if (open) {
+            document.querySelector(`.block_openai_chat`).classList.add('expanded')
+        }
+    }
 }
 
 /**

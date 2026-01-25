@@ -157,17 +157,8 @@
     margin-right: 0;
     padding: 0 2rem;
 }
-.drawer {
-    filter: unset !important;
-}
 
 @media screen and (max-width: 750px) {
-    .drawerheader {
-        pointer-events: none;
-    }
-    .drawerheader button {
-        pointer-events: all;
-    }
     .block_openai_chat.expanded {
         transform: unset;
         top: 0;
@@ -176,10 +167,10 @@
         height: 100vh;
     }
     .block_openai_chat.expanded .openai_input_popout_btn {
-        right: 3rem;
+        display: none;
     }
     .block_openai_chat.expanded .recording {
-        right: 5.5rem;
+        right: 2.5rem;
     }
 }
 
