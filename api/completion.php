@@ -43,10 +43,7 @@ $body = json_decode(file_get_contents('php://input'), true);
 $message = clean_param($body['message'], PARAM_NOTAGS);
 $history = clean_param_array($body['history'], PARAM_NOTAGS, true);
 $block_id = clean_param($body['blockId'], PARAM_INT, true);
-$thread_id = clean_param($body['threadId'], PARAM_NOTAGS, true);
 
-// So that we're not leaking info to the client like API key, the block makes an API request including its ID
-// Then we can look up that specific block to pull out its config data
 $instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
 $instance = block_instance('openai_chat', $instance_record);
 if (!$instance) {
@@ -56,36 +53,20 @@ if (!$instance) {
 $context = context::instance_by_id($instance_record->parentcontextid);
 $PAGE->set_context($context);
 
-$block_settings = [];
-$setting_names = [
-    'sourceoftruth', 
-    'prompt',
-    'instructions',
-    'username', 
-    'assistantname', 
-    'apikey', 
-    'model', 
-    'temperature', 
-    'maxlength', 
-    'topp', 
-    'frequency', 
-    'presence',
-    'assistant'
+// Set block instance settings
+$blocksettings = [
+    'sourceoftruth' => '',
+    'prompt' => '',
+    'username' => '',
+    'assistantname' => ''
 ];
-foreach ($setting_names as $setting) {
-    if ($instance->config && property_exists($instance->config, $setting)) {
-        $block_settings[$setting] = $instance->config->$setting ? $instance->config->$setting : "";
-    } else {
-        $block_settings[$setting] = "";
+foreach ($blocksettings as $settingname => $value) {
+    if ($instance->config && property_exists($instance->config, $settingname) && $instance->config->$settingname) {
+        $blocksettings[$settingname] = $instance->config->$settingname;
     }
 }
 
-$engine_class;
-$model = get_config('block_openai_chat', 'model');
-$api_type = get_config('block_openai_chat', 'type');
-$engine_class = "\block_openai_chat\completion\\$api_type";
-
-$completion = new $engine_class(...[$model, $message, $history, $block_settings, $thread_id]);
+$completion = new completion($message, $history, $blocksettings);
 $response = $completion->create_completion($PAGE->context);
 
 // Format the markdown of each completion message into HTML.

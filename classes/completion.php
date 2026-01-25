@@ -27,23 +27,13 @@ defined('MOODLE_INTERNAL') || die;
 
 class completion {
 
-    protected $apikey;
-    protected $message;
-    protected $history;
+    private $message;
+    private $history;
 
-    protected $assistantname;
-    protected $username;
-    protected $prompt;
-    protected $sourceoftruth;
-    protected $model;
-    protected $temperature;
-    protected $maxlength;
-    protected $topp;
-    protected $frequency;
-    protected $presence;
-
-    protected $assistant;
-    protected $instructions;
+    private $assistantname;
+    private $username;
+    private $prompt;
+    private $sourceoftruth;
 
     /**
      * Initialize all the class properties that we'll need regardless of model
@@ -52,29 +42,12 @@ class completion {
      * @param array history: An array of objects containing the history of the conversation
      * @param string block_settings: An object containing the instance-level settings if applicable
      */
-    public function __construct($model, $message, $history, $block_settings) {
-        // Set default values
-        $this->model = $model;
-        $this->apikey = get_config('block_openai_chat', 'apikey');
-
-        // We fetch defaults for both chat and assistant APIs, even though only one can be active at a time
-        // In the past, multiple different completion classes shared API types, so this might happen again
-        // Any settings that don't apply to the current API type are just ignored
-
+    public function __construct($message, $history, $block_settings) {
         $this->prompt = $this->get_setting('prompt', get_string('defaultprompt', 'block_openai_chat'));
         $this->assistantname = $this->get_setting('assistantname', get_string('defaultassistantname', 'block_openai_chat'));
         $this->username = $this->get_setting('username', get_string('defaultusername', 'block_openai_chat'));
 
-        $this->temperature = $this->get_setting('temperature', 0.5);
-        $this->maxlength = $this->get_setting('maxlength', 500);
-        $this->topp = $this->get_setting('topp', 1);
-        $this->frequency = $this->get_setting('frequency', 1);
-        $this->presence = $this->get_setting('presence', 1);
-
-        $this->assistant = $this->get_setting('assistant');
-        $this->instructions = $this->get_setting('instructions');
-
-        // Then override with block settings if applicable
+        // Override with block settings if applicable
         if (get_config('block_openai_chat', 'allowinstancesettings') === "1") {
             foreach ($block_settings as $name => $value) {
                 if ($value) {
@@ -85,8 +58,45 @@ class completion {
 
         $this->message = $message;
         $this->history = $history;
-
         $this->build_source_of_truth($block_settings['sourceoftruth']);
+    }
+
+    public function create_completion($context) {
+        global $USER;
+
+        $historystring = $this->build_history_string();
+
+        $fullprompt = 
+            $this->sourceoftruth . 
+            "----- SYSTEM PROMPT -----\n" .
+            $this->prompt . "\n" . 
+            "----- END SYSTEM PROMPT -----\n" .
+            "----- BEGIN CONVERSATION -----\n" .
+            $historystring . 
+            $this->username . ": " . $this->message .
+            $this->assistantname . ": ";
+
+        $manager = \core\di::get(\core_ai\manager::class);
+        $action = new \core_ai\aiactions\generate_text(
+            contextid: $context->id,
+            userid: $USER->id,
+            prompttext: $fullprompt
+        );
+
+        $response = $manager->process_action($action);
+        if (!$response->get_success()) {
+            return [
+                "result" => "error",
+                "message" => $response->get_error() . ": " . $response->get_errormessage()
+            ];
+        }
+
+        $responsedata = $response->get_response_data();
+        $content = $responsedata['generatedcontent'] ?? '';
+        return [
+            "result" => "success",
+            "message" => $content   
+        ];
     }
 
     /**
@@ -95,12 +105,20 @@ class completion {
      * @param mixed default_value: The default value to return if the setting isn't already set
      * @return mixed: The saved or default value
      */
-    protected function get_setting($settingname, $default_value = null) {
+    private function get_setting($settingname, $default_value = null) {
         $setting = get_config('block_openai_chat', $settingname);
         if (!$setting && $setting != 0) {
             $setting = $default_value;
         }
         return $setting;
+    }
+
+    private function build_history_string() {
+        $string = "";
+        foreach ($this->history as $message) {
+            $string .= "{$message['user']}: {$message['message']}\n";
+        }
+        return $string;
     }
 
     /**
@@ -109,13 +127,17 @@ class completion {
      */
     private function build_source_of_truth($localsourceoftruth) {
         $sourceoftruth = get_config('block_openai_chat', 'sourceoftruth');
-    
-        if ($sourceoftruth || $localsourceoftruth) {
+        if (!empty($sourceoftruth) || !empty($localsourceoftruth)) {
             $sourceoftruth = 
                 get_string('sourceoftruthpreamble', 'block_openai_chat')
                 . $sourceoftruth . "\n\n"
-                . $localsourceoftruth . "\n\n";
-            }
-        $this->sourceoftruth = $sourceoftruth;
+                . $localsourceoftruth . "\n";
+        }
+        
+        $this->sourceoftruth =
+            "----- SYSTEM INSTRUCTIONS ----\n" .
+            "$sourceoftruth" .
+            "----- END SYSTEM INSTRUCTIONS -----\n"
+        ;
     }
 }

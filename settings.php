@@ -36,34 +36,6 @@ if ($hassiteconfig) {
     }
 
     if ($ADMIN->fulltree) {
-
-        require_once($CFG->dirroot .'/blocks/openai_chat/lib.php');
-
-        $type = get_type_to_display();
-        $assistant_array = [];
-        if ($type === 'assistant') {
-            $assistant_array = fetch_assistants_array();
-        }
-
-        global $PAGE;
-        $PAGE->requires->js_call_amd('block_openai_chat/settings', 'init');
-
-        $settings->add(new admin_setting_configtext(
-            'block_openai_chat/apikey',
-            get_string('apikey', 'block_openai_chat'),
-            get_string('apikeydesc', 'block_openai_chat'),
-            '',
-            PARAM_TEXT
-        ));
-
-        $settings->add(new admin_setting_configselect(
-            'block_openai_chat/type',
-            get_string('type', 'block_openai_chat'),
-            get_string('typedesc', 'block_openai_chat'),
-            'chat',
-            ['chat' => 'chat', 'assistant' => 'assistant', 'azure' => 'azure']
-        ));
-
         $settings->add(new admin_setting_configcheckbox(
             'block_openai_chat/restrictusage',
             get_string('restrictusage', 'block_openai_chat'),
@@ -94,104 +66,27 @@ if ($hassiteconfig) {
             0
         ));
 
-        // Assistant settings //
+        $settings->add(new admin_setting_configcheckbox(
+            'block_openai_chat/persistconvo',
+            get_string('persistconvo', 'block_openai_chat'),
+            get_string('persistconvodesc', 'block_openai_chat'),
+            0
+        ));
 
-        if ($type === 'assistant') {
-            $settings->add(new admin_setting_heading(
-                'block_openai_chat/assistantheading',
-                get_string('assistantheading', 'block_openai_chat'),
-                get_string('assistantheadingdesc', 'block_openai_chat')
-            ));
+        $settings->add(new admin_setting_configtextarea(
+            'block_openai_chat/prompt',
+            get_string('prompt', 'block_openai_chat'),
+            get_string('promptdesc', 'block_openai_chat'),
+            get_string('defaultprompt', 'block_openai_chat'),
+            PARAM_TEXT
+        ));
 
-            if (count($assistant_array)) {
-                $settings->add(new admin_setting_configselect(
-                    'block_openai_chat/assistant',
-                    get_string('assistant', 'block_openai_chat'),
-                    get_string('assistantdesc', 'block_openai_chat'),
-                    count($assistant_array) ? reset($assistant_array) : null,
-                    $assistant_array
-                ));
-            } else {
-                $settings->add(new admin_setting_description(
-                    'block_openai_chat/noassistants',
-                    get_string('assistant', 'block_openai_chat'),
-                    get_string('noassistants', 'block_openai_chat'),
-                ));
-            }
-
-            $settings->add(new admin_setting_configcheckbox(
-                'block_openai_chat/persistconvo',
-                get_string('persistconvo', 'block_openai_chat'),
-                get_string('persistconvodesc', 'block_openai_chat'),
-                1
-            ));
-
-        } else {
-
-            // Chat settings //
-
-            if ($type === 'azure') {
-                $settings->add(new admin_setting_heading(
-                    'block_openai_chat/azureheading',
-                    get_string('azureheading', 'block_openai_chat'),
-                    get_string('azureheadingdesc', 'block_openai_chat')
-                ));
-
-                $settings->add(new admin_setting_configtext(
-                    'block_openai_chat/resourcename',
-                    get_string('resourcename', 'block_openai_chat'),
-                    get_string('resourcenamedesc', 'block_openai_chat'),
-                    "",
-                    PARAM_TEXT
-                ));
-
-                $settings->add(new admin_setting_configtext(
-                    'block_openai_chat/deploymentid',
-                    get_string('deploymentid', 'block_openai_chat'),
-                    get_string('deploymentiddesc', 'block_openai_chat'),
-                    "",
-                    PARAM_TEXT
-                ));
-
-                $settings->add(new admin_setting_configtext(
-                    'block_openai_chat/apiversion',
-                    get_string('apiversion', 'block_openai_chat'),
-                    get_string('apiversiondesc', 'block_openai_chat'),
-                    "2023-09-01-preview",
-                    PARAM_TEXT
-                ));
-            }
-
-            $settings->add(new admin_setting_heading(
-                'block_openai_chat/chatheading',
-                get_string('chatheading', 'block_openai_chat'),
-                get_string('chatheadingdesc', 'block_openai_chat')
-            ));
-
-            $settings->add(new admin_setting_configtextarea(
-                'block_openai_chat/prompt',
-                get_string('prompt', 'block_openai_chat'),
-                get_string('promptdesc', 'block_openai_chat'),
-                "Below is a conversation between a user and a support assistant for a Moodle site, where users go for online learning.",
-                PARAM_TEXT
-            ));
-
-            $settings->add(new admin_setting_configtextarea(
-                'block_openai_chat/sourceoftruth',
-                get_string('sourceoftruth', 'block_openai_chat'),
-                get_string('sourceoftruthdesc', 'block_openai_chat'),
-                '',
-                PARAM_TEXT
-            ));
-        }
-
-
-        // Advanced Settings //
-
-        $settings->add(new admin_setting_heading(
-            'block_openai_chat/advanced',
-            get_string('advanced', 'block_openai_chat'),
-            get_string('advanceddesc', 'block_openai_chat')
+        $settings->add(new admin_setting_configtextarea(
+            'block_openai_chat/sourceoftruth',
+            get_string('sourceoftruth', 'block_openai_chat'),
+            get_string('sourceoftruthdesc', 'block_openai_chat'),
+            '',
+            PARAM_TEXT
         ));
 
         $settings->add(new admin_setting_configcheckbox(
@@ -200,57 +95,5 @@ if ($hassiteconfig) {
             get_string('allowinstancesettingsdesc', 'block_openai_chat'),
             0
         ));
-
-        if ($type === 'assistant') {
-
-        } else {
-            $settings->add(new admin_setting_configselect(
-                'block_openai_chat/model',
-                get_string('model', 'block_openai_chat'),
-                get_string('modeldesc', 'block_openai_chat'),
-                'text-davinci-003',
-                get_models()['models']
-            ));
-
-            $settings->add(new admin_setting_configtext(
-                'block_openai_chat/temperature',
-                get_string('temperature', 'block_openai_chat'),
-                get_string('temperaturedesc', 'block_openai_chat'),
-                0.5,
-                PARAM_FLOAT
-            ));
-
-            $settings->add(new admin_setting_configtext(
-                'block_openai_chat/maxlength',
-                get_string('maxlength', 'block_openai_chat'),
-                get_string('maxlengthdesc', 'block_openai_chat'),
-                500,
-                PARAM_INT
-            ));
-
-            $settings->add(new admin_setting_configtext(
-                'block_openai_chat/topp',
-                get_string('topp', 'block_openai_chat'),
-                get_string('toppdesc', 'block_openai_chat'),
-                1,
-                PARAM_FLOAT
-            ));
-
-            $settings->add(new admin_setting_configtext(
-                'block_openai_chat/frequency',
-                get_string('frequency', 'block_openai_chat'),
-                get_string('frequencydesc', 'block_openai_chat'),
-                1,
-                PARAM_FLOAT
-            ));
-
-            $settings->add(new admin_setting_configtext(
-                'block_openai_chat/presence',
-                get_string('presence', 'block_openai_chat'),
-                get_string('presencedesc', 'block_openai_chat'),
-                1,
-                PARAM_FLOAT
-            ));
-        }
     }
 }
