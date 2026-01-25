@@ -41,6 +41,16 @@ class block_openai_chat extends block_base {
         }
     }
 
+    private function get_config_item($name, $defaultvalue) {
+        $configitem = get_config('block_openai_chat', $name) ?: $defaultvalue;
+        if (!empty($this->config) && get_config('block_openai_chat', 'allowinstancesettings')) {
+            if (property_exists($this->config, $name) && $this->config->$name !== NULL && $this->config->$name !== "") {
+                $configitem = $this->config->$name;
+            }
+        }
+        return $configitem;
+    }
+
     public function get_content() {
         global $OUTPUT;
         global $PAGE;
@@ -49,19 +59,12 @@ class block_openai_chat extends block_base {
             return $this->content;
         }
 
-        $assistantname = get_config('block_openai_chat', 'assistantname') ? get_config('block_openai_chat', 'assistantname') : get_string('defaultassistantname', 'block_openai_chat');
-        $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : get_string('defaultusername', 'block_openai_chat');
-        if (!empty($this->config)) {
-            $assistantname = (property_exists($this->config, 'assistantname') && $this->config->assistantname) ? $this->config->assistantname : $assistantname;
-            $username = (property_exists($this->config, 'username') && $this->config->username) ? $this->config->username : $username;
-        }
+        $assistantname = $this->get_config_item('assistantname', get_string('defaultassistantname', 'block_openai_chat'));
         $assistantname = format_string($assistantname, true, ['context' => $this->context]);
+        $username = $this->get_config_item('username', get_string('defaultusername', 'block_openai_chat'));
         $username = format_string($username, true, ['context' => $this->context]);
-        
-        $persistconvo = get_config('block_openai_chat', 'persistconvo');
-        if (!empty($this->config)) {
-            $persistconvo = (property_exists($this->config, 'persistconvo') && get_config('block_openai_chat', 'allowinstancesettings')) ? $this->config->persistconvo : $persistconvo;
-        }
+
+        $persistconvo = (int) $this->get_config_item('persistconvo', false);
 
         $this->page->requires->js_call_amd('block_openai_chat/lib', 'init', [[
             'blockId' => $this->instance->id,

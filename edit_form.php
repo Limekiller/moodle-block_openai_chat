@@ -56,6 +56,9 @@ class block_openai_chat_edit_form extends block_edit_form {
             $mform->setDefault('config_assistantname', '');
             $mform->setType('config_assistantname', PARAM_TEXT);
             $mform->addHelpButton('config_assistantname', 'config_assistantname', 'block_openai_chat');
+
+            $mform->addElement('advcheckbox', 'config_persistconvo', get_string('persistconvo', 'block_openai_chat'));
+            $mform->setDefault('config_persistconvo', get_config('block_openai_chat', 'persistconvo'));
         }
     }
 }
