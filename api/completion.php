@@ -47,7 +47,7 @@ $block_id = clean_param($body['blockId'], PARAM_INT, true);
 $instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
 $instance = block_instance('openai_chat', $instance_record);
 if (!$instance) {
-    print_error('invalidblockinstance', 'error', $id);
+    throw new moodle_exception('invalidblockinstance', 'error', $id);
 }
 
 $context = context::instance_by_id($instance_record->parentcontextid);
