@@ -86,13 +86,17 @@ if ($courseid !== 1) {
 
 // filter by user, starttime, endtime
 if ($user) {
-    $where .= " AND CONCAT(u.firstname, ' ', u.lastname) like '%$user%'";
+    $likeuser = $DB->sql_like("LOWER(CONCAT(u.firstname, ' ', u.lastname))", ':user');
+    $where .= " AND {$likeuser}";
+    $params['user'] = "%" . strtolower($user) . "%";
 }
 if ($starttime_ts) {
-    $where .= " AND ocl.timecreated > $starttime_ts";
+    $where .= " AND ocl.timecreated > :starttime";
+    $params['starttime'] = $starttime_ts;
 }
 if ($endtime_ts) {
-    $where .= " AND ocl.timecreated < $endtime_ts";
+    $where .= " AND ocl.timecreated < :endtime";
+    $params['endtime'] = $endtime_ts;
 }
 
 if (!$tsort) {
@@ -105,7 +109,8 @@ $table->set_sql(
         JOIN {user} u ON u.id = ocl.userid 
         JOIN {context} c ON c.id = ocl.contextid
         LEFT JOIN {course} co ON co.id = c.instanceid",
-    $where
+    $where,
+    $params
 );
 $table->define_baseurl($pageurl);
 $table->out($out, true);
