@@ -28,4 +28,4 @@ $plugin->component = 'block_openai_chat';
 $plugin->version = 2026020401;
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.0.1';
+$plugin->release = '4.0.2';
