@@ -16,6 +16,10 @@
     margin-bottom: 0.5rem;
 }
 
+ng-component #openai_chat_log {
+    max-height: 70vh !important;
+}
+
 .block_openai_chat #openai_chat_log p {
     margin: 0;
 }
@@ -25,6 +29,84 @@
     text-decoration: underline;
 }
 
+.block_openai_chat #control_bar {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.block_openai_chat #control_bar button:hover {
+    filter: brightness(0.8);
+}
+
+.block_openai_chat #control_bar #go,
+#control_bar #go button.button-native {
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.block_openai_chat #control_bar button  {
+    transition: filter 0.2s ease;
+    border: none;
+    border-radius: 0.5rem;
+    width: 2.5rem;
+}
+
+.openai_input_submit_btn {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.openai_input_refresh_btn {
+    background-color: var(--secondary);
+    color: black;
+}
+
+.block_openai_chat .openai_input_popout_btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 99rem;
+    padding: 0.4rem;
+    display: flex;
+    border: none;
+    z-index: 2;
+}
+.block_openai_chat .openai_input_popout_btn img {
+    max-width: 1.25rem;
+    pointer-events: none;
+}
+.drawercontent {
+    position: unset;
+}
+
+.openai_input_submit_btn_icon,
+.openai_input_refresh_btn_icon {
+    width: 80%;
+}
+
+.openai_input_bar {
+    display: flex;
+    width: 100%;
+}
+
+.block_openai_chat img {
+    transform: scale(0.7);
+}
+
+.block_openai_chat #openai_input,
+.openai_input_bar input {
+    padding: 0.5rem;
+    border-radius: 0.5rem 0 0 0.5rem;
+    border: 1px solid gray;
+    width: 100%;
+    transition: background 0.4s ease;
+}
+
+ng-component textarea#openai_input {
+    height: 1em;
+}
+
 .block_openai_chat #openai_input.error {
     border: 1px solid red;
 }
@@ -32,6 +114,7 @@
 .block_openai_chat .openai_message {
     padding: 0.75rem 1rem;
     background: #f4f4f4;
+    color: black;
     border-radius: 0.5rem;
     margin-bottom: 1.75rem;
     width: fit-content;
@@ -62,6 +145,11 @@
 .block_openai_chat .openai_message.bot {
     background: var(--bs-blue);
     color: var(--bs-white);
+}
+
+ion-card.block_openai_chat .openai_message.bot {
+    background-color: #0f6cbf !important;
+    color: white !important;
 }
 
 .block_openai_chat .openai_message.loading {

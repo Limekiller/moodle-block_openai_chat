@@ -1,0 +1,61 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_openai_chat/mobile
+
+    This template renders the block on mobile.
+
+    Example context (json):
+    {
+        "logging_enabled": boolean, true if logging is enabled in the plugin settings
+        "pix_popout": relative url of the popout pix to the root of moodle
+        "pix_arrow_right": relative url of the arrow right pix to the root of moodle
+        "pix_refresh": relative url of the refresh pix to the root of moodle
+    }
+}}
+{{=<% %>=}}
+<div style="padding: 0 0.5em 0.5em 0.5em">
+    <h3><% title %></h3>
+    <div id="openai_chat_log" role="log"></div>
+    <form id="openai-form">
+        <div id="control_bar">
+            <div class="openai_input_bar" id="input_bar">
+                <ion-input type="hidden" style="display: none;" id="openai_history" name="history" ></ion-input>
+                <ion-input type="hidden" style="display: none;" id="contextid" name="contextid" value="<% contextid %>" ></ion-input>
+                <textarea
+                    style="background-color: white; color: black;"
+                    aria-label="<%#str%>askaquestion, block_openai_chat<%/str%>"
+                    rows=1 id="openai_input" placeholder="<%#str%>askaquestion, block_openai_chat<%/str%>"
+                    name="message" core-auto-rows ></textarea>
+
+                <ion-button id="go" style="width: 1em; height: 1em; margin: 0;" color="ccaa"
+                    core-site-plugins-call-ws
+                    name="block_openai_chat_answer"
+                    form="openai-form"
+                    (onSuccess)="this.answer($event)"
+                    (onError)="this.answer($event)"
+                    ><img style="transform: scale(1.3)" src="<%config.wwwroot%><% pix_arrow_right %>" alt="<%#str%>askaquestion, block_openai_chat<%/str%>" class='openai_input_submit_btn_icon'>
+                </ion-button>
+            </div>
+            <ion-button class='openai_input_refresh_btn' style="width: 1em; height: 1em; margin: 0;" color="secondary"
+                title="<%#str%>new_chat, block_openai_chat <%/str%>" id="refresh">
+                <img style="transform: scale(1.3)" src="<%config.wwwroot%><% pix_refresh %>" class='openai_input_refresh_btn_icon' alt="<%#str%>new_chat, block_openai_chat <%/str%>" />
+            </ion-button>
+        </div>
+    </form>
+    <span style="display: none" id="openai_assistantname"><% assistantname %></span>
+</div>
